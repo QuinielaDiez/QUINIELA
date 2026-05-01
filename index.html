@@ -5,57 +5,74 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>La de Diez Ganadora</title>
     <style>
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f0f2f5; text-align: center; margin: 0; padding: 10px; }
+        body { font-family: 'Segoe UI', sans-serif; background-color: #f0f2f5; text-align: center; margin: 0; padding: 10px; }
         .container { max-width: 450px; margin: auto; background: white; border-radius: 20px; overflow: hidden; box-shadow: 0 10px 25px rgba(0,0,0,0.1); border: 2px solid #004d26; }
-        .header { background: #004d26; color: white; padding: 20px; }
-        /* ESTO AGREGA TU LOGO */
-        .header img { width: 120px; height: 120px; border-radius: 50%; border: 4px solid #ffd700; margin-bottom: 10px; background: white; }
-        .partido { display: flex; align-items: center; justify-content: space-between; padding: 12px; border-bottom: 1px solid #eee; }
-        .equipo { width: 35%; font-weight: bold; font-size: 13px; color: #333; text-transform: uppercase; }
-        .opciones { width: 30%; display: flex; gap: 4px; justify-content: center; }
-        .btn { border: 1px solid #ddd; background: #fff; padding: 10px 12px; cursor: pointer; border-radius: 6px; font-weight: bold; flex: 1; transition: 0.2s; }
-        .btn.active { background: #ffd700; border-color: #004d26; color: #004d26; }
-        .footer { padding: 20px; background: #f9f9f9; }
-        input[type="text"] { width: 90%; padding: 12px; margin-bottom: 15px; border: 2px solid #ddd; border-radius: 10px; font-size: 16px; text-align: center; }
-        .total { font-size: 22px; font-weight: bold; color: #004d26; margin-bottom: 15px; }
-        .btn-enviar { background: #25d366; color: white; border: none; padding: 16px; font-size: 18px; border-radius: 12px; cursor: pointer; font-weight: bold; width: 100%; box-shadow: 0 4px 10px rgba(37, 211, 102, 0.3); }
+        .header { background: #004d26; color: white; padding: 15px; }
+        .header img { width: 100px; height: 100px; border-radius: 50%; border: 3px solid #ffd700; background: white; margin-bottom: 10px; }
+        .partido { display: flex; align-items: center; justify-content: space-between; padding: 10px; border-bottom: 1px solid #eee; }
+        .equipo { width: 35%; font-weight: bold; font-size: 12px; text-transform: uppercase; }
+        .opciones { width: 30%; display: flex; gap: 3px; }
+        .btn { border: 1px solid #ddd; background: #fff; padding: 8px; cursor: pointer; border-radius: 5px; font-weight: bold; flex: 1; font-size: 12px; }
+        .btn.active { background: #ffd700; border-color: #004d26; }
+        .footer { padding: 15px; background: #f9f9f9; border-top: 2px solid #004d26; }
+        input { width: 90%; padding: 12px; margin-bottom: 10px; border: 2px solid #ddd; border-radius: 10px; font-size: 16px; text-align: center; }
+        
+        /* ESTILOS DE LA LISTA DE JUGADAS */
+        .lista-jugadas { background: #fff; margin: 10px; border-radius: 10px; text-align: left; padding: 10px; border: 1px dashed #004d26; max-height: 200px; overflow-y: auto; }
+        .jugada-item { display: flex; justify-content: space-between; align-items: center; padding: 5px 0; border-bottom: 1px solid #eee; font-family: monospace; font-size: 14px; }
+        .btn-borrar { background: #ff4444; color: white; border: none; padding: 2px 8px; border-radius: 4px; cursor: pointer; }
+        
+        .btn-accion { width: 48%; padding: 12px; font-weight: bold; border-radius: 10px; cursor: pointer; border: none; font-size: 14px; }
+        .btn-agregar { background: #004d26; color: white; }
+        .btn-whatsapp { background: #25d366; color: white; width: 100%; margin-top: 10px; font-size: 18px; }
+        .totales-finales { font-size: 18px; font-weight: bold; color: #004d26; margin: 10px 0; }
     </style>
 </head>
 <body>
 
 <div class="container">
     <div class="header">
-        <!-- BUSCARÁ UNA IMAGEN LLAMADA logo.jpg EN TU GITHUB -->
-        <img src="logo.jpg" alt="Logo" onerror="this.style.display='none'">
+        <img src="LOGO 10.jpg" alt="Logo" onerror="this.src='https://via.placeholder.com/100'">
         <h2 style="margin:0">LA DE DIEZ GANADORA</h2>
-        <p style="margin:5px 0 0; opacity: 0.8;">Jornada 2 - Sin Comisión</p>
+        <p style="margin:0; opacity: 0.8;">Jornada 2 - $10 la sencilla</p>
     </div>
 
     <div id="lista-partidos"></div>
 
+    <div class="lista-jugadas" id="carritoContainer" style="display:none;">
+        <strong style="color:#004d26">JUGADAS AGREGADAS:</strong>
+        <div id="carritoItems"></div>
+    </div>
+
     <div class="footer">
-        <input type="text" id="nombreParticipante" placeholder="ESCRIBE TU NOMBRE">
-        <div class="total">TOTAL: $<span id="montoTotal">0</span></div>
-        <button class="btn-enviar" onclick="enviarPedido()">ENVIAR REGISTRO 📲</button>
+        <input type="text" id="nombreParticipante" placeholder="TU NOMBRE">
+        <div style="display:flex; justify-content: space-between;">
+            <button class="btn-accion btn-agregar" onclick="agregarAlCarrito()">➕ AGREGAR JUGADA</button>
+            <div style="width:48%; text-align:right">
+                <small>Esta jugada:</small><br>
+                <strong>$<span id="montoActual">0</span></strong>
+            </div>
+        </div>
+
+        <div class="totales-finales">TOTAL A PAGAR: $<span id="totalFinal">0</span></div>
+        <button class="btn-accion btn-whatsapp" onclick="enviarWhatsApp()">ENVIAR TODAS POR WHATSAPP 📲</button>
     </div>
 </div>
 
 <script>
     const partidos = [
-        { l: "BRENTFORD", v: "WEST HAM" },
-        { l: "NEWCASTLE", v: "BRIGHTON" },
-        { l: "ARSENAL", v: "FULHAM" },
-        { l: "TIGRES", v: "CHIVAS" },
-        { l: "ATLAS", v: "CRUZ AZUL" },
-        { l: "MAN. UNITED", v: "LIVERPOOL" },
-        { l: "ASTON VILLA", v: "TOTTENHAM" },
-        { l: "AMÉRICA", v: "PUMAS" },
+        { l: "BRENTFORD", v: "WEST HAM" }, { l: "NEWCASTLE", v: "BRIGHTON" },
+        { l: "ARSENAL", v: "FULHAM" }, { l: "TIGRES", v: "CHIVAS" },
+        { l: "ATLAS", v: "CRUZ AZUL" }, { l: "MAN. UNITED", v: "LIVERPOOL" },
+        { l: "ASTON VILLA", v: "TOTTENHAM" }, { l: "AMÉRICA", v: "PUMAS" },
         { l: "TOLUCA", v: "PACHUCA" }
     ];
 
-    const contenedor = document.getElementById('lista-partidos');
-    let selecciones = {};
+    let seleccionesActuales = Array(partidos.length).fill().map(() => []);
+    let carrito = [];
 
+    // Cargar partidos
+    const contenedor = document.getElementById('lista-partidos');
     partidos.forEach((p, index) => {
         const div = document.createElement('div');
         div.className = 'partido';
@@ -69,50 +86,74 @@
             <div class="equipo" style="text-align:left">${p.v}</div>
         `;
         contenedor.appendChild(div);
-        selecciones[index] = [];
     });
 
-    function marcar(partidoIdx, opcion, elemento) {
-        const idx = selecciones[partidoIdx].indexOf(opcion);
-        if (idx > -1) {
-            selecciones[partidoIdx].splice(idx, 1);
-            elemento.classList.remove('active');
-        } else {
-            selecciones[partidoIdx].push(opcion);
-            elemento.classList.add('active');
-        }
-        calcularTotal();
+    function marcar(pIdx, op, el) {
+        const i = seleccionesActuales[pIdx].indexOf(op);
+        if (i > -1) { seleccionesActuales[pIdx].splice(i, 1); el.classList.remove('active'); }
+        else { seleccionesActuales[pIdx].push(op); el.classList.add('active'); }
+        actualizarMontoActual();
     }
 
-    function calcularTotal() {
-        let combinaciones = 1;
-        let tieneSeleccion = false;
-        for (let idx in selecciones) {
-            if (selecciones[idx].length > 0) {
-                combinaciones *= selecciones[idx].length;
-                tieneSeleccion = true;
-            }
-        }
-        const total = tieneSeleccion ? combinaciones * 10 : 0;
-        document.getElementById('montoTotal').innerText = total;
+    function actualizarMontoActual() {
+        let comb = 1; let activa = false;
+        seleccionesActuales.forEach(s => { if(s.length > 0) { comb *= s.length; activa = true; } });
+        document.getElementById('montoActual').innerText = activa ? comb * 10 : 0;
     }
 
-    function enviarPedido() {
-        const nombre = document.getElementById('nombreParticipante').value.toUpperCase();
-        if (!nombre) { alert("Por favor escribe tu nombre"); return; }
+    function agregarAlCarrito() {
+        let jugada = seleccionesActuales.map(s => s.sort().join('') || "?").join(' ');
+        let costo = parseInt(document.getElementById('montoActual').innerText);
+        
+        if (costo === 0) { alert("Selecciona al menos un equipo por partido"); return; }
 
-        // FORMATO LINEAL PARA TU SISTEMA
-        let jugadaLineal = "";
-        partidos.forEach((p, i) => {
-            let sel = selecciones[i].join('');
-            jugadaLineal += (sel === "" ? "?" : sel) + " "; 
+        carrito.push({ texto: jugada, costo: costo });
+        renderCarrito();
+        resetSeleccion();
+    }
+
+    function renderCarrito() {
+        const items = document.getElementById('carritoItems');
+        const container = document.getElementById('carritoContainer');
+        items.innerHTML = "";
+        let total = 0;
+
+        carrito.forEach((j, i) => {
+            total += j.costo;
+            items.innerHTML += `<div class="jugada-item">
+                <span>#${i+1}: ${j.texto}</span>
+                <button class="btn-borrar" onclick="borrarDelCarrito(${i})">✕</button>
+            </div>`;
         });
 
-        const total = document.getElementById('montoTotal').innerText;
-        let mensaje = `${nombre}: ${jugadaLineal.trim()} | Total: $${total}`;
-        
-        // REEMPLAZA CON TU NÚMERO
-        const url = "https://wa.me/523221394827?text=" + encodeURIComponent(mensaje);
+        document.getElementById('totalFinal').innerText = total;
+        container.style.display = carrito.length > 0 ? "block" : "none";
+    }
+
+    function borrarDelCarrito(i) {
+        carrito.splice(i, 1);
+        renderCarrito();
+    }
+
+    function resetSeleccion() {
+        seleccionesActuales = Array(partidos.length).fill().map(() => []);
+        document.querySelectorAll('.btn').forEach(b => b.classList.remove('active'));
+        actualizarMontoActual();
+    }
+
+    function enviarWhatsApp() {
+        const nombre = document.getElementById('nombreParticipante').value.toUpperCase();
+        if (!nombre) { alert("Escribe tu nombre"); return; }
+        if (carrito.length === 0) { alert("Agrega al menos una quiniela"); return; }
+
+        let msg = `${nombre}:\n`;
+        carrito.forEach((j, i) => {
+            msg += `${i+1}) ${j.texto}\n`;
+        });
+        msg += `TOTAL: $${document.getElementById('totalFinal').innerText}`;
+
+        // CAMBIA TU NÚMERO AQUÍ
+        const url = "https://wa.me/5213111234567?text=" + encodeURIComponent(msg);
         window.open(url, '_blank');
     }
 </script>
