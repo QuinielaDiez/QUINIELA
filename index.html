@@ -44,13 +44,15 @@
 <script>
     // CONFIGURA AQUÍ TUS PARTIDOS (Máximo 10, Mínimo 7)
     const partidos = [
-        { l: "TIGRES", v: "CHIVAS" },
-        { l: "AMÉRICA", v: "PUMAS" },
-        { l: "ATLAS", v: "CRUZ AZUL" },
-        { l: "TOLUCA", v: "PACHUCA" },
-        { l: "BRENTFORD", v: "WEST HAM" },
+        { l: "BRENTFORD", v: "WEST HAM " },
         { l: "NEWCASTLE", v: "BRIGHTON" },
-        { l: "ARSENAL", v: "FULHAM" }
+        { l: "ARSENAL", v: "FULHAM" },
+        { l: "TIGRES", v: "CHIVAS " },
+        { l: "ATLAS", v: "CRUZ AZUL" },
+        { l: "MAN. UNITED", v: "LIVERPOOL " },
+        { l: "ASTON VILLA", v: "TOTTENHAM " },
+	{ l: "AMERICA", v: "PUMAS  " },
+        { l: "TOLUCA", v: "PACHUCA  " }
     ];
 
     const contenedor = document.getElementById('lista-partidos');
@@ -112,7 +114,7 @@
         resumen += `\n💰 *Total a pagar: $${document.getElementById('montoTotal').innerText}*`;
         
         // REEMPLAZA EL NÚMERO ABAJO CON EL TUYO
-        const url = "https://wa.me/521TU_NUMERO_AQUI?text=" + encodeURIComponent(resumen);
+        const url = "https://wa.me/523221394827?text=" + encodeURIComponent(resumen);
         window.open(url, '_blank');
     }
 </script>
