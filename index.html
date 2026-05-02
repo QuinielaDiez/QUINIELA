@@ -5,80 +5,105 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>La de Diez Ganadora</title>
     <style>
-        /* Estilos exactos para igualar tu captura */
-        body { font-family: sans-serif; background-color: #f0f2f5; display: flex; justify-content: center; padding-top: 50px; }
-        .card { background-color: #004d40; color: white; border-radius: 25px; width: 450px; padding: 30px; text-align: center; box-shadow: 0 4px 15px rgba(0,0,0,0.2); }
-        .logo-circulo { background: white; width: 80px; height: 80px; border-radius: 50%; margin: 0 auto 15px; display: flex; align-items: center; justify-content: center; border: 3px solid #fbc02d; }
-        .logo-circulo img { width: 60px; }
-        h1 { font-size: 1.3rem; margin: 5px 0; letter-spacing: 1px; }
-        .sub { font-size: 0.9rem; margin-bottom: 20px; color: #eee; }
-        .input-nombre { width: 100%; padding: 12px; border-radius: 10px; border: none; margin-bottom: 15px; text-align: center; font-size: 1rem; font-weight: bold; text-transform: uppercase; }
-        .btn-agregar { background-color: #002b23; color: white; border: none; padding: 12px; border-radius: 10px; cursor: pointer; width: 60%; font-weight: bold; margin-bottom: 10px; font-size: 0.9rem; }
+        /* Diseño original verde esmeralda */
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f0f2f5; display: flex; justify-content: center; padding-top: 30px; margin: 0; }
+        .card { background-color: #004d40; color: white; border-radius: 25px; width: 450px; padding: 30px; text-align: center; box-shadow: 0 10px 25px rgba(0,0,0,0.3); position: relative; }
         
-        /* ESTO ES LO QUE FALTA EN TU CÓDIGO: El contenedor de partidos */
-        #contenedorPartidos { background: white; color: black; border-radius: 15px; padding: 15px; margin: 15px 0; text-align: left; display: none; /* Inicia oculto */ }
-        .fila { display: flex; justify-content: space-between; margin-bottom: 8px; border-bottom: 1px solid #ddd; padding-bottom: 5px; font-size: 0.85rem; }
+        /* Círculo del logo restaurado */
+        .logo-circulo { background: white; width: 90px; height: 90px; border-radius: 50%; margin: 0 auto 15px; display: flex; align-items: center; justify-content: center; border: 4px solid #fbc02d; }
+        .logo-circulo img { width: 75px; height: auto; }
         
-        .total-pago { font-weight: bold; font-size: 1.4rem; margin: 20px 0; color: #fbc02d; }
-        .btn-whatsapp { background-color: #2ecc71; color: white; border: none; padding: 15px; border-radius: 15px; width: 100%; font-weight: bold; font-size: 1.1rem; cursor: pointer; }
+        h1 { font-size: 1.4rem; margin: 5px 0; letter-spacing: 1.5px; text-transform: uppercase; }
+        .sub { font-size: 0.9rem; margin-bottom: 25px; color: #b2dfdb; font-weight: 300; }
+        
+        .input-nombre { width: 100%; padding: 12px; border-radius: 10px; border: none; margin-bottom: 15px; text-align: center; font-size: 1.1rem; font-weight: bold; text-transform: uppercase; box-sizing: border-box; }
+        
+        /* Botón Agregar Jugada */
+        .btn-agregar { background-color: #002b23; color: white; border: none; padding: 12px; border-radius: 10px; cursor: pointer; width: 65%; font-weight: bold; margin: 0 auto 10px; display: flex; align-items: center; justify-content: center; gap: 8px; font-size: 0.9rem; transition: background 0.3s; }
+        .btn-agregar:hover { background-color: #003d32; }
+
+        /* Contenedor de la lista de partidos (se despliega al dar clic) */
+        #contenedorPartidos { background: white; color: #333; border-radius: 15px; padding: 15px; margin: 15px 0; text-align: left; display: none; box-shadow: inset 0 2px 8px rgba(0,0,0,0.2); }
+        .fila { display: flex; justify-content: space-between; align-items: center; padding: 8px 0; border-bottom: 1px solid #eee; font-size: 0.85rem; }
+        .fila select { padding: 4px; border-radius: 5px; border: 1px solid #ccc; font-weight: bold; cursor: pointer; }
+        
+        .total-seccion { margin: 25px 0; }
+        .total-txt { font-size: 1rem; color: #fbc02d; display: block; }
+        .monto { font-size: 2.2rem; font-weight: bold; color: #fbc02d; }
+        
+        .btn-whatsapp { background-color: #2ecc71; color: white; border: none; padding: 15px; border-radius: 15px; width: 100%; font-weight: bold; font-size: 1.2rem; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.2); }
+        .btn-whatsapp:hover { background-color: #27ae60; }
+        
+        .bloqueo { background: #c62828; color: white; padding: 20px; border-radius: 15px; display: none; font-weight: bold; line-height: 1.4; }
     </style>
 </head>
 <body>
 
 <div class="card">
+    <!-- El logo se llama logo.png -->
     <div class="logo-circulo">
-        <img src="https://i.imgur.com/vHq0L9t.png" alt="10">
+        <img src="logo.png" alt="La de Diez">
     </div>
 
     <h1>LA DE DIEZ GANADORA</h1>
-    <p class="sub">Jornada 2 - $10 la sencilla</p>
+    <p class="sub">Jornada de Estreno - $10 la sencilla</p>
 
-    <input type="text" id="nombreCliente" class="input-nombre" placeholder="JUAN PEREZ">
+    <input type="text" id="nombreCliente" class="input-nombre" placeholder="NOMBRE DEL CLIENTE">
 
-    <!-- BOTÓN QUE ABRE LOS PARTIDOS -->
-    <button class="btn-agregar" onclick="mostrarLista()">+ AGREGAR JUGADA</button>
-
-    <!-- LISTA QUE APARECE AL DAR CLIC -->
-    <div id="contenedorPartidos">
-        <div id="listaPartidos"></div>
-        <button onclick="confirmar()" style="width:100%; background:#004d40; color:white; border:none; padding:10px; border-radius:10px; margin-top:10px; cursor:pointer;">LISTO ✅</button>
+    <div id="seccionInteractiva">
+        <button class="btn-agregar" onclick="abrirFormulario()">➕ AGREGAR JUGADA</button>
+        
+        <!-- Lista de partidos que se llena por JavaScript -->
+        <div id="contenedorPartidos">
+            <h4 style="margin: 0 0 10px 0; color: #004d40; border-bottom: 2px solid #fbc02d;">Pronósticos:</h4>
+            <div id="listaDinamica"></div>
+            <button onclick="guardarYSumar()" style="width:100%; background:#004d40; color:white; border:none; padding:12px; border-radius:10px; margin-top:10px; font-weight:bold; cursor:pointer;">CONFIRMAR JUGADA ✅</button>
+        </div>
     </div>
 
-    <div style="text-align: right; font-size: 0.8rem; margin-top: 10px;">
-        Costo jugada: <span id="costo">$0</span>
+    <div class="total-seccion">
+        <span class="total-txt">TOTAL A PAGAR:</span>
+        <span class="monto">$<span id="montoActual">0</span></span>
     </div>
 
-    <div class="total-pago">
-        TOTAL A PAGAR: $<span id="total">0</span>
+    <button id="btnEnviar" class="btn-whatsapp" onclick="enviarWhatsApp()">
+        ENVIAR A WHATSAPP 📲
+    </button>
+    
+    <div id="msgBloqueo" class="bloqueo">
+        ⚠️ REGISTRO CERRADO PARA ESTA JORNADA<br>
+        <small>Límite: Sábado 9 de Mayo 6:00 AM</small>
     </div>
-
-    <button class="btn-whatsapp" onclick="enviar()">ENVIAR A WHATSAPP 📲</button>
 </div>
 
 <script>
-// LOS 9 PARTIDOS EN EL ORDEN QUE PEDISTE
-const partidos = [
-    { id: 1, l: "Man. City", v: "Fulham" },
-    { id: 2, l: "Real Madrid", v: "Alavés" },
-    { id: 3, l: "América", v: "Pumas" },
-    { id: 4, l: "Chivas", v: "Tigres" },
-    { id: 5, l: "Liverpool", v: "Chelsea" },
-    { id: 6, l: "Toluca", v: "Pachuca" },
-    { id: 7, l: "Napoli", v: "AC Milan" },
-    { id: 8, l: "Barcelona", v: "Real Sociedad" },
-    { id: 9, l: "Cruz Azul", v: "Monterrey" }
+// 1. LOS 9 PARTIDOS EN ORDEN CRONOLÓGICO (Fín de semana 9 y 10 de Mayo)
+const partidosSemana = [
+    { id: 1, l: "Man. City", v: "Fulham" },    // Sáb 07:00 AM
+    { id: 2, l: "Real Madrid", v: "Alavés" },  // Sáb 12:00 PM
+    { id: 3, l: "América", v: "Pumas" },       // Sáb 06:00 PM
+    { id: 4, l: "Chivas", v: "Tigres" },       // Sáb 08:00 PM
+    { id: 5, l: "Liverpool", v: "Chelsea" },   // Dom 08:30 AM
+    { id: 6, l: "Toluca", v: "Pachuca" },      // Dom 11:00 AM
+    { id: 7, l: "Napoli", v: "AC Milan" },     // Dom 11:45 AM
+    { id: 8, l: "Barcelona", v: "Real Sociedad"},// Dom 12:00 PM
+    { id: 9, l: "Cruz Azul", v: "Monterrey" }  // Dom 06:00 PM
 ];
 
-let jugadas = [];
+let jugadasRealizadas = [];
 
-function mostrarLista() {
-    const lista = document.getElementById('listaPartidos');
-    lista.innerHTML = ""; // Limpiar
-    partidos.forEach(p => {
+// 2. FUNCIÓN PARA MOSTRAR LA LISTA DE PARTIDOS
+function abrirFormulario() {
+    const lista = document.getElementById('listaDinamica');
+    const contenedor = document.getElementById('contenedorPartidos');
+    
+    lista.innerHTML = ""; // Limpiar contenido previo
+    partidosSemana.forEach(p => {
         lista.innerHTML += `
             <div class="fila">
                 <span><b>${p.id}.</b> ${p.l} vs ${p.v}</span>
-                <select class="sel-partido">
+                <select class="input-jugada" data-id="${p.id}">
+                    <option value="">-</option>
                     <option value="L">L</option>
                     <option value="E">E</option>
                     <option value="V">V</option>
@@ -86,40 +111,75 @@ function mostrarLista() {
             </div>
         `;
     });
-    document.getElementById('contenedorPartidos').style.display = 'block';
+    contenedor.style.display = 'block';
+    document.querySelector('.btn-agregar').style.display = 'none';
 }
 
-function confirmar() {
-    const seleccionados = document.querySelectorAll('.sel-partido');
-    let comb = [];
-    seleccionados.forEach(s => comb.push(s.value));
-    
-    jugadas.push(comb.join('-'));
-    document.getElementById('total').innerText = jugadas.length * 10;
-    document.getElementById('costo').innerText = "$" + (jugadas.length * 10);
-    document.getElementById('contenedorPartidos').style.display = 'none';
-    alert("¡Jugada agregada!");
-}
+// 3. GUARDAR LA COMBINACIÓN Y ACTUALIZAR EL TOTAL
+function guardarYSumar() {
+    const selects = document.querySelectorAll('.input-jugada');
+    let combinacion = [];
+    let faltaUno = false;
 
-function enviar() {
-    const nombre = document.getElementById('nombreCliente').value;
-    if(!nombre || jugadas.length === 0) return alert("Pon tu nombre y agrega jugadas");
-    
-    let msg = `🏆 *LA DE DIEZ GANADORA*\n👤 *Cliente:* ${nombre}\n`;
-    jugadas.forEach((j, i) => msg += `✅ Jugada ${i+1}: ${j}\n`);
-    msg += `💰 *Total:* $${jugadas.length * 10}`;
-    
-    window.open(`https://wa.me/523113405833?text=${encodeURIComponent(msg)}`);
-}
+    selects.forEach(s => {
+        if(s.value === "") faltaUno = true;
+        combinacion.push(s.value);
+    });
 
-// BLOQUEO AUTOMÁTICO SÁBADO 6 AM
-setInterval(() => {
-    const ahora = new Date();
-    const limite = new Date(2026, 4, 9, 6, 0, 0); // Mayo 9, 6 AM
-    if (ahora >= limite) {
-        document.querySelector('.card').innerHTML = "<h2 style='color:white'>JORNADA CERRADA ⚠️</h2>";
+    if(faltaUno) {
+        alert("¡Error! Debes elegir el resultado de los 9 partidos.");
+        return;
     }
-}, 1000);
+
+    // Guardar como texto "L-E-V..."
+    jugadasRealizadas.push(combinacion.join('-'));
+    
+    // Actualizar dinero en pantalla
+    document.getElementById('montoActual').innerText = jugadasRealizadas.length * 10;
+    
+    // Ocultar lista y volver a mostrar el botón agregar
+    document.getElementById('contenedorPartidos').style.display = 'none';
+    document.querySelector('.btn-agregar').style.display = 'flex';
+    alert("✅ Jugada guardada con éxito.");
+}
+
+// 4. BLOQUEO AUTOMÁTICO (Sábado 9 de Mayo, 6:00 AM)
+function verificarTiempo() {
+    const ahora = new Date();
+    // Mayo es el mes 4 en JavaScript (Enero=0, Mayo=4)
+    const limite = new Date(2026, 4, 9, 6, 0, 0);
+
+    if (ahora >= limite) {
+        document.getElementById('btnEnviar').style.display = 'none';
+        document.getElementById('seccionInteractiva').style.display = 'none';
+        document.getElementById('msgBloqueo').style.display = 'block';
+    }
+}
+setInterval(verificarTiempo, 1000);
+verificarTiempo();
+
+// 5. ENVÍO DE DATOS A WHATSAPP
+function enviarWhatsApp() {
+    const nombre = document.getElementById('nombreCliente').value;
+    const total = document.getElementById('montoActual').innerText;
+
+    if (!nombre) { alert("Escribe el nombre del cliente."); return; }
+    if (jugadasRealizadas.length === 0) { alert("Agrega al menos una jugada."); return; }
+
+    let texto = `🏆 *LA DE DIEZ GANADORA*\n👤 *Cliente:* ${nombre.toUpperCase()}\n`;
+    texto += `📅 *Fecha:* ${new Date().toLocaleDateString()}\n`;
+    texto += `--------------------------\n`;
+    
+    jugadasRealizadas.forEach((j, i) => {
+        texto += `⚽ *Jugada ${i + 1}:* ${j}\n`;
+    });
+
+    texto += `--------------------------\n`;
+    texto += `💰 *TOTAL A PAGAR: $${total}*`;
+
+    const url = `https://wa.me/523113405833?text=${encodeURIComponent(texto)}`;
+    window.open(url, '_blank');
+}
 </script>
 
 </body>
