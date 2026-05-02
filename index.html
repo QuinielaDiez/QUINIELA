@@ -63,13 +63,17 @@
 
 <script>
     // LISTA DE PARTIDOS
-    const partidos = [
-        { l: "BRENTFORD", v: "WEST HAM" }, { l: "NEWCASTLE", v: "BRIGHTON" },
-        { l: "ARSENAL", v: "FULHAM" }, { l: "TIGRES", v: "CHIVAS" },
-        { l: "ATLAS", v: "CRUZ AZUL" }, { l: "MAN. UNITED", v: "LIVERPOOL" },
-        { l: "ASTON VILLA", v: "TOTTENHAM" }, { l: "AMÉRICA", v: "PUMAS" },
-        { l: "TOLUCA", v: "PACHUCA" }
-    ];
+   const partidosJornada = [
+    { local: "América", visitante: "Pumas" },
+    { local: "Chivas", visitante: "Tigres" },
+    { local: "Cruz Azul", visitante: "Monterrey" },
+    { local: "Toluca", visitante: "Pachuca" },
+    { local: "Real Madrid", visitante: "Alavés" },
+    { local: "Barcelona", visitante: "Real Sociedad" },
+    { local: "Liverpool", visitante: "Chelsea" },
+    { local: "Man. City", visitante: "Fulham" },
+    { local: "Napoli", visitante: "AC Milan" }
+];
 
     let seleccionesActuales = Array(partidos.length).fill().map(() => []);
     let carrito = [];
