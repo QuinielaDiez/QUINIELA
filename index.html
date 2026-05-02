@@ -7,26 +7,17 @@
     <style>
         body { font-family: sans-serif; background-color: #f0f2f5; display: flex; justify-content: center; padding-top: 30px; margin: 0; }
         .card { background-color: #004d40; color: white; border-radius: 25px; width: 450px; padding: 30px; text-align: center; box-shadow: 0 10px 25px rgba(0,0,0,0.3); }
-        
-        /* Círculo del logo */
         .logo-circulo { background: white; width: 90px; height: 90px; border-radius: 50%; margin: 0 auto 15px; display: flex; align-items: center; justify-content: center; border: 4px solid #fbc02d; overflow: hidden; }
-        .logo-circulo img { width: 100%; height: auto; display: block; }
+        .logo-circulo img { width: 100%; height: auto; }
+        h1 { font-size: 1.4rem; margin: 5px 0; text-transform: uppercase; }
+        .input-nombre { width: 100%; padding: 12px; border-radius: 10px; border: none; margin-bottom: 15px; text-align: center; font-size: 1.1rem; }
+        .btn-agregar { background-color: #002b23; color: white; border: none; padding: 12px; border-radius: 10px; cursor: pointer; width: 65%; font-weight: bold; margin: 0 auto; display: block; }
         
-        h1 { font-size: 1.4rem; margin: 5px 0; letter-spacing: 1.5px; text-transform: uppercase; }
-        .sub { font-size: 0.9rem; margin-bottom: 25px; color: #b2dfdb; }
-        
-        .input-nombre { width: 100%; padding: 12px; border-radius: 10px; border: none; margin-bottom: 15px; text-align: center; font-size: 1.1rem; font-weight: bold; text-transform: uppercase; box-sizing: border-box; }
-        
-        .btn-agregar { background-color: #002b23; color: white; border: none; padding: 12px; border-radius: 10px; cursor: pointer; width: 65%; font-weight: bold; margin: 0 auto 10px; display: flex; align-items: center; justify-content: center; gap: 8px; font-size: 0.9rem; }
-
-        /* Contenedor de los partidos */
+        /* Contenedor partidos */
         #contenedorPartidos { background: white; color: #333; border-radius: 15px; padding: 15px; margin: 15px 0; text-align: left; display: none; }
-        .fila { display: flex; justify-content: space-between; align-items: center; padding: 8px 0; border-bottom: 1px solid #eee; font-size: 0.85rem; }
-        .fila select { padding: 4px; border-radius: 5px; border: 1px solid #ccc; font-weight: bold; }
+        .fila { display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid #eee; font-size: 0.85rem; }
         
-        .total-seccion { margin: 25px 0; }
-        .monto { font-size: 2.2rem; font-weight: bold; color: #fbc02d; }
-        
+        .monto { font-size: 2.2rem; font-weight: bold; color: #fbc02d; margin: 15px 0; display: block; }
         .btn-whatsapp { background-color: #2ecc71; color: white; border: none; padding: 15px; border-radius: 15px; width: 100%; font-weight: bold; font-size: 1.2rem; cursor: pointer; }
     </style>
 </head>
@@ -34,94 +25,67 @@
 
 <div class="card">
     <div class="logo-circulo">
-        <!-- Revisa que tu archivo se llame logo.png, logo.jpg o logo.jpeg -->
-        <img src="logo.jpg" alt="Logo" onerror="this.src='https://via.placeholder.com/90?text=LOGO'">
+        <!-- CAMBIADO A .JPG PORQUE ASÍ ESTÁ EN TU GITHUB -->
+        <img src="logo.jpg" alt="Logo">
     </div>
 
     <h1>LA DE DIEZ GANADORA</h1>
-    <p class="sub">Jornada de Estreno - $10 la sencilla</p>
+    <p style="color:#b2dfdb">Jornada de Estreno - $10 la sencilla</p>
 
     <input type="text" id="nombreCliente" class="input-nombre" placeholder="NOMBRE DEL CLIENTE">
 
-    <div id="seccionInteractiva">
-        <button class="btn-agregar" onclick="mostrarPartidos()">➕ AGREGAR JUGADA</button>
-        
-        <div id="contenedorPartidos">
-            <div id="listaDinamica"></div>
-            <button onclick="confirmarJugada()" style="width:100%; background:#004d40; color:white; border:none; padding:12px; border-radius:10px; margin-top:10px; font-weight:bold; cursor:pointer;">CONFIRMAR JUGADA ✅</button>
-        </div>
+    <button class="btn-agregar" onclick="verPartidos()">➕ AGREGAR JUGADA</button>
+    
+    <div id="contenedorPartidos">
+        <div id="lista"></div>
+        <button onclick="cerrarYGuardar()" style="width:100%; background:#004d40; color:white; border:none; padding:10px; border-radius:10px; margin-top:10px; cursor:pointer;">LISTO ✅</button>
     </div>
 
-    <div class="total-seccion">
-        <span style="color:#fbc02d">TOTAL A PAGAR:</span><br>
-        <span class="monto">$<span id="montoTotal">0</span></span>
+    <div style="margin-top:20px">
+        TOTAL A PAGAR:<br>
+        <span class="monto">$<span id="txtTotal">0</span></span>
     </div>
 
-    <button class="btn-whatsapp" onclick="enviarWhatsApp()">ENVIAR A WHATSAPP 📲</button>
+    <button class="btn-whatsapp" onclick="enviar()">ENVIAR A WHATSAPP 📲</button>
 </div>
 
 <script>
 const partidos = [
-    { id: 1, l: "Man. City", v: "Fulham" },
-    { id: 2, l: "Real Madrid", v: "Alavés" },
-    { id: 3, l: "América", v: "Pumas" },
-    { id: 4, l: "Chivas", v: "Tigres" },
-    { id: 5, l: "Liverpool", v: "Chelsea" },
-    { id: 6, l: "Toluca", v: "Pachuca" },
-    { id: 7, l: "Napoli", v: "AC Milan" },
-    { id: 8, l: "Barcelona", v: "Real Sociedad" },
-    { id: 9, l: "Cruz Azul", v: "Monterrey" }
+    {id: 1, l: "Man. City", v: "Fulham"}, {id: 2, l: "Real Madrid", v: "Alavés"},
+    {id: 3, l: "América", v: "Pumas"}, {id: 4, l: "Chivas", v: "Tigres"},
+    {id: 5, l: "Liverpool", v: "Chelsea"}, {id: 6, l: "Toluca", v: "Pachuca"},
+    {id: 7, l: "Napoli", v: "AC Milan"}, {id: 8, l: "Barcelona", v: "Real Sociedad"},
+    {id: 9, l: "Cruz Azul", v: "Monterrey"}
 ];
 
 let jugadas = [];
 
-function mostrarPartidos() {
-    const lista = document.getElementById('listaDinamica');
-    lista.innerHTML = ""; 
+function verPartidos() {
+    const d = document.getElementById('lista');
+    d.innerHTML = "";
     partidos.forEach(p => {
-        lista.innerHTML += `
-            <div class="fila">
-                <span><b>${p.id}.</b> ${p.l} vs ${p.v}</span>
-                <select class="sel-res">
-                    <option value="">-</option>
-                    <option value="L">L</option>
-                    <option value="E">E</option>
-                    <option value="V">V</option>
-                </select>
-            </div>
-        `;
+        d.innerHTML += `<div class="fila">
+            <span>${p.id}. ${p.l} vs ${p.v}</span>
+            <select class="sel"><option value="L">L</option><option value="E">E</option><option value="V">V</option></select>
+        </div>`;
     });
     document.getElementById('contenedorPartidos').style.display = 'block';
-    document.querySelector('.btn-agregar').style.display = 'none';
 }
 
-function confirmarJugada() {
-    const seleccionados = document.querySelectorAll('.sel-res');
-    let combinacion = [];
-    let incompleto = false;
-
-    seleccionados.forEach(s => {
-        if(s.value === "") incompleto = true;
-        combinacion.push(s.value);
-    });
-
-    if(incompleto) return alert("Elige los 9 resultados");
-
-    jugadas.push(combinacion.join('-'));
-    document.getElementById('montoTotal').innerText = jugadas.length * 10;
+function cerrarYGuardar() {
+    const picks = Array.from(document.querySelectorAll('.sel')).map(s => s.value);
+    jugadas.push(picks.join('-'));
+    document.getElementById('txtTotal').innerText = jugadas.length * 10;
     document.getElementById('contenedorPartidos').style.display = 'none';
-    document.querySelector('.btn-agregar').style.display = 'flex';
 }
 
-function enviarWhatsApp() {
-    const nombre = document.getElementById('nombreCliente').value;
-    if(!nombre || jugadas.length === 0) return alert("Faltan datos");
-    
-    let msg = `🏆 *LA DE DIEZ GANADORA*\n👤 *Cliente:* ${nombre.toUpperCase()}\n`;
-    jugadas.forEach((j, i) => msg += `✅ Jugada ${i+1}: ${j}\n`);
-    msg += `💰 *Total:* $${jugadas.length * 10}`;
-    
-    window.open(`https://wa.me/523113405833?text=${encodeURIComponent(msg)}`);
+function enviar() {
+    const nom = document.getElementById('nombreCliente').value;
+    if(!nom || jugadas.length === 0) return alert("Falta nombre o jugada");
+    let m = `🏆 *LA DE DIEZ GANADORA*\n👤 *Cliente:* ${nom.toUpperCase()}\n`;
+    jugadas.forEach((j, i) => m += `✅ Jugada ${i+1}: ${j}\n`);
+    m += `💰 *Total:* $${jugadas.length * 10}`;
+    window.open(`https://wa.me/523113405833?text=${encodeURIComponent(m)}`);
 }
 </script>
 </body>
