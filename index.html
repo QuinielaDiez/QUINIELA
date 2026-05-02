@@ -8,32 +8,20 @@
         body { font-family: 'Arial', sans-serif; background-color: #f4f4f4; display: flex; justify-content: center; padding: 15px; margin: 0; }
         .card { background-color: #004d40; color: white; border-radius: 20px; width: 100%; max-width: 480px; padding: 25px; text-align: center; box-shadow: 0 8px 25px rgba(0,0,0,0.4); }
         
-        /* CONTENEDOR DEL LOGO REPARADO */
-        .contenedor-logo { 
-            background: white; 
-            width: 90px; 
-            height: 90px; 
-            border-radius: 50%; 
-            margin: 0 auto 15px; 
-            display: flex; 
-            align-items: center; 
-            justify-content: center; 
-            border: 4px solid #fbc02d; 
-            overflow: hidden; 
-        }
+        .contenedor-logo { background: white; width: 90px; height: 90px; border-radius: 50%; margin: 0 auto 15px; display: flex; align-items: center; justify-content: center; border: 4px solid #fbc02d; overflow: hidden; }
         .contenedor-logo img { width: 100%; height: auto; display: block; }
 
         .input-nombre { width: 90%; padding: 12px; border-radius: 8px; border: none; margin-bottom: 20px; text-align: center; font-weight: bold; font-size: 1.1rem; }
 
         .tabla-blanca { background: white; color: #333; border-radius: 15px; padding: 15px; margin-bottom: 15px; }
-        .fila { display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid #eee; padding: 12px 0; }
-        .equipo { width: 35%; font-weight: bold; font-size: 0.9rem; color: #004d40; }
+        .fila { display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid #eee; padding: 10px 0; }
+        .equipo { width: 35%; font-weight: bold; font-size: 0.85rem; color: #004d40; }
         .izq { text-align: right; }
         .der { text-align: left; }
         
         .opciones { width: 30%; display: flex; justify-content: space-around; }
-        .btn-voto { width: 34px; height: 34px; display: flex; align-items: center; justify-content: center; cursor: pointer; border: 1px solid #ccc; border-radius: 6px; font-weight: bold; background: #fdfdfd; }
-        .btn-voto.activo { background: #fbc02d; border-color: #fbc02d; color: #004d40; transform: scale(1.1); }
+        .btn-voto { width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; cursor: pointer; border: 1px solid #ccc; border-radius: 6px; font-weight: bold; background: #fdfdfd; }
+        .btn-voto.activo { background: #fbc02d; border-color: #fbc02d; color: #004d40; }
 
         .btn-agregar { background-color: #002b23; color: white; border: 1px solid #b2dfdb; padding: 12px; border-radius: 8px; width: 100%; font-weight: bold; cursor: pointer; margin-top: 10px; }
         .monto-total { font-size: 2.5rem; font-weight: bold; color: #fbc02d; margin: 10px 0; display: block; }
@@ -43,12 +31,12 @@
 <body>
 
 <div class="card">
-    <!-- LOGO AHORA SÍ VISIBLE -->
     <div class="contenedor-logo">
-        <img src="logo.jpg" alt="Logo de la Quiniela">
+        <img src="logo.jpg" alt="Logo">
     </div>
 
-    <h2 style="margin: 0 0 15px 0;">LA DE DIEZ GANADORA</h2>
+    <h2 style="margin: 0 0 10px 0;">LA DE DIEZ GANADORA</h2>
+    <p style="margin: 0 0 15px 0; color: #fbc02d; font-weight: bold;">Sencilla $10 | Doble $20 | Triple $30</p>
 
     <input type="text" id="nombreCliente" class="input-nombre" placeholder="TU NOMBRE">
 
@@ -66,16 +54,23 @@
 </div>
 
 <script>
+// LOS 9 PARTIDOS ACORDADOS EN ORDEN
 const partidos = [
-    {id: 1, l: "AMÉRICA", v: "PUMAS"}, {id: 2, l: "TOLUCA", v: "PACHUCA"},
-    {id: 3, l: "CANCÚN", v: "JAIBA"}, {id: 4, l: "TEPA", v: "MINEROS"},
-    {id: 5, l: "AUSTIN", v: "LOUIS"}, {id: 6, l: "INTER", v: "FLUMI"}
+    {id: 1, l: "AMÉRICA", v: "PUMAS"}, 
+    {id: 2, l: "TOLUCA", v: "PACHUCA"},
+    {id: 3, l: "CANCÚN", v: "JAIBA BRAVA"}, 
+    {id: 4, l: "TEPATITLÁN", v: "MINEROS"},
+    {id: 5, l: "AUSTIN", v: "LOUIS CITY"}, 
+    {id: 6, l: "INTERNACIONAL", v: "FLUMINENSE"},
+    {id: 7, l: "MIRASSOL", v: "CORINTHIANS"},
+    {id: 8, l: "BARCELONA", v: "R. SOCIEDAD"},
+    {id: 9, l: "MAN. CITY", v: "ARSENAL"}
 ];
 
 let seleccionActual = {};
-let historial = [];
+let historialCostos = 0;
 
-function cargarInmediato() {
+function cargar() {
     const contenedor = document.getElementById('listaPartidos');
     partidos.forEach(p => {
         seleccionActual[p.id] = [];
@@ -100,42 +95,51 @@ function marcar(id, valor, el) {
         seleccionActual[id].push(valor);
         el.classList.add('activo');
     }
-    calcularImporte(); // Calcula dobles/triples al momento
+    actualizarPrecio();
 }
 
-function calcularImporte() {
-    let acumulado = historial.reduce((sum, j) => sum + j.costo, 0);
-    let subtotalActual = 0;
+// LÓGICA DE DINERO CORREGIDA
+function actualizarPrecio() {
+    let costoActual = 0;
+    let tieneSeleccion = false;
+
     Object.keys(seleccionActual).forEach(id => {
-        subtotalActual += (seleccionActual[id].length * 10);
+        let opciones = seleccionActual[id].length;
+        if(opciones > 0) {
+            tieneSeleccion = true;
+            // Si el partido tiene 1 opción = $10 total (si es el único o base)
+            // Aquí la lógica es: La jugada base cuesta $10. 
+            // Cada opción EXTRA en un partido suma $10.
+            if (opciones === 2) costoActual += 10; // Doble
+            if (opciones === 3) costoActual += 20; // Triple
+        }
     });
-    document.getElementById('displayTotal').innerText = `$${acumulado + subtotalActual}`;
+
+    // Si hay al menos algo marcado, la base son $10
+    let totalJugada = tieneSeleccion ? (10 + costoActual) : 0;
+    
+    document.getElementById('displayTotal').innerText = `$${historialCostos + totalJugada}`;
 }
 
 function guardarJugada() {
-    let costo = 0;
-    Object.keys(seleccionActual).forEach(id => {
-        if(seleccionActual[id].length === 0) return;
-        costo += (seleccionActual[id].length * 10);
-    });
+    let costoDeEsta = parseInt(document.getElementById('displayTotal').innerText.replace('$','')) - historialCostos;
+    if(costoDeEsta === 0) return alert("Selecciona tus pronósticos");
 
-    if(costo === 0) return alert("Selecciona partidos");
-
-    historial.push({ costo });
+    historialCostos += costoDeEsta;
     document.querySelectorAll('.btn-voto').forEach(b => b.classList.remove('activo'));
     partidos.forEach(p => seleccionActual[p.id] = []);
-    alert("¡Jugada agregada!");
-    calcularImporte();
+    alert("Jugada agregada exitosamente.");
+    actualizarPrecio();
 }
 
 function enviar() {
     const n = document.getElementById('nombreCliente').value;
-    if(!n) return alert("Falta tu nombre");
+    if(!n) return alert("Por favor escribe tu nombre");
     let t = document.getElementById('displayTotal').innerText;
-    window.open(`https://wa.me/523113405833?text=Hola, soy ${n}. Mi total es ${t}.`);
+    window.open(`https://wa.me/523113405833?text=Hola, soy ${n}. Mi quiniela total es de ${t}.`);
 }
 
-cargarInmediato();
+cargar();
 </script>
 </body>
 </html>
