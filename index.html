@@ -5,104 +5,137 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>La de Diez Ganadora</title>
     <style>
-        body { font-family: sans-serif; background-color: #f0f2f5; display: flex; justify-content: center; padding: 10px; margin: 0; }
-        .card { background-color: #004d40; color: white; border-radius: 20px; width: 100%; max-width: 450px; padding: 20px; text-align: center; }
-        .input-nombre { width: 90%; padding: 10px; border-radius: 8px; border: none; margin-bottom: 15px; font-weight: bold; }
+        body { font-family: 'Arial', sans-serif; background-color: #f4f4f4; display: flex; justify-content: center; padding: 15px; margin: 0; }
+        .card { background-color: #004d40; color: white; border-radius: 20px; width: 100%; max-width: 500px; padding: 20px; text-align: center; box-shadow: 0 8px 20px rgba(0,0,0,0.3); }
         
-        /* Tabla de partidos */
-        .tabla { background: white; color: #333; border-radius: 12px; padding: 10px; margin-bottom: 15px; }
-        .fila { display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid #eee; padding: 10px 0; font-size: 0.8rem; }
-        .equipo { width: 35%; font-weight: bold; }
-        .opciones { width: 30%; display: flex; justify-content: space-around; }
-        
-        .btn-v { width: 30px; height: 30px; border: 1px solid #ccc; display: flex; align-items: center; justify-content: center; cursor: pointer; border-radius: 4px; }
-        .btn-v.activo { background: #fbc02d; color: #004d40; border-color: #fbc02d; }
+        .logo { background: white; width: 80px; height: 80px; border-radius: 50%; margin: 0 auto 10px; display: flex; align-items: center; justify-content: center; border: 3px solid #fbc02d; overflow: hidden; }
+        .logo img { width: 100%; height: auto; }
 
-        .btn-ag { background: #002b23; color: white; border: 1px solid #b2dfdb; padding: 10px; width: 100%; border-radius: 8px; cursor: pointer; margin-top: 10px; font-weight: bold; }
-        .total-box { margin: 15px 0; }
-        .monto { font-size: 2rem; color: #fbc02d; font-weight: bold; }
-        .btn-wa { background: #2ecc71; color: white; border: none; padding: 15px; width: 100%; border-radius: 10px; font-weight: bold; font-size: 1.1rem; cursor: pointer; }
+        .input-nombre { width: 95%; padding: 12px; border-radius: 8px; border: none; margin-bottom: 20px; text-align: center; font-weight: bold; font-size: 1rem; }
+
+        /* Estilo de la tabla igual a la competencia */
+        .tabla-contenedor { background: white; color: #333; border-radius: 12px; padding: 10px; margin-bottom: 15px; }
+        .encabezado-tabla { display: flex; font-size: 0.75rem; font-weight: bold; color: #004d40; border-bottom: 2px solid #fbc02d; padding-bottom: 8px; margin-bottom: 10px; }
+        
+        .fila-partido { display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid #eee; padding: 12px 0; }
+        .col-equipo { width: 35%; font-weight: bold; font-size: 0.85rem; }
+        .izq { text-align: right; padding-right: 8px; }
+        .der { text-align: left; padding-left: 8px; }
+        
+        .col-botones { width: 30%; display: flex; justify-content: space-around; }
+        .btn-opcion { width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; cursor: pointer; border: 1px solid #ccc; border-radius: 4px; font-weight: bold; background: #f9f9f9; transition: 0.2s; }
+        .btn-opcion.seleccionado { background: #fbc02d; border-color: #fbc02d; color: #004d40; box-shadow: inset 0 2px 4px rgba(0,0,0,0.1); }
+
+        .btn-agregar { background-color: #002b23; color: white; border: 1px solid #b2dfdb; padding: 12px; border-radius: 8px; width: 100%; font-weight: bold; cursor: pointer; margin-top: 10px; }
+        
+        .total-seccion { margin: 20px 0; }
+        .monto-grande { font-size: 2.5rem; font-weight: bold; color: #fbc02d; }
+        
+        .btn-enviar { background-color: #2ecc71; color: white; border: none; padding: 18px; border-radius: 12px; width: 100%; font-weight: bold; font-size: 1.2rem; cursor: pointer; }
     </style>
 </head>
 <body>
 
 <div class="card">
-    <h2>LA DE DIEZ GANADORA</h2>
-    <input type="text" id="cliente" class="input-nombre" placeholder="TU NOMBRE">
+    <div class="logo">
+        <img src="logo.jpg" alt="Logo">
+    </div>
 
-    <div class="tabla">
-        <div id="partidosLista">
-            <!-- Los partidos aparecerán aquí -->
+    <h2 style="margin: 5px 0;">LA DE DIEZ GANADORA</h2>
+    <p style="color: #b2dfdb; margin-bottom: 20px;">Jornada de Estreno - $10 la sencilla</p>
+
+    <div class="tabla-contenedor">
+        <!-- Títulos de columnas -->
+        <div class="encabezado-tabla">
+            <div style="width: 35%;">LOCAL</div>
+            <div style="width: 30%;">L - E - V</div>
+            <div style="width: 35%;">VISITANTE</div>
         </div>
-        <button class="btn-ag" onclick="guardar()">+ AGREGAR JUGADA</button>
+
+        <!-- LISTA DE PARTIDOS QUE SE CARGA AL INSTANTE -->
+        <div id="listaPartidos"></div>
+        
+        <button class="btn-agregar" onclick="agregarAlTotal()">+ AGREGAR JUGADA</button>
     </div>
 
-    <div class="total-box">
-        TOTAL:<br>
-        <span class="monto" id="t">$0</span>
+    <input type="text" id="nombreCliente" class="input-nombre" placeholder="NOMBRE DEL CLIENTE">
+
+    <div class="total-seccion">
+        TOTAL A PAGAR:<br>
+        <span class="monto-grande" id="displayTotal">$0</span>
     </div>
 
-    <button class="btn-wa" onclick="enviar()">ENVIAR A WHATSAPP</button>
+    <button class="btn-enviar" onclick="enviar()">ENVIAR A WHATSAPP 📲</button>
 </div>
 
 <script>
-const lista = [
-    {l:"AMERICA", v:"PUMAS"}, {l:"TOLUCA", v:"PACHUCA"}, 
-    {l:"CANCUN", v:"JAIBA"}, {l:"TEPA", v:"MINEROS"},
-    {l:"AUSTIN", v:"LOUIS"}, {l:"INTER", v:"FLUMI"}
+// Aquí pones tus partidos de la semana
+const jornada = [
+    {id: 1, l: "AMÉRICA", v: "PUMAS"}, {id: 2, l: "TOLUCA", v: "PACHUCA"},
+    {id: 3, l: "CANCÚN", v: "JAIBA BRAVA"}, {id: 4, l: "TEPATITLÁN", v: "MINEROS"},
+    {id: 5, l: "AUSTIN", v: "LOUIS CITY"}, {id: 6, l: "INTERNACIONAL", v: "FLUMINENSE"},
+    {id: 7, l: "MIRASSOL", v: "CORINTHIANS"}, {id: 8, l: "BARCELONA", v: "R. SOCIEDAD"}
 ];
 
-let sel = {};
-let historial = [];
+let seleccionTemporal = {};
+let totalGeneral = 0;
 
-function iniciar() {
-    const box = document.getElementById('partidosLista');
-    lista.forEach((p, i) => {
-        sel[i] = [];
-        box.innerHTML += `
-            <div class="fila">
-                <div class="equipo" style="text-align:right">${p.l}</div>
-                <div class="opciones">
-                    <div class="btn-v" onclick="marcar(${i},'L',this)">L</div>
-                    <div class="btn-v" onclick="marcar(${i},'E',this)">E</div>
-                    <div class="btn-v" onclick="marcar(${i},'V',this)">V</div>
+function cargarPartidos() {
+    const contenedor = document.getElementById('listaPartidos');
+    jornada.forEach(p => {
+        seleccionTemporal[p.id] = [];
+        contenedor.innerHTML += `
+            <div class="fila-partido">
+                <div class="col-equipo izq">${p.l}</div>
+                <div class="col-botones">
+                    <div class="btn-opcion" onclick="picar(${p.id}, 'L', this)">L</div>
+                    <div class="btn-opcion" onclick="picar(${p.id}, 'E', this)">E</div>
+                    <div class="btn-opcion" onclick="picar(${p.id}, 'V', this)">V</div>
                 </div>
-                <div class="equipo" style="text-align:left">${p.v}</div>
+                <div class="col-equipo der">${p.v}</div>
             </div>`;
     });
 }
 
-function marcar(i, v, el) {
-    if(sel[i].includes(v)) {
-        sel[i] = sel[i].filter(x => x !== v);
-        el.classList.remove('activo');
+function picar(id, valor, el) {
+    if (seleccionTemporal[id].includes(valor)) {
+        seleccionTemporal[id] = seleccionTemporal[id].filter(v => v !== valor);
+        el.classList.remove('seleccionado');
     } else {
-        sel[i].push(v);
-        el.classList.add('activo');
+        seleccionTemporal[id].push(valor);
+        el.classList.add('seleccionado');
     }
 }
 
-function guardar() {
+function agregarAlTotal() {
     let costo = 0;
-    Object.keys(sel).forEach(k => costo += (sel[k].length * 10));
-    if(costo === 0) return alert("Marca los partidos");
+    Object.keys(seleccionTemporal).forEach(k => {
+        costo += (seleccionTemporal[k].length * 10);
+    });
+
+    if (costo === 0) return alert("Selecciona al menos un partido");
+
+    totalGeneral += costo;
+    document.getElementById('displayTotal').innerText = `$${totalGeneral}`;
     
-    historial.push({costo});
-    let total = historial.reduce((a, b) => a + b.costo, 0);
-    document.getElementById('t').innerText = "$" + total;
-    
-    document.querySelectorAll('.btn-v').forEach(b => b.classList.remove('activo'));
-    Object.keys(sel).forEach(k => sel[k] = []);
-    alert("¡Jugada agregada!");
+    // Limpiar visualmente para la siguiente jugada
+    document.querySelectorAll('.btn-opcion').forEach(b => b.classList.remove('seleccionado'));
+    jornada.forEach(p => seleccionTemporal[p.id] = []);
+    alert("Jugada agregada al total");
 }
 
 function enviar() {
-    const n = document.getElementById('cliente').value;
-    if(!n) return alert("Pon tu nombre");
-    window.open("https://wa.me/523113405833?text=Hola, soy " + n + ". Ya hice mi quiniela.");
+    const nombre = document.getElementById('nombreCliente').value;
+    if (!nombre) return alert("Escribe el nombre del cliente");
+    if (totalGeneral === 0) return alert("Primero agrega una jugada");
+
+    let msg = `🏆 *LA DE DIEZ GANADORA*\n👤 *Cliente:* ${nombre.toUpperCase()}\n💰 *Total:* $${totalGeneral}`;
+    window.open(`https://wa.me/523113405833?text=${encodeURIComponent(msg)}`);
 }
 
-iniciar();
+// ESTA LÍNEA HACE QUE SE VEAN AL PURO ENTRAR
+cargarPartidos();
 </script>
+
 </body>
 </html>
