@@ -11,25 +11,28 @@
         .logo-header { background: white; width: 80px; height: 80px; border-radius: 50%; margin: 0 auto 10px; display: flex; align-items: center; justify-content: center; border: 3px solid #fbc02d; overflow: hidden; }
         .logo-header img { width: 100%; height: auto; }
 
-        .input-nombre { width: 90%; padding: 10px; border-radius: 5px; border: none; margin-bottom: 15px; text-align: center; font-weight: bold; }
+        .input-nombre { width: 90%; padding: 12px; border-radius: 8px; border: none; margin-bottom: 20px; text-align: center; font-weight: bold; font-size: 1rem; }
 
-        /* Estilo Tabla como la imagen */
-        .tabla-quiniela { background: white; color: #333; border-radius: 10px; padding: 10px; margin-bottom: 20px; }
-        .fila-partido { display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid #eee; padding: 10px 0; font-size: 0.85rem; }
+        /* Estilo Tabla */
+        .tabla-quiniela { background: white; color: #333; border-radius: 10px; padding: 10px; margin-bottom: 15px; }
+        .fila-partido { display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid #eee; padding: 12px 0; }
         
-        .col-equipo { width: 35%; font-weight: bold; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-        .izq { text-align: right; padding-right: 5px; }
-        .der { text-align: left; padding-left: 5px; }
+        .col-equipo { width: 35%; font-weight: bold; font-size: 0.85rem; }
+        .izq { text-align: right; padding-right: 8px; }
+        .der { text-align: left; padding-left: 8px; }
         
-        .col-opciones { width: 30%; display: flex; justify-content: space-around; align-items: center; }
+        .col-opciones { width: 30%; display: flex; justify-content: space-around; }
         
-        /* Botoncitos L E V */
-        .btn-voto { width: 30px; height: 30px; display: flex; align-items: center; justify-content: center; cursor: pointer; border-radius: 4px; font-weight: bold; color: #777; transition: 0.2s; }
-        .btn-voto.activo { background: #fbc02d; color: #004d40; box-shadow: inset 0 0 5px rgba(0,0,0,0.2); }
-        .label-voto { font-size: 0.7rem; margin-bottom: 2px; display: block; color: #999; }
+        /* Botones L E V */
+        .btn-voto { width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; cursor: pointer; border: 1px solid #ddd; border-radius: 5px; font-weight: bold; color: #555; background: #fafafa; transition: 0.2s; }
+        .btn-voto.activo { background: #fbc02d; border-color: #fbc02d; color: #004d40; box-shadow: 0 2px 4px rgba(0,0,0,0.2); }
 
-        .monto-total { font-size: 2rem; font-weight: bold; color: #fbc02d; margin: 10px 0; display: block; }
-        .btn-whatsapp { background-color: #2ecc71; color: white; border: none; padding: 15px; border-radius: 10px; width: 100%; font-weight: bold; font-size: 1.1rem; cursor: pointer; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+        /* Botón Agregar debajo de partidos */
+        .btn-agregar { background-color: #002b23; color: white; border: 1px solid #b2dfdb; padding: 12px; border-radius: 8px; width: 100%; font-weight: bold; cursor: pointer; margin-top: 10px; font-size: 0.9rem; }
+        .btn-agregar:hover { background-color: #003d32; }
+
+        .monto-total { font-size: 2.2rem; font-weight: bold; color: #fbc02d; margin: 15px 0; display: block; }
+        .btn-whatsapp { background-color: #2ecc71; color: white; border: none; padding: 18px; border-radius: 12px; width: 100%; font-weight: bold; font-size: 1.2rem; cursor: pointer; margin-top: 10px; }
     </style>
 </head>
 <body>
@@ -40,13 +43,13 @@
     </div>
 
     <h3 style="margin: 5px 0;">LA DE DIEZ GANADORA</h3>
-    <p style="font-size: 0.8rem; color: #b2dfdb; margin-bottom: 15px;">DOMINGUERA - $10 la sencilla</p>
+    <p style="font-size: 0.85rem; color: #b2dfdb; margin-bottom: 20px;">DOMINGUERA - $10 la sencilla</p>
 
-    <input type="text" id="nombreCliente" class="input-nombre" placeholder="Nombre de la quiniela">
+    <input type="text" id="nombreCliente" class="input-nombre" placeholder="Nombre del cliente / Quiniela">
 
     <div class="tabla-quiniela">
         <!-- Encabezados -->
-        <div style="display: flex; font-size: 0.7rem; font-weight: bold; color: #004d40; border-bottom: 2px solid #fbc02d; padding-bottom: 5px;">
+        <div style="display: flex; font-size: 0.75rem; font-weight: bold; color: #004d40; border-bottom: 2px solid #fbc02d; padding-bottom: 8px; margin-bottom: 5px;">
             <div style="width: 35%;">LOCAL</div>
             <div style="width: 30%; display: flex; justify-content: space-around;">
                 <span>L</span><span>E</span><span>V</span>
@@ -55,10 +58,14 @@
         </div>
 
         <div id="listaPartidos"></div>
+        
+        <!-- EL BOTÓN AHORA ESTÁ AQUÍ, DESPUÉS DE LOS PARTIDOS -->
+        <button class="btn-agregar" onclick="guardarCombinacion()">➕ AGREGAR ESTA JUGADA</button>
     </div>
 
-    <div style="margin-bottom: 15px;">
-        TOTAL: <span class="monto-total" id="txtTotal">$0.00</span>
+    <div style="margin: 20px 0;">
+        TOTAL A PAGAR:<br>
+        <span class="monto-total" id="txtTotal">$0</span>
     </div>
 
     <button class="btn-whatsapp" onclick="enviarWhatsApp()">ENVIAR A WHATSAPP 📲</button>
@@ -73,19 +80,20 @@ const partidos = [
     {id: 9, l: "CRUZ AZUL", v: "MONTERREY"}
 ];
 
-let selecciones = {};
+let seleccionesActuales = {};
+let historialJugadas = [];
 
 function cargar() {
     const contenedor = document.getElementById('listaPartidos');
     partidos.forEach(p => {
-        selecciones[p.id] = [];
+        seleccionesActuales[p.id] = [];
         contenedor.innerHTML += `
             <div class="fila-partido">
                 <div class="col-equipo izq">${p.l}</div>
                 <div class="col-opciones">
-                    <div class="btn-voto" onclick="marcar(${p.id}, 'L', this)">L</div>
-                    <div class="btn-voto" onclick="marcar(${p.id}, 'E', this)">E</div>
-                    <div class="btn-voto" onclick="marcar(${p.id}, 'V', this)">V</div>
+                    <div class="btn-voto" data-p="${p.id}" data-v="L" onclick="seleccionar(${p.id}, 'L', this)">L</div>
+                    <div class="btn-voto" data-p="${p.id}" data-v="E" onclick="seleccionar(${p.id}, 'E', this)">E</div>
+                    <div class="btn-voto" data-p="${p.id}" data-v="V" onclick="seleccionar(${p.id}, 'V', this)">V</div>
                 </div>
                 <div class="col-equipo der">${p.v}</div>
             </div>
@@ -93,36 +101,56 @@ function cargar() {
     });
 }
 
-function marcar(id, valor, el) {
-    let opts = selecciones[id];
-    if (opts.includes(valor)) {
-        selecciones[id] = opts.filter(v => v !== valor);
+function seleccionar(id, valor, el) {
+    if (seleccionesActuales[id].includes(valor)) {
+        seleccionesActuales[id] = seleccionesActuales[id].filter(v => v !== valor);
         el.classList.remove('activo');
     } else {
-        selecciones[id].push(valor);
+        seleccionesActuales[id].push(valor);
         el.classList.add('activo');
     }
+}
+
+function guardarCombinacion() {
+    // Validar que todos los partidos tengan al menos una selección
+    const incompletos = partidos.filter(p => seleccionesActuales[p.id].length === 0);
+    if(incompletos.length > 0) return alert("Debes marcar al menos una opción en cada partido.");
+
+    // Guardar la jugada actual en el historial
+    let jugadaTexto = partidos.map(p => seleccionesActuales[p.id].sort().join('')).join('-');
     
-    let total = 0;
-    Object.keys(selecciones).forEach(k => {
-        total += (selecciones[k].length * 10);
+    // Calcular costo de esta jugada (dobles y triples)
+    let costoEstaJugada = 0;
+    Object.keys(seleccionesActuales).forEach(id => {
+        costoEstaJugada += (seleccionesActuales[id].length * 10);
     });
-    document.getElementById('txtTotal').innerText = `$${total.toFixed(2)}`;
+
+    historialJugadas.push({ texto: jugadaTexto, costo: costoEstaJugada });
+
+    // Actualizar total visual
+    let totalAcumulado = historialJugadas.reduce((sum, j) => sum + j.costo, 0);
+    document.getElementById('txtTotal').innerText = `$${totalAcumulado}`;
+
+    // Limpiar visualmente para la siguiente jugada
+    document.querySelectorAll('.btn-voto').forEach(b => b.classList.remove('activo'));
+    partidos.forEach(p => seleccionesActuales[p.id] = []);
+    
+    alert("✅ Jugada guardada. Puedes agregar otra o enviar a WhatsApp.");
 }
 
 function enviarWhatsApp() {
     const nom = document.getElementById('nombreCliente').value;
-    if(!nom) return alert("Escribe el nombre");
-    
-    // Validar que todos tengan al menos una marca
-    if(Object.values(selecciones).some(s => s.length === 0)) return alert("Completa todos los partidos");
+    if(!nom) return alert("Escribe el nombre del cliente.");
+    if(historialJugadas.length === 0) return alert("Agrega al menos una jugada antes de enviar.");
 
-    let msg = `🏆 *LA DE DIEZ GANADORA*\n👤 *Nombre:* ${nom.toUpperCase()}\n\n`;
-    partidos.forEach(p => {
-        let sel = selecciones[p.id].sort().join('');
-        msg += `⚽ ${p.l} [${sel}] ${p.v}\n`;
+    let msg = `🏆 *LA DE DIEZ GANADORA*\n👤 *Cliente:* ${nom.toUpperCase()}\n\n`;
+    
+    historialJugadas.forEach((j, i) => {
+        msg += `✅ *Jugada ${i+1}:* ${j.texto}\n`;
     });
-    msg += `\n💰 *TOTAL: ${document.getElementById('txtTotal').innerText}*`;
+
+    let totalFinal = historialJugadas.reduce((sum, j) => sum + j.costo, 0);
+    msg += `\n💰 *TOTAL A PAGAR: $${totalFinal}*`;
     
     window.open(`https://wa.me/523113405833?text=${encodeURIComponent(msg)}`);
 }
