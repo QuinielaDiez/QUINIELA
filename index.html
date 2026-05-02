@@ -24,8 +24,14 @@
         .btn-voto.activo { background: #fbc02d; border-color: #fbc02d; color: #004d40; }
 
         .btn-agregar { background-color: #002b23; color: white; border: 1px solid #b2dfdb; padding: 12px; border-radius: 8px; width: 100%; font-weight: bold; cursor: pointer; margin-top: 10px; }
+        
+        /* Nueva sección de resumen */
+        .resumen-contenedor { background: rgba(255,255,255,0.1); border-radius: 12px; padding: 10px; margin-top: 15px; text-align: left; font-size: 0.85rem; }
+        .jugada-item { display: flex; justify-content: space-between; align-items: center; background: white; color: #333; margin-bottom: 5px; padding: 8px; border-radius: 6px; }
+        .btn-eliminar { background: #e74c3c; color: white; border: none; border-radius: 4px; padding: 4px 8px; cursor: pointer; font-weight: bold; }
+
         .monto-total { font-size: 2.8rem; font-weight: bold; color: #fbc02d; margin: 10px 0; display: block; }
-        .btn-whatsapp { background-color: #2ecc71; color: white; border: none; padding: 18px; border-radius: 12px; width: 100%; font-weight: bold; font-size: 1.2rem; cursor: pointer; }
+        .btn-whatsapp { background-color: #2ecc71; color: white; border: none; padding: 18px; border-radius: 12px; width: 100%; font-weight: bold; font-size: 1.2rem; cursor: pointer; margin-top: 10px; }
     </style>
 </head>
 <body>
@@ -43,6 +49,12 @@
     <div class="tabla-blanca">
         <div id="listaPartidos"></div>
         <button class="btn-agregar" onclick="guardarJugada()">+ AGREGAR JUGADA</button>
+    </div>
+
+    <!-- Lista de jugadas agregadas -->
+    <div id="areaResumen" style="display:none;">
+        <p style="margin: 5px 0; font-weight: bold;">MIS JUGADAS:</p>
+        <div id="listaResumen"></div>
     </div>
 
     <div style="margin: 15px 0;">
@@ -67,7 +79,6 @@ const partidos = [
 ];
 
 let seleccionActual = {};
-let totalHistorico = 0;
 let todasLasJugadas = [];
 
 function cargar() {
@@ -95,71 +106,93 @@ function marcar(id, valor, el) {
         seleccionActual[id].push(valor);
         el.classList.add('activo');
     }
-    calcularCosto();
+    actualizarTotalVisual();
 }
 
-function calcularCosto() {
+function calcularCostoJugada(seleccion) {
     let combinaciones = 1;
     let tieneMarcas = false;
     partidos.forEach(p => {
-        let cant = seleccionActual[p.id].length;
+        let cant = seleccion[p.id].length;
         if (cant > 0) {
             combinaciones *= cant;
             tieneMarcas = true;
+        } else {
+            combinaciones = 0; // Si falta un partido, el costo es 0
         }
     });
-    let costoEstaJugada = tieneMarcas ? (combinaciones * 10) : 0;
-    document.getElementById('displayTotal').innerText = `$${totalHistorico + costoEstaJugada}`;
+    return tieneMarcas ? (combinaciones * 10) : 0;
+}
+
+function actualizarTotalVisual() {
+    let costoActual = calcularCostoJugada(seleccionActual);
+    let totalAcumulado = todasLasJugadas.reduce((sum, j) => sum + j.costo, 0);
+    document.getElementById('displayTotal').innerText = `$${totalAcumulado + costoActual}`;
 }
 
 function guardarJugada() {
     let completo = true;
     let resumenHorizontal = [];
-
     partidos.forEach(p => {
-        if (seleccionActual[p.id].length === 0) {
-            completo = false;
-        } else {
-            // Unimos las opciones sin comas (LE, EV, LEV)
-            resumenHorizontal.push(seleccionActual[p.id].join(""));
-        }
+        if (seleccionActual[p.id].length === 0) completo = false;
+        resumenHorizontal.push(seleccionActual[p.id].sort().join(""));
     });
 
-    if (!completo) return alert("Debes marcar los 9 partidos para guardar la jugada.");
+    if (!completo) return alert("Debes marcar los 9 partidos.");
 
-    let montoActual = parseInt(document.getElementById('displayTotal').innerText.replace('$', ''));
-    let costoEsta = montoActual - totalHistorico;
+    let costo = calcularCostoJugada(seleccionActual);
 
-    // Guardamos la jugada con el texto separado por espacios
     todasLasJugadas.push({
         pronostico: resumenHorizontal.join(" "),
-        costo: costoEsta
+        costo: costo
     });
 
-    totalHistorico = montoActual;
+    renderResumen();
     
+    // Limpiar selección
     document.querySelectorAll('.btn-voto').forEach(b => b.classList.remove('activo'));
     partidos.forEach(p => seleccionActual[p.id] = []);
+    actualizarTotalVisual();
+}
+
+function renderResumen() {
+    const contenedor = document.getElementById('listaResumen');
+    const area = document.getElementById('areaResumen');
+    contenedor.innerHTML = "";
     
-    alert("✅ Jugada añadida.");
-    document.getElementById('displayTotal').innerText = `$${totalHistorico}`;
+    if (todasLasJugadas.length > 0) {
+        area.style.display = "block";
+        todasLasJugadas.forEach((j, index) => {
+            contenedor.innerHTML += `
+                <div class="jugada-item">
+                    <span><b>J${index+1}:</b> ${j.pronostico} ($${j.costo})</span>
+                    <button class="btn-eliminar" onclick="eliminarJugada(${index})">X</button>
+                </div>`;
+        });
+    } else {
+        area.style.display = "none";
+    }
+}
+
+function eliminarJugada(index) {
+    todasLasJugadas.splice(index, 1);
+    renderResumen();
+    actualizarTotalVisual();
 }
 
 function enviar() {
     const nombre = document.getElementById('nombreCliente').value;
-    const totalFinal = document.getElementById('displayTotal').innerText;
-
     if (!nombre) return alert("Escribe el nombre del cliente.");
     if (todasLasJugadas.length === 0) return alert("Agrega al menos una jugada.");
 
+    let totalFinal = todasLasJugadas.reduce((sum, j) => sum + j.costo, 0);
     let mensaje = `🏆 *LA DE DIEZ GANADORA*\n👤 *Cliente:* ${nombre.toUpperCase()}\n\n`;
     
     todasLasJugadas.forEach((j, index) => {
         mensaje += `🎮 *J${index + 1}:* ${j.pronostico} ($${j.costo})\n`;
     });
 
-    mensaje += `\n💰 *TOTAL A PAGAR: ${totalFinal}*`;
-    
+    mensaje += `\n💰 *TOTAL A PAGAR: $${totalFinal}*`;
     window.open(`https://wa.me/523113405833?text=${encodeURIComponent(mensaje)}`);
 }
 
