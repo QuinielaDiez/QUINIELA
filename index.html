@@ -11,24 +11,21 @@
         .logo-circulo { background: white; width: 90px; height: 90px; border-radius: 50%; margin: 0 auto 15px; display: flex; align-items: center; justify-content: center; border: 4px solid #fbc02d; overflow: hidden; }
         .logo-circulo img { width: 100%; height: auto; }
         
-        h1 { font-size: 1.4rem; margin: 5px 0; text-transform: uppercase; }
         .input-nombre { width: 100%; padding: 12px; border-radius: 10px; border: none; margin-bottom: 20px; text-align: center; font-size: 1.1rem; font-weight: bold; box-sizing: border-box; }
         
-        .btn-agregar { background-color: #002b23; color: white; border: none; padding: 12px; border-radius: 10px; cursor: pointer; width: 60%; font-weight: bold; margin-bottom: 20px; }
-
-        /* Contenedor de Quiniela */
-        #contenedorPartidos { background: white; color: #333; border-radius: 20px; padding: 15px; margin-bottom: 20px; display: none; }
-        .fila-partido { border-bottom: 1px solid #eee; padding: 15px 0; display: flex; flex-direction: column; align-items: center; }
-        .nombres-equipos { font-weight: bold; margin-bottom: 10px; font-size: 0.95rem; color: #004d40; }
+        /* Contenedor de Partidos siempre visible */
+        .contenedor-blanco { background: white; color: #333; border-radius: 20px; padding: 15px; margin-bottom: 20px; text-align: left; }
+        .fila-partido { border-bottom: 1px solid #eee; padding: 12px 0; display: flex; flex-direction: column; align-items: center; }
+        .nombres-equipos { font-weight: bold; margin-bottom: 8px; font-size: 0.9rem; color: #004d40; text-align: center; }
         
-        /* Botones L E V redondos */
-        .selector-lev { display: flex; gap: 20px; justify-content: center; }
-        .btn-lev { width: 45px; height: 45px; border-radius: 50%; border: 2px solid #ccc; display: flex; align-items: center; justify-content: center; font-weight: bold; cursor: pointer; background: #f9f9f9; transition: 0.2s; }
-        .btn-lev:hover { background: #eee; }
-        .btn-lev.activo { background: #fbc02d; border-color: #fbc02d; color: #004d40; transform: scale(1.1); box-shadow: 0 4px 8px rgba(0,0,0,0.2); }
+        /* Botones L E V */
+        .selector-lev { display: flex; gap: 15px; justify-content: center; }
+        .btn-lev { width: 42px; height: 42px; border-radius: 50%; border: 2px solid #ccc; display: flex; align-items: center; justify-content: center; font-weight: bold; cursor: pointer; background: #f9f9f9; transition: 0.2s; user-select: none; }
+        .btn-lev.activo { background: #fbc02d; border-color: #fbc02d; color: #004d40; transform: scale(1.1); box-shadow: 0 3px 6px rgba(0,0,0,0.2); }
 
-        .monto-total { font-size: 2.2rem; font-weight: bold; color: #fbc02d; margin: 15px 0; display: block; }
-        .btn-whatsapp { background-color: #2ecc71; color: white; border: none; padding: 15px; border-radius: 15px; width: 100%; font-weight: bold; font-size: 1.2rem; cursor: pointer; }
+        .total-box { margin: 20px 0; }
+        .monto { font-size: 2.5rem; font-weight: bold; color: #fbc02d; display: block; }
+        .btn-whatsapp { background-color: #2ecc71; color: white; border: none; padding: 18px; border-radius: 15px; width: 100%; font-weight: bold; font-size: 1.2rem; cursor: pointer; box-shadow: 0 4px 10px rgba(0,0,0,0.2); }
     </style>
 </head>
 <body>
@@ -38,21 +35,18 @@
         <img src="logo.jpg" alt="Logo">
     </div>
 
-    <h1>LA DE DIEZ GANADORA</h1>
-    <p style="color:#b2dfdb; margin-bottom: 20px;">Jornada de Estreno - $10 la sencilla</p>
+    <h2 style="margin: 0 0 5px 0;">LA DE DIEZ GANADORA</h2>
+    <p style="color:#b2dfdb; margin-bottom: 15px;">$10 la sencilla (Doble x2, Triple x3)</p>
 
-    <input type="text" id="nombreCliente" class="input-nombre" placeholder="NOMBRE DEL CLIENTE">
+    <input type="text" id="nombreCliente" class="input-nombre" placeholder="TU NOMBRE AQUÍ">
 
-    <button class="btn-agregar" id="btnAbrir" onclick="mostrarQuiniela()">➕ AGREGAR JUGADA</button>
-    
-    <div id="contenedorPartidos">
-        <div id="listaPartidos"></div>
-        <button onclick="finalizarJugada()" style="width:100%; background:#004d40; color:white; border:none; padding:15px; border-radius:12px; margin-top:10px; cursor:pointer; font-weight:bold; font-size: 1rem;">CONFIRMAR JUGADA ✅</button>
+    <div class="contenedor-blanco" id="listaPartidos">
+        <!-- Los partidos se cargan aquí automáticamente -->
     </div>
 
-    <div>
+    <div class="total-box">
         TOTAL A PAGAR:<br>
-        <span class="monto-total">$<span id="txtTotal">0</span></span>
+        <span class="monto" id="txtTotal">$0</span>
     </div>
 
     <button class="btn-whatsapp" onclick="enviarWhatsApp()">ENVIAR A WHATSAPP 📲</button>
@@ -67,68 +61,84 @@ const partidos = [
     {id: 9, l: "Cruz Azul", v: "Monterrey"}
 ];
 
-let todasLasJugadas = [];
-let seleccionTemporal = {};
+// Aquí guardamos lo que el usuario selecciona para cada partido
+let selecciones = {}; 
 
-function mostrarQuiniela() {
+function cargarPartidos() {
     const lista = document.getElementById('listaPartidos');
-    lista.innerHTML = "";
-    seleccionTemporal = {}; 
-    
     partidos.forEach(p => {
+        selecciones[p.id] = []; // Inicializar vacío
         lista.innerHTML += `
             <div class="fila-partido">
                 <div class="nombres-equipos">${p.id}. ${p.l} vs ${p.v}</div>
                 <div class="selector-lev">
-                    <div class="btn-lev" onclick="marcar(${p.id}, 'L', this)">L</div>
-                    <div class="btn-lev" onclick="marcar(${p.id}, 'E', this)">E</div>
-                    <div class="btn-lev" onclick="marcar(${p.id}, 'V', this)">V</div>
+                    <div class="btn-lev" onclick="tocarOpcion(${p.id}, 'L', this)">L</div>
+                    <div class="btn-lev" onclick="tocarOpcion(${p.id}, 'E', this)">E</div>
+                    <div class="btn-lev" onclick="tocarOpcion(${p.id}, 'V', this)">V</div>
                 </div>
             </div>
         `;
     });
-    document.getElementById('contenedorPartidos').style.display = 'block';
-    document.getElementById('btnAbrir').style.display = 'none';
 }
 
-function marcar(id, valor, el) {
-    // Quitar "activo" de los otros botones del mismo partido
-    const padre = el.parentElement;
-    Array.from(padre.children).forEach(b => b.classList.remove('activo'));
+function tocarOpcion(id, valor, el) {
+    let opciones = selecciones[id];
     
-    // Poner activo al que tocamos
-    el.classList.add('activo');
-    seleccionTemporal[id] = valor;
-}
-
-function finalizarJugada() {
-    if(Object.keys(seleccionTemporal).length < 9) {
-        alert("Por favor, selecciona los 9 partidos.");
-        return;
+    if (opciones.includes(valor)) {
+        // Si ya estaba, lo quitamos (desmarcar)
+        selecciones[id] = opciones.filter(item => item !== valor);
+        el.classList.remove('activo');
+    } else {
+        // Si no estaba, lo agregamos (marcar)
+        selecciones[id].push(valor);
+        el.classList.add('activo');
     }
-    
-    const combinacion = partidos.map(p => seleccionTemporal[p.id]).join('-');
-    todasLasJugadas.push(combinacion);
-    
-    document.getElementById('txtTotal').innerText = todasLasJugadas.length * 10;
-    document.getElementById('contenedorPartidos').style.display = 'none';
-    document.getElementById('btnAbrir').style.display = 'inline-block';
-    alert("Jugada agregada correctamente.");
+    calcularTotal();
+}
+
+function calcularTotal() {
+    let costoTotal = 0;
+    let tieneJugada = false;
+
+    // Lógica: Cada partido cuesta $10 por cada opción marcada
+    // Si marcas L y E, ese partido cuesta $20
+    Object.keys(selecciones).forEach(id => {
+        let cantidad = selecciones[id].length;
+        if (cantidad > 0) {
+            costoTotal += (cantidad * 10);
+            tieneJugada = true;
+        }
+    });
+
+    document.getElementById('txtTotal').innerText = `$${costoTotal}`;
 }
 
 function enviarWhatsApp() {
-    const cliente = document.getElementById('nombreCliente').value;
-    if(!cliente || todasLasJugadas.length === 0) {
-        alert("Ingresa el nombre y al menos una jugada.");
-        return;
-    }
+    const nombre = document.getElementById('nombreCliente').value;
+    const total = document.getElementById('txtTotal').innerText;
     
-    let mensaje = `🏆 *LA DE DIEZ GANADORA*\n👤 *Cliente:* ${cliente.toUpperCase()}\n`;
-    todasLasJugadas.forEach((j, i) => mensaje += `✅ Jugada ${i+1}: ${j}\n`);
-    mensaje += `💰 *Total a pagar:* $${todasLasJugadas.length * 10}`;
+    if(!nombre) return alert("Por favor escribe tu nombre");
+
+    // Revisar si faltan partidos por marcar
+    let incompletos = partidos.filter(p => selecciones[p.id].length === 0);
+    if(incompletos.length > 0) return alert("Faltan partidos por marcar");
+
+    let mensaje = `🏆 *LA DE DIEZ GANADORA*\n👤 *Cliente:* ${nombre.toUpperCase()}\n\n`;
+    
+    partidos.forEach(p => {
+        // Ordenamos las letras para que se vea bonito (L-E-V)
+        let marcados = selecciones[p.id].sort().join('');
+        mensaje += `⚽ ${p.id}. ${p.l} vs ${p.v}: *[${marcados}]*\n`;
+    });
+
+    mensaje += `\n💰 *TOTAL A PAGAR: ${total}*`;
     
     window.open(`https://wa.me/523113405833?text=${encodeURIComponent(mensaje)}`);
 }
+
+// Iniciar la carga al abrir la página
+cargarPartidos();
 </script>
+
 </body>
 </html>
