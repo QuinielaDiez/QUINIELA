@@ -36,9 +36,9 @@
     </div>
 
     <h2 style="margin: 0 0 10px 0;">LA DE DIEZ GANADORA</h2>
-    <p style="margin: 0 0 15px 0; color: #fbc02d; font-weight: bold;">Sencilla $10 | Doble $20 | Triple $30</p>
+    <p style="margin: 0 0 15px 0; color: #b2dfdb;">9 Partidos Fijos</p>
 
-    <input type="text" id="nombreCliente" class="input-nombre" placeholder="TU NOMBRE">
+    <input type="text" id="nombreCliente" class="input-nombre" placeholder="ESCRIBE TU NOMBRE">
 
     <div class="tabla-blanca">
         <div id="listaPartidos"></div>
@@ -54,7 +54,7 @@
 </div>
 
 <script>
-// LOS 9 PARTIDOS ACORDADOS EN ORDEN
+// LOS 9 PARTIDOS FIJOS EN ORDEN
 const partidos = [
     {id: 1, l: "AMÉRICA", v: "PUMAS"}, 
     {id: 2, l: "TOLUCA", v: "PACHUCA"},
@@ -68,7 +68,7 @@ const partidos = [
 ];
 
 let seleccionActual = {};
-let historialCostos = 0;
+let totalAcumulado = 0;
 
 function cargar() {
     const contenedor = document.getElementById('listaPartidos');
@@ -95,48 +95,56 @@ function marcar(id, valor, el) {
         seleccionActual[id].push(valor);
         el.classList.add('activo');
     }
-    actualizarPrecio();
+    calcularCosto();
 }
 
-// LÓGICA DE DINERO CORREGIDA
-function actualizarPrecio() {
-    let costoActual = 0;
-    let tieneSeleccion = false;
+// NUEVA LÓGICA DE COSTO MULTIPLICADO
+function calcularCosto() {
+    let multiplicador = 1;
+    let completo = true;
 
-    Object.keys(seleccionActual).forEach(id => {
-        let opciones = seleccionActual[id].length;
-        if(opciones > 0) {
-            tieneSeleccion = true;
-            // Si el partido tiene 1 opción = $10 total (si es el único o base)
-            // Aquí la lógica es: La jugada base cuesta $10. 
-            // Cada opción EXTRA en un partido suma $10.
-            if (opciones === 2) costoActual += 10; // Doble
-            if (opciones === 3) costoActual += 20; // Triple
+    partidos.forEach(p => {
+        let cant = seleccionActual[p.id].length;
+        if (cant === 0) {
+            completo = false;
+        } else {
+            multiplicador = multiplicador * cant;
         }
     });
 
-    // Si hay al menos algo marcado, la base son $10
-    let totalJugada = tieneSeleccion ? (10 + costoActual) : 0;
+    // Si no ha marcado los 9 partidos, el total de esa jugada es 0 hasta que termine
+    let costoEstaJugada = completo ? (multiplicador * 10) : 0;
     
-    document.getElementById('displayTotal').innerText = `$${historialCostos + totalJugada}`;
+    document.getElementById('displayTotal').innerText = `$${totalAcumulado + costoEstaJugada}`;
 }
 
 function guardarJugada() {
-    let costoDeEsta = parseInt(document.getElementById('displayTotal').innerText.replace('$','')) - historialCostos;
-    if(costoDeEsta === 0) return alert("Selecciona tus pronósticos");
+    let textoTotal = document.getElementById('displayTotal').innerText;
+    let montoActual = parseInt(textoTotal.replace('$', ''));
+    
+    if (montoActual === totalAcumulado) {
+        return alert("Debes marcar los 9 partidos para calcular el costo.");
+    }
 
-    historialCostos += costoDeEsta;
+    totalAcumulado = montoActual;
+    
+    // Limpiar para la siguiente jugada
     document.querySelectorAll('.btn-voto').forEach(b => b.classList.remove('activo'));
     partidos.forEach(p => seleccionActual[p.id] = []);
-    alert("Jugada agregada exitosamente.");
-    actualizarPrecio();
+    
+    alert("✅ Jugada agregada al total.");
+    document.getElementById('displayTotal').innerText = `$${totalAcumulado}`;
 }
 
 function enviar() {
     const n = document.getElementById('nombreCliente').value;
-    if(!n) return alert("Por favor escribe tu nombre");
+    if(!n) return alert("Escribe el nombre del cliente");
     let t = document.getElementById('displayTotal').innerText;
-    window.open(`https://wa.me/523113405833?text=Hola, soy ${n}. Mi quiniela total es de ${t}.`);
+    
+    if(t === "$0") return alert("No hay jugadas marcadas.");
+
+    let msg = `🏆 *LA DE DIEZ GANADORA*\n👤 *Cliente:* ${n.toUpperCase()}\n💰 *TOTAL A PAGAR: ${t}*`;
+    window.open(`https://wa.me/523113405833?text=${encodeURIComponent(msg)}`);
 }
 
 cargar();
