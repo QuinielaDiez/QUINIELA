@@ -8,37 +8,41 @@
         body { font-family: 'Arial', sans-serif; background-color: #f4f4f4; display: flex; justify-content: center; padding: 15px; margin: 0; }
         .card { background-color: #004d40; color: white; border-radius: 20px; width: 100%; max-width: 480px; padding: 25px; text-align: center; box-shadow: 0 8px 25px rgba(0,0,0,0.4); }
         
+        /* Contenedor del Logo */
         .contenedor-logo { background: white; width: 90px; height: 90px; border-radius: 50%; margin: 0 auto 15px; display: flex; align-items: center; justify-content: center; border: 4px solid #fbc02d; overflow: hidden; }
         .contenedor-logo img { width: 100%; height: auto; display: block; }
 
         .input-nombre { width: 90%; padding: 12px; border-radius: 8px; border: none; margin-bottom: 20px; text-align: center; font-weight: bold; font-size: 1.1rem; }
 
+        /* Tabla de Partidos Estilo Competencia */
         .tabla-blanca { background: white; color: #333; border-radius: 15px; padding: 15px; margin-bottom: 15px; }
-        .fila { display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid #eee; padding: 10px 0; }
+        .fila { display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid #eee; padding: 12px 0; }
         .equipo { width: 35%; font-weight: bold; font-size: 0.85rem; color: #004d40; }
         .izq { text-align: right; }
         .der { text-align: left; }
         
         .opciones { width: 30%; display: flex; justify-content: space-around; }
-        .btn-voto { width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; cursor: pointer; border: 1px solid #ccc; border-radius: 6px; font-weight: bold; background: #fdfdfd; }
-        .btn-voto.activo { background: #fbc02d; border-color: #fbc02d; color: #004d40; }
+        .btn-voto { width: 34px; height: 34px; display: flex; align-items: center; justify-content: center; cursor: pointer; border: 1px solid #ccc; border-radius: 6px; font-weight: bold; background: #fdfdfd; transition: 0.2s; }
+        .btn-voto.activo { background: #fbc02d; border-color: #fbc02d; color: #004d40; transform: scale(1.05); }
 
         .btn-agregar { background-color: #002b23; color: white; border: 1px solid #b2dfdb; padding: 12px; border-radius: 8px; width: 100%; font-weight: bold; cursor: pointer; margin-top: 10px; }
-        .monto-total { font-size: 2.5rem; font-weight: bold; color: #fbc02d; margin: 10px 0; display: block; }
-        .btn-whatsapp { background-color: #2ecc71; color: white; border: none; padding: 18px; border-radius: 12px; width: 100%; font-weight: bold; font-size: 1.2rem; cursor: pointer; }
+
+        .monto-total { font-size: 2.8rem; font-weight: bold; color: #fbc02d; margin: 10px 0; display: block; text-shadow: 2px 2px 4px rgba(0,0,0,0.3); }
+        .btn-whatsapp { background-color: #2ecc71; color: white; border: none; padding: 18px; border-radius: 12px; width: 100%; font-weight: bold; font-size: 1.2rem; cursor: pointer; margin-top: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.2); }
     </style>
 </head>
 <body>
 
 <div class="card">
     <div class="contenedor-logo">
+        <!-- Asegúrate de que logo.jpg esté en la misma carpeta -->
         <img src="logo.jpg" alt="Logo">
     </div>
 
-    <h2 style="margin: 0 0 10px 0;">LA DE DIEZ GANADORA</h2>
-    <p style="margin: 0 0 15px 0; color: #b2dfdb;">9 Partidos Fijos</p>
+    <h2 style="margin: 0 0 5px 0;">LA DE DIEZ GANADORA</h2>
+    <p style="margin: 0 0 15px 0; color: #b2dfdb; font-size: 0.9rem;">Sencilla $10 | Doble x2 | Triple x3</p>
 
-    <input type="text" id="nombreCliente" class="input-nombre" placeholder="ESCRIBE TU NOMBRE">
+    <input type="text" id="nombreCliente" class="input-nombre" placeholder="ESCRIBE NOMBRE DEL CLIENTE">
 
     <div class="tabla-blanca">
         <div id="listaPartidos"></div>
@@ -46,7 +50,7 @@
     </div>
 
     <div style="margin: 15px 0;">
-        TOTAL:<br>
+        TOTAL A PAGAR:<br>
         <span class="monto-total" id="displayTotal">$0</span>
     </div>
 
@@ -68,8 +72,9 @@ const partidos = [
 ];
 
 let seleccionActual = {};
-let totalAcumulado = 0;
+let totalHistorico = 0;
 
+// Cargar partidos al iniciar la página
 function cargar() {
     const contenedor = document.getElementById('listaPartidos');
     partidos.forEach(p => {
@@ -95,58 +100,58 @@ function marcar(id, valor, el) {
         seleccionActual[id].push(valor);
         el.classList.add('activo');
     }
-    calcularCosto();
+    calcularCostoEnVivo();
 }
 
-// NUEVA LÓGICA DE COSTO MULTIPLICADO
-function calcularCosto() {
-    let multiplicador = 1;
-    let completo = true;
+// LÓGICA DE MULTIPLICACIÓN (Correcta para Quinielas)
+function calcularCostoEnVivo() {
+    let combinaciones = 1;
+    let tieneMarcas = false;
 
     partidos.forEach(p => {
         let cant = seleccionActual[p.id].length;
-        if (cant === 0) {
-            completo = false;
-        } else {
-            multiplicador = multiplicador * cant;
+        if (cant > 0) {
+            combinaciones = combinaciones * cant;
+            tieneMarcas = true;
         }
     });
 
-    // Si no ha marcado los 9 partidos, el total de esa jugada es 0 hasta que termine
-    let costoEstaJugada = completo ? (multiplicador * 10) : 0;
-    
-    document.getElementById('displayTotal').innerText = `$${totalAcumulado + costoEstaJugada}`;
+    let costoEstaJugada = tieneMarcas ? (combinaciones * 10) : 0;
+    document.getElementById('displayTotal').innerText = `$${totalHistorico + costoEstaJugada}`;
 }
 
 function guardarJugada() {
     let textoTotal = document.getElementById('displayTotal').innerText;
-    let montoActual = parseInt(textoTotal.replace('$', ''));
+    let montoTotalActual = parseInt(textoTotal.replace('$', ''));
     
-    if (montoActual === totalAcumulado) {
-        return alert("Debes marcar los 9 partidos para calcular el costo.");
+    if (montoTotalActual === totalHistorico) {
+        return alert("Selecciona tus pronósticos antes de agregar.");
     }
 
-    totalAcumulado = montoActual;
+    totalHistorico = montoTotalActual;
     
-    // Limpiar para la siguiente jugada
+    // Limpiar selección visual para la siguiente jugada
     document.querySelectorAll('.btn-voto').forEach(b => b.classList.remove('activo'));
     partidos.forEach(p => seleccionActual[p.id] = []);
     
-    alert("✅ Jugada agregada al total.");
-    document.getElementById('displayTotal').innerText = `$${totalAcumulado}`;
+    alert("✅ Jugada guardada. Puedes hacer otra o enviar.");
+    document.getElementById('displayTotal').innerText = `$${totalHistorico}`;
 }
 
 function enviar() {
-    const n = document.getElementById('nombreCliente').value;
-    if(!n) return alert("Escribe el nombre del cliente");
-    let t = document.getElementById('displayTotal').innerText;
-    
-    if(t === "$0") return alert("No hay jugadas marcadas.");
+    const nombre = document.getElementById('nombreCliente').value;
+    const totalFinal = document.getElementById('displayTotal').innerText;
 
-    let msg = `🏆 *LA DE DIEZ GANADORA*\n👤 *Cliente:* ${n.toUpperCase()}\n💰 *TOTAL A PAGAR: ${t}*`;
-    window.open(`https://wa.me/523113405833?text=${encodeURIComponent(msg)}`);
+    if (!nombre) return alert("Por favor escribe el nombre del cliente.");
+    if (totalFinal === "$0") return alert("No hay jugadas para enviar.");
+
+    let mensaje = `🏆 *LA DE DIEZ GANADORA*\n👤 *Cliente:* ${nombre.toUpperCase()}\n💰 *TOTAL A PAGAR: ${totalFinal}*`;
+    
+    // Tu número de WhatsApp configurado
+    window.open(`https://wa.me/523113405833?text=${encodeURIComponent(mensaje)}`);
 }
 
+// Ejecutar carga de partidos
 cargar();
 </script>
 </body>
