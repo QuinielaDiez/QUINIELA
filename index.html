@@ -5,65 +5,60 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>La de Diez Ganadora</title>
     <style>
-        body { font-family: Arial, sans-serif; background-color: #f0f2f5; display: flex; justify-content: center; padding: 20px; margin: 0; }
-        .card { background-color: #004d40; color: white; border-radius: 20px; width: 480px; padding: 20px; text-align: center; box-shadow: 0 10px 25px rgba(0,0,0,0.3); }
+        /* Estilo general inspirado en image_876e44.png */
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f0f2f5; display: flex; justify-content: center; padding: 20px; margin: 0; }
+        .card { background-color: #004d40; color: white; border-radius: 25px; width: 480px; padding: 25px; text-align: center; box-shadow: 0 10px 30px rgba(0,0,0,0.4); }
         
-        .logo-header { background: white; width: 80px; height: 80px; border-radius: 50%; margin: 0 auto 10px; display: flex; align-items: center; justify-content: center; border: 3px solid #fbc02d; overflow: hidden; }
-        .logo-header img { width: 100%; height: auto; }
+        .logo-circulo { background: white; width: 90px; height: 90px; border-radius: 50%; margin: 0 auto 15px; display: flex; align-items: center; justify-content: center; border: 4px solid #fbc02d; overflow: hidden; }
+        .logo-circulo img { width: 100%; height: auto; }
 
-        .input-nombre { width: 90%; padding: 12px; border-radius: 8px; border: none; margin-bottom: 20px; text-align: center; font-weight: bold; font-size: 1rem; }
+        .input-nombre { width: 100%; padding: 12px; border-radius: 10px; border: none; margin-bottom: 20px; text-align: center; font-size: 1.1rem; font-weight: bold; box-sizing: border-box; }
 
-        /* Estilo Tabla */
-        .tabla-quiniela { background: white; color: #333; border-radius: 10px; padding: 10px; margin-bottom: 15px; }
+        /* TABLA DE PARTIDOS INMEDIATA */
+        .contenedor-partidos { background: white; color: #333; border-radius: 15px; padding: 10px; margin-bottom: 20px; }
         .fila-partido { display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid #eee; padding: 12px 0; }
+        .col-equipo { width: 35%; font-weight: bold; font-size: 0.85rem; color: #004d40; }
+        .izq { text-align: right; }
+        .der { text-align: left; }
         
-        .col-equipo { width: 35%; font-weight: bold; font-size: 0.85rem; }
-        .izq { text-align: right; padding-right: 8px; }
-        .der { text-align: left; padding-left: 8px; }
-        
-        .col-opciones { width: 30%; display: flex; justify-content: space-around; }
-        
-        /* Botones L E V */
-        .btn-voto { width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; cursor: pointer; border: 1px solid #ddd; border-radius: 5px; font-weight: bold; color: #555; background: #fafafa; transition: 0.2s; }
-        .btn-voto.activo { background: #fbc02d; border-color: #fbc02d; color: #004d40; box-shadow: 0 2px 4px rgba(0,0,0,0.2); }
+        .col-votos { width: 30%; display: flex; justify-content: space-around; }
+        .btn-voto { width: 32px; height: 32px; border: 1px solid #ccc; border-radius: 5px; display: flex; align-items: center; justify-content: center; font-weight: bold; cursor: pointer; background: #f9f9f9; transition: 0.2s; }
+        .btn-voto.activo { background: #fbc02d; border-color: #fbc02d; color: #004d40; transform: scale(1.1); box-shadow: 0 2px 5px rgba(0,0,0,0.2); }
 
-        /* Botón Agregar debajo de partidos */
-        .btn-agregar { background-color: #002b23; color: white; border: 1px solid #b2dfdb; padding: 12px; border-radius: 8px; width: 100%; font-weight: bold; cursor: pointer; margin-top: 10px; font-size: 0.9rem; }
-        .btn-agregar:hover { background-color: #003d32; }
+        .btn-agregar { background-color: #002b23; color: white; border: 1px solid #b2dfdb; padding: 10px; border-radius: 8px; width: 100%; font-weight: bold; cursor: pointer; margin-top: 5px; }
 
-        .monto-total { font-size: 2.2rem; font-weight: bold; color: #fbc02d; margin: 15px 0; display: block; }
-        .btn-whatsapp { background-color: #2ecc71; color: white; border: none; padding: 18px; border-radius: 12px; width: 100%; font-weight: bold; font-size: 1.2rem; cursor: pointer; margin-top: 10px; }
+        .monto-total { font-size: 2.5rem; font-weight: bold; color: #fbc02d; margin: 10px 0; display: block; }
+        .btn-whatsapp { background-color: #2ecc71; color: white; border: none; padding: 18px; border-radius: 15px; width: 100%; font-weight: bold; font-size: 1.2rem; cursor: pointer; box-shadow: 0 5px 15px rgba(0,0,0,0.2); }
     </style>
 </head>
 <body>
 
 <div class="card">
-    <div class="logo-header">
+    <div class="logo-circulo">
         <img src="logo.jpg" alt="Logo">
     </div>
 
-    <h3 style="margin: 5px 0;">LA DE DIEZ GANADORA</h3>
-    <p style="font-size: 0.85rem; color: #b2dfdb; margin-bottom: 20px;">DOMINGUERA - $10 la sencilla</p>
+    <h2 style="margin: 0 0 5px 0;">LA DE DIEZ GANADORA</h2>
+    <p style="color:#b2dfdb; margin-bottom: 15px; font-size: 0.9rem;">Jornada de Estreno - $10 la sencilla</p>
 
-    <input type="text" id="nombreCliente" class="input-nombre" placeholder="Nombre del cliente / Quiniela">
+    <input type="text" id="nombreCliente" class="input-nombre" placeholder="ESCRIBE TU NOMBRE AQUÍ">
 
-    <div class="tabla-quiniela">
-        <!-- Encabezados -->
-        <div style="display: flex; font-size: 0.75rem; font-weight: bold; color: #004d40; border-bottom: 2px solid #fbc02d; padding-bottom: 8px; margin-bottom: 5px;">
+    <div class="contenedor-partidos">
+        <!-- Encabezados de tabla -->
+        <div style="display: flex; font-size: 0.7rem; font-weight: bold; color: #999; margin-bottom: 5px; border-bottom: 2px solid #fbc02d;">
             <div style="width: 35%;">LOCAL</div>
-            <div style="width: 30%; display: flex; justify-content: space-around;">
-                <span>L</span><span>E</span><span>V</span>
-            </div>
+            <div style="width: 30%;">L - E - V</div>
             <div style="width: 35%;">VISITANTE</div>
         </div>
 
-        <div id="listaPartidos"></div>
+        <div id="listaPartidos">
+            <!-- Los partidos se cargan aquí al abrir la página -->
+        </div>
         
-        <!-- EL BOTÓN AHORA ESTÁ AQUÍ, DESPUÉS DE LOS PARTIDOS -->
-        <button class="btn-agregar" onclick="guardarCombinacion()">➕ AGREGAR ESTA JUGADA</button>
+        <button class="btn-agregar" onclick="guardarJugada()">+ AGREGAR ESTA JUGADA</button>
     </div>
 
-    <div style="margin: 20px 0;">
+    <div style="margin-bottom: 15px;">
         TOTAL A PAGAR:<br>
         <span class="monto-total" id="txtTotal">$0</span>
     </div>
@@ -72,28 +67,30 @@
 </div>
 
 <script>
+// Lista de partidos para la jornada
 const partidos = [
     {id: 1, l: "AMÉRICA", v: "PUMAS"}, {id: 2, l: "TOLUCA", v: "PACHUCA"},
     {id: 3, l: "CANCÚN", v: "JAIBA BRAVA"}, {id: 4, l: "TEPATITLÁN", v: "MINEROS"},
-    {id: 5, l: "AUSTIN", v: "LOUIS CITY"}, {id: 6, l: "INTERNACIONAL", v: "FLUMINENSE"},
+    {id: 5, l: "AUSTIN", v: "LOUIS CITY"}, {id: 6, l: "INTER", v: "FLUMINENSE"},
     {id: 7, l: "MIRASSOL", v: "CORINTHIANS"}, {id: 8, l: "BARCELONA", v: "R. SOCIEDAD"},
     {id: 9, l: "CRUZ AZUL", v: "MONTERREY"}
 ];
 
 let seleccionesActuales = {};
-let historialJugadas = [];
+let historial = [];
 
-function cargar() {
+// Esta función se ejecuta sola al abrir el enlace
+function cargarInmediato() {
     const contenedor = document.getElementById('listaPartidos');
     partidos.forEach(p => {
         seleccionesActuales[p.id] = [];
         contenedor.innerHTML += `
             <div class="fila-partido">
                 <div class="col-equipo izq">${p.l}</div>
-                <div class="col-opciones">
-                    <div class="btn-voto" data-p="${p.id}" data-v="L" onclick="seleccionar(${p.id}, 'L', this)">L</div>
-                    <div class="btn-voto" data-p="${p.id}" data-v="E" onclick="seleccionar(${p.id}, 'E', this)">E</div>
-                    <div class="btn-voto" data-p="${p.id}" data-v="V" onclick="seleccionar(${p.id}, 'V', this)">V</div>
+                <div class="col-votos">
+                    <div class="btn-voto" onclick="marcar(${p.id}, 'L', this)">L</div>
+                    <div class="btn-voto" onclick="marcar(${p.id}, 'E', this)">E</div>
+                    <div class="btn-voto" onclick="marcar(${p.id}, 'V', this)">V</div>
                 </div>
                 <div class="col-equipo der">${p.v}</div>
             </div>
@@ -101,9 +98,10 @@ function cargar() {
     });
 }
 
-function seleccionar(id, valor, el) {
-    if (seleccionesActuales[id].includes(valor)) {
-        seleccionesActuales[id] = seleccionesActuales[id].filter(v => v !== valor);
+function marcar(id, valor, el) {
+    let s = seleccionesActuales[id];
+    if (s.includes(valor)) {
+        seleccionesActuales[id] = s.filter(v => v !== valor);
         el.classList.remove('activo');
     } else {
         seleccionesActuales[id].push(valor);
@@ -111,51 +109,46 @@ function seleccionar(id, valor, el) {
     }
 }
 
-function guardarCombinacion() {
-    // Validar que todos los partidos tengan al menos una selección
-    const incompletos = partidos.filter(p => seleccionesActuales[p.id].length === 0);
-    if(incompletos.length > 0) return alert("Debes marcar al menos una opción en cada partido.");
+function guardarJugada() {
+    // Verificar que llenó todo
+    if (Object.values(seleccionesActuales).some(s => s.length === 0)) {
+        return alert("Por favor marca todos los partidos.");
+    }
 
-    // Guardar la jugada actual en el historial
-    let jugadaTexto = partidos.map(p => seleccionesActuales[p.id].sort().join('')).join('-');
-    
-    // Calcular costo de esta jugada (dobles y triples)
-    let costoEstaJugada = 0;
-    Object.keys(seleccionesActuales).forEach(id => {
-        costoEstaJugada += (seleccionesActuales[id].length * 10);
-    });
+    let costo = 0;
+    let resumen = partidos.map(p => {
+        costo += (seleccionesActuales[p.id].length * 10);
+        return seleccionesActuales[p.id].sort().join('');
+    }).join('-');
 
-    historialJugadas.push({ texto: jugadaTexto, costo: costoEstaJugada });
+    historial.push({ resumen, costo });
 
-    // Actualizar total visual
-    let totalAcumulado = historialJugadas.reduce((sum, j) => sum + j.costo, 0);
-    document.getElementById('txtTotal').innerText = `$${totalAcumulado}`;
+    // Sumar al total visual
+    let total = historial.reduce((acc, j) => acc + j.costo, 0);
+    document.getElementById('txtTotal').innerText = `$${total}`;
 
-    // Limpiar visualmente para la siguiente jugada
+    // Limpiar para nueva jugada
     document.querySelectorAll('.btn-voto').forEach(b => b.classList.remove('activo'));
     partidos.forEach(p => seleccionesActuales[p.id] = []);
-    
-    alert("✅ Jugada guardada. Puedes agregar otra o enviar a WhatsApp.");
+    alert("¡Jugada guardada! Puedes hacer otra o enviar.");
 }
 
 function enviarWhatsApp() {
-    const nom = document.getElementById('nombreCliente').value;
-    if(!nom) return alert("Escribe el nombre del cliente.");
-    if(historialJugadas.length === 0) return alert("Agrega al menos una jugada antes de enviar.");
+    const nombre = document.getElementById('nombreCliente').value;
+    if(!nombre) return alert("Escribe tu nombre");
+    if(historial.length === 0) return alert("Agrega al menos una jugada");
 
-    let msg = `🏆 *LA DE DIEZ GANADORA*\n👤 *Cliente:* ${nom.toUpperCase()}\n\n`;
-    
-    historialJugadas.forEach((j, i) => {
-        msg += `✅ *Jugada ${i+1}:* ${j.texto}\n`;
+    let mensaje = `🏆 *LA DE DIEZ GANADORA*\n👤 *Cliente:* ${nombre.toUpperCase()}\n\n`;
+    historial.forEach((j, i) => {
+        mensaje += `✅ *Jugada ${i+1}:* ${j.resumen}\n`;
     });
+    mensaje += `\n💰 *TOTAL FINAL: $${historial.reduce((a,b)=>a+b.costo, 0)}*`;
 
-    let totalFinal = historialJugadas.reduce((sum, j) => sum + j.costo, 0);
-    msg += `\n💰 *TOTAL A PAGAR: $${totalFinal}*`;
-    
-    window.open(`https://wa.me/523113405833?text=${encodeURIComponent(msg)}`);
+    window.open(`https://wa.me/523113405833?text=${encodeURIComponent(mensaje)}`);
 }
 
-cargar();
+// Arrancar nada más abrir la web
+cargarInmediato();
 </script>
 
 </body>
