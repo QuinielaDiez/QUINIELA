@@ -29,11 +29,23 @@
         .txt-costo { font-size: 16px; font-weight: 800; color: #064e3b; margin-bottom: 10px; }
         .btn-g { background-color: #064e3b; color: white; border: none; padding: 14px; width: 100%; border-radius: 8px; font-weight: bold; font-size: 14px; cursor: pointer; text-transform: uppercase; }
 
-        .ticket { padding: 10px; background: #f0f0f0; max-height: 200px; overflow-y: auto; }
-        .card { background: white; padding: 10px; border-radius: 6px; margin-bottom: 6px; display: flex; flex-direction: column; gap: 5px; border-left: 6px solid #059669; box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
-        .card-top { display: flex; justify-content: space-between; align-items: center; }
-        .card-prog { font-family: monospace; font-size: 12px; color: #444; font-weight: bold; background: #f9f9f9; padding: 4px; border-radius: 4px; }
-        .btn-del { background: #e11d48; color: white; border: none; padding: 6px 10px; border-radius: 4px; cursor: pointer; font-size: 11px; }
+        /* ESTILO CORREGIDO PARA QUE SE VEA LA JUGADA */
+        .ticket { padding: 10px; background: #f0f0f0; max-height: 250px; overflow-y: auto; }
+        .card { background: white; padding: 12px; border-radius: 6px; margin-bottom: 8px; border-left: 6px solid #059669; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+        .card-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
+        .card-prog { 
+            display: block; 
+            font-family: 'Courier New', Courier, monospace; 
+            font-size: 14px; 
+            color: #000; 
+            font-weight: 900; 
+            background: #f1f1f1; 
+            padding: 8px; 
+            border-radius: 4px;
+            text-align: center;
+            border: 1px solid #ccc;
+        }
+        .btn-del { background: #e11d48; color: white; border: none; padding: 6px 12px; border-radius: 4px; cursor: pointer; font-size: 11px; font-weight: bold; }
 
         .final { background: #064e3b; padding: 20px; text-align: center; }
         #total-pago { color: white; font-size: 20px; font-weight: 900; margin-bottom: 15px; }
@@ -70,14 +82,10 @@
 
 <script>
     const partidos = [
-        {l: "AMÉRICA", v: "PUMAS"}, 
-        {l: "TOLUCA", v: "PACHUCA"},
-        {l: "CANCÚN", v: "JAIBA BRAVA"}, 
-        {l: "TEPATITLÁN", v: "MINEROS"},
-        {l: "AUSTIN", v: "LOUIS CITY"}, 
-        {l: "INTERNACIONAL", v: "FLUMINENSE"},
-        {l: "MIRASSOL", v: "CORINTHIANS"},
-        {l: "BARCELONA", v: "R. SOCIEDAD"},
+        {l: "AMÉRICA", v: "PUMAS"}, {l: "TOLUCA", v: "PACHUCA"},
+        {l: "CANCÚN", v: "JAIBA BRAVA"}, {l: "TEPATITLÁN", v: "MINEROS"},
+        {l: "AUSTIN", v: "LOUIS CITY"}, {l: "INTERNACIONAL", v: "FLUMINENSE"},
+        {l: "MIRASSOL", v: "CORINTHIANS"}, {l: "BARCELONA", v: "R. SOCIEDAD"},
         {l: "MAN. CITY", v: "ARSENAL"}
     ];
 
@@ -126,18 +134,13 @@
     }
 
     function calcular() {
-        let costo = 10, tiene = false;
-        let completos = 0;
+        let costo = 10, completos = 0;
         for (let k in actual) {
             let n = actual[k].length;
-            if (n > 0) {
-                tiene = true;
-                completos++;
-            }
+            if (n > 0) completos++;
             if (n === 2) costo *= 2;
             if (n === 3) costo *= 3;
         }
-        // Solo mostramos costo si tiene los 9 partidos marcados
         const r = completos === 9 ? costo : 0;
         document.getElementById('c-actual').innerText = `Importe Jugada: $${r}`;
         return r;
@@ -145,7 +148,7 @@
 
     function guardarJugada() {
         const c = calcular();
-        if (c === 0) return alert("Por favor selecciona resultados para los 9 partidos");
+        if (c === 0) return alert("Selecciona los 9 partidos");
         
         ticket.push({ 
             datos: JSON.parse(JSON.stringify(actual)), 
@@ -161,7 +164,7 @@
             });
         }
         dibujarTicket();
-        calcular();
+        document.getElementById('c-actual').innerText = "Importe Jugada: $0";
     }
 
     function borrar(i) {
@@ -190,19 +193,14 @@
     function enviar() {
         const u = document.getElementById('usuario').value;
         if (!u || ticket.length === 0) return alert("Escribe tu nombre y guarda tus jugadas");
-        
         let m = `◈ *LA DE DIEZ GANADORA*\n◈ *Cliente:* ${u.toUpperCase()}\n\n`;
         let total = 0;
-
         ticket.forEach((j, idx) => {
             total += j.precio;
             m += `◈ *J${idx + 1}:* ${j.resumenTexto} ($${j.precio})\n`;
         });
-
         m += `\n◈ *TOTAL A PAGAR: $${total}*`;
-        
-        const num = "523113405833"; 
-        window.open(`https://wa.me/${num}?text=${encodeURIComponent(m)}`);
+        window.open(`https://wa.me/523113405833?text=${encodeURIComponent(m)}`);
     }
 </script>
 </body>
