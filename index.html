@@ -5,175 +5,210 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>LA DE DIEZ GANADORA</title>
     <style>
-        body { font-family: 'Segoe UI', sans-serif; background-color: #f0f2f5; margin: 0; padding: 10px; }
+        body { font-family: 'Segoe UI', Tahoma, sans-serif; background-color: #f0f2f5; margin: 0; padding: 10px; }
         .container { max-width: 500px; margin: auto; background: white; border-radius: 20px; overflow: hidden; box-shadow: 0 10px 25px rgba(0,0,0,0.1); }
+        
+        /* CABECERA Y LOGO PRINCIPAL */
         .header { background-color: #064e3b; color: white; text-align: center; padding: 20px; }
         .logo-principal { width: 85px; height: 85px; background: white; border-radius: 50%; padding: 5px; margin-bottom: 10px; object-fit: contain; }
         
-        .input-seccion { padding: 15px; border-bottom: 2px solid #eee; background: #fff; position: sticky; top: 0; z-index: 10; }
+        .input-seccion { padding: 15px; border-bottom: 2px solid #eee; background: #fff; position: sticky; top: 0; z-index: 10; text-align: center;}
         input { width: 90%; padding: 12px; border: 2px solid #e5e7eb; border-radius: 8px; text-align: center; font-weight: bold; font-size: 16px; }
 
+        /* LISTA DE PARTIDOS CON LOGOS */
         .fila { display: flex; align-items: center; padding: 10px; border-bottom: 1px solid #f3f4f6; }
-        .equipo { flex: 1; font-size: 11px; font-weight: bold; color: #374151; text-transform: uppercase; }
-        .izq { text-align: right; padding-right: 8px; }
-        .der { text-align: left; padding-left: 8px; }
+        .equipo { flex: 1; font-size: 11px; font-weight: bold; color: #374151; text-transform: uppercase; display: flex; align-items: center; }
+        .izq { justify-content: flex-end; text-align: right; }
+        .der { justify-content: flex-start; text-align: left; }
+        .img-logo { width: 25px; height: 25px; object-fit: contain; margin: 0 8px; }
 
         .opciones { display: flex; gap: 4px; }
         .btn { width: 36px; height: 36px; display: flex; align-items: center; justify-content: center; border: 1px solid #d1d5db; border-radius: 6px; cursor: pointer; font-weight: bold; background: white; }
         .btn.active { background: #059669; color: white; border-color: #059669; }
 
-        .controles { padding: 20px; background: #f9fafb; text-align: center; }
-        .btn-guardar { background: #064e3b; color: white; border: none; padding: 12px; width: 100%; border-radius: 8px; font-weight: bold; cursor: pointer; margin-bottom: 10px; }
+        /* CONTROLES DE JUGADA */
+        .controles { padding: 20px; background: #f9fafb; text-align: center; border-top: 1px solid #eee; }
+        .btn-guardar { background: #064e3b; color: white; border: none; padding: 15px; width: 100%; border-radius: 8px; font-weight: bold; cursor: pointer; font-size: 14px; }
         
-        .lista-guardadas { padding: 15px; background: #fff; }
-        .jugada-item { background: #f3f4f6; padding: 10px; border-radius: 8px; margin-bottom: 10px; font-size: 13px; display: flex; justify-content: space-between; align-items: center; }
-        .btn-borrar { background: #ef4444; color: white; border: none; padding: 5px 10px; border-radius: 4px; cursor: pointer; }
+        /* JUGADAS GUARDADAS */
+        .lista-guardadas { padding: 15px; background: #fff; border-top: 1px solid #eee; }
+        .jugada-item { background: #f3f4f6; padding: 12px; border-radius: 8px; margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center; border-left: 5px solid #059669; }
+        .btn-borrar { background: #ef4444; color: white; border: none; padding: 6px 12px; border-radius: 4px; cursor: pointer; font-size: 12px; }
 
+        /* FOOTER TOTAL */
         .footer-total { background: #064e3b; color: white; padding: 20px; text-align: center; }
-        .gran-total { font-size: 24px; font-weight: 900; margin-bottom: 15px; }
-        .btn-whatsapp { background: #25d366; color: white; border: none; padding: 15px; width: 100%; border-radius: 10px; font-weight: bold; cursor: pointer; font-size: 16px; }
+        .gran-total { font-size: 22px; font-weight: 900; margin-bottom: 15px; }
+        .btn-whatsapp { background: #25d366; color: white; border: none; padding: 15px; width: 100%; border-radius: 10px; font-weight: bold; cursor: pointer; font-size: 16px; box-shadow: 0 4px 10px rgba(0,0,0,0.2); }
     </style>
 </head>
 <body>
 
 <div class="container">
     <div class="header">
-        <img src="logos/QUINIELA.png" class="logo-principal" onerror="this.src='https://via.placeholder.com/85?text=LOGO'">
-        <h1>LA DE DIEZ GANADORA</h1>
+        <!-- Logo de la Quiniela -->
+        <img src="logos/QUINIELA.png" class="logo-principal" onerror="this.style.display='none'">
+        <h1 style="margin:0; font-size: 20px;">LA DE DIEZ GANADORA</h1>
+        <p style="margin:5px 0 0; font-size: 12px; opacity: 0.8;">Sencilla $10 | Doble x2 | Triple x3</p>
     </div>
 
     <div class="input-seccion">
         <input type="text" id="nombreCliente" placeholder="NOMBRE DEL PARTICIPANTE">
     </div>
 
-    <div id="partidosContenedor"></div>
+    <div id="partidosContenedor">
+        <!-- Los partidos se cargan aquí -->
+    </div>
 
     <div class="controles">
-        <div style="font-weight: bold; margin-bottom: 10px;" id="costoActual">Costo Jugada: $0</div>
-        <button class="btn-guardar" onclick="guardarJugada()">+ GUARDAR JUGADA</button>
+        <div style="font-weight: bold; margin-bottom: 12px; font-size: 16px;" id="costoActual">Costo Jugada: $0</div>
+        <button class="btn-guardar" onclick="guardarJugada()">+ GUARDAR ESTA JUGADA</button>
     </div>
 
     <div class="lista-guardadas" id="listaGuardadas">
-        <h4 style="margin-top:0">Jugadas Guardadas:</h4>
-        <!-- Aquí aparecen las jugadas -->
+        <h4 style="margin:0 0 10px 0; color: #064e3b;">Jugadas en el carrito:</h4>
+        <div id="itemsJugadas"></div>
     </div>
 
     <div class="footer-total">
-        <div class="gran-total" id="granTotal">TOTAL A PAGAR: $0</div>
-        <button class="btn-whatsapp" onclick="enviarTodo()">ENVIAR TODAS POR WHATSAPP</button>
+        <div class="gran-total" id="granTotal">GRAN TOTAL: $0</div>
+        <button class="btn-whatsapp" onclick="enviarTodo()">ENVIAR PEDIDO POR WHATSAPP</button>
     </div>
 </div>
 
 <script>
-    const partidos = ["REAL SOCIEDAD vs REAL BETIS", "CHIVAS vs TIGRES", "CRUZ AZUL vs ATLAS", "PORTLAND vs KANSAS CITY", "BARCELONA vs REAL MADRID", "PSG vs BREST", "TOLOUSE vs LYON", "PACHUCA vs TOLUCA", "PUMAS vs AMERICA"];
-    let seleccionActual = {};
-    let jugadasGuardadas = [];
+    // Configuración de partidos y sus logos
+    const datosPartidos = [
+        { l: "REAL SOCIEDAD", v: "REAL BETIS", imgL: "REALSOCIEDAD.png", imgV: "REALBETIS.png" },
+        { l: "CHIVAS", v: "TIGRES", imgL: "CHIVAS.png", imgV: "TIGRES.png" },
+        { l: "CRUZ AZUL", v: "ATLAS", imgL: "CRUZAZUL.png", imgV: "ATLAS.png" },
+        { l: "PORTLAND", v: "KANSAS CITY", imgL: "PORTLAND.png", imgV: "KANSAS CITY.png" },
+        { l: "BARCELONA", v: "REAL MADRID", imgL: "BARCELONA.png", imgV: "REALMADRID.png" },
+        { l: "PSG", v: "BREST", imgL: "PSG.png", imgV: "BREST.png" },
+        { l: "TOLOUSE", v: "LYON", imgL: "TOLOUSE.png", imgV: "LYON.png" },
+        { l: "PACHUCA", v: "TOLUCA", imgL: "PACHUCA.png", imgV: "TOLUCA.png" },
+        { l: "PUMAS", v: "AMERICA", imgL: "PUMAS.png", imgV: "AMERICA.png" }
+    ];
 
-    function iniciar() {
-        const cont = document.getElementById('partidosContenedor');
-        partidos.forEach((p, i) => {
+    let seleccionActual = {};
+    let carritoJugadas = [];
+
+    function iniciarApp() {
+        const contenedor = document.getElementById('partidosContenedor');
+        datosPartidos.forEach((p, i) => {
             seleccionActual[i] = [];
-            const [l, v] = p.split(" vs ");
-            cont.innerHTML += `<div class="fila">
-                <div class="equipo izq">${l}</div>
-                <div class="opciones">
-                    <div class="btn" id="L-${i}" onclick="votar(${i},'L')">L</div>
-                    <div class="btn" id="E-${i}" onclick="votar(${i},'E')">E</div>
-                    <div class="btn" id="V-${i}" onclick="votar(${i},'V')">V</div>
-                </div>
-                <div class="equipo der">${v}</div>
-            </div>`;
+            contenedor.innerHTML += `
+                <div class="fila">
+                    <div class="equipo izq">
+                        ${p.l} <img src="logos/${p.imgL}" class="img-logo" onerror="this.style.display='none'">
+                    </div>
+                    <div class="opciones">
+                        <div class="btn" id="L-${i}" onclick="seleccionar(${i},'L')">L</div>
+                        <div class="btn" id="E-${i}" onclick="seleccionar(${i},'E')">E</div>
+                        <div class="btn" id="V-${i}" onclick="seleccionar(${i},'V')">V</div>
+                    </div>
+                    <div class="equipo der">
+                        <img src="logos/${p.imgV}" class="img-logo" onerror="this.style.display='none'"> ${p.v}
+                    </div>
+                </div>`;
         });
     }
 
-    function votar(i, t) {
-        const b = document.getElementById(`${t}-${i}`);
-        if (seleccionActual[i].includes(t)) {
-            seleccionActual[i] = seleccionActual[i].filter(x => x !== t);
-            b.classList.remove('active');
+    function seleccionar(partidoIdx, tipo) {
+        const boton = document.getElementById(`${tipo}-${partidoIdx}`);
+        if (seleccionActual[partidoIdx].includes(tipo)) {
+            seleccionActual[partidoIdx] = seleccionActual[partidoIdx].filter(t => t !== tipo);
+            boton.classList.remove('active');
         } else {
-            seleccionActual[i].push(t);
-            b.classList.add('active');
+            seleccionActual[partidoIdx].push(tipo);
+            boton.classList.add('active');
         }
-        actualizarCosto();
+        actualizarCostoTemporal();
     }
 
-    function actualizarCosto() {
+    function actualizarCostoTemporal() {
         let costo = 10;
-        let tiene = false;
+        let activo = false;
         for (let i in seleccionActual) {
             let n = seleccionActual[i].length;
-            if (n > 0) tiene = true;
+            if (n > 0) activo = true;
             if (n === 2) costo *= 2;
             if (n === 3) costo *= 3;
         }
-        document.getElementById('costoActual').innerText = `Costo Jugada: $${tiene ? costo : 0}`;
-        return tiene ? costo : 0;
+        const total = activo ? costo : 0;
+        document.getElementById('costoActual').innerText = `Costo Jugada: $${total}`;
+        return total;
     }
 
     function guardarJugada() {
-        const costo = actualizarCosto();
-        if (costo === 0) return alert("Selecciona al menos un resultado");
-        
-        const copiaSeleccion = JSON.parse(JSON.stringify(seleccionActual));
-        jugadasGuardadas.push({ selecciones: copiaSeleccion, importe: costo });
-        
-        // Limpiar selección para la siguiente
-        partidos.forEach((_, i) => {
+        const costo = actualizarCostoTemporal();
+        if (costo === 0) return alert("Selecciona al menos un resultado antes de guardar.");
+
+        // Guardar copia
+        carritoJugadas.push({
+            detalle: JSON.parse(JSON.stringify(seleccionActual)),
+            importe: costo
+        });
+
+        // Limpiar interfaz
+        for (let i in seleccionActual) {
             seleccionActual[i] = [];
             document.getElementById(`L-${i}`).classList.remove('active');
             document.getElementById(`E-${i}`).classList.remove('active');
             document.getElementById(`V-${i}`).classList.remove('active');
-        });
+        }
         
-        dibujarLista();
-        actualizarCosto();
+        renderizarCarrito();
+        actualizarCostoTemporal();
     }
 
-    function borrarJugada(index) {
-        jugadasGuardadas.splice(index, 1);
-        dibujarLista();
+    function borrarDelCarrito(idx) {
+        carritoJugadas.splice(idx, 1);
+        renderizarCarrito();
     }
 
-    function dibujarLista() {
-        const lista = document.getElementById('listaGuardadas');
-        let html = '<h4 style="margin-top:0">Jugadas Guardadas:</h4>';
-        let total = 0;
-        
-        jugadasGuardadas.forEach((j, i) => {
-            total += j.importe;
-            html += `<div class="jugada-item">
-                <span>Jugada #${i+1} - <b>$${j.importe}</b></span>
-                <button class="btn-borrar" onclick="borrarJugada(${i})">Eliminar</button>
-            </div>`;
+    function renderizarCarrito() {
+        const lista = document.getElementById('itemsJugadas');
+        let html = "";
+        let sumaTotal = 0;
+
+        carritoJugadas.forEach((j, i) => {
+            sumaTotal += j.importe;
+            html += `
+                <div class="jugada-item">
+                    <div><b>Jugada #${i+1}</b><br><small>Importe: $${j.importe}</small></div>
+                    <button class="btn-borrar" onclick="borrarDelCarrito(${i})">Eliminar</button>
+                </div>`;
         });
-        
+
         lista.innerHTML = html;
-        document.getElementById('granTotal').innerText = `TOTAL A PAGAR: $${total}`;
+        document.getElementById('granTotal').innerText = `GRAN TOTAL: $${sumaTotal}`;
     }
 
     function enviarTodo() {
         const nombre = document.getElementById('nombreCliente').value;
-        if (!nombre) return alert("Escribe el nombre del participante");
-        if (jugadasGuardadas.length === 0) return alert("No hay jugadas guardadas");
+        if (!nombre) return alert("Escribe tu nombre para el envío.");
+        if (carritoJugadas.length === 0) return alert("No tienes jugadas guardadas.");
 
-        let msg = `⚽ *QUINIELA: LA DE DIEZ GANADORA*\n👤 *Participante:* ${nombre}\n\n`;
-        let totalFinal = 0;
+        let texto = `⚽ *LA DE DIEZ GANADORA*\n👤 *Cliente:* ${nombre}\n\n`;
+        let granTotal = 0;
 
-        jugadasGuardadas.forEach((j, idx) => {
-            totalFinal += j.importe;
-            msg += `👉 *JUGADA #${idx+1} ($${j.importe})*\n`;
-            partidos.forEach((p, i) => {
-                msg += `${i+1}. [${j.selecciones[i].join('-')}]\n`;
+        carritoJugadas.forEach((j, idx) => {
+            granTotal += j.importe;
+            texto += `📝 *JUGADA #${idx+1} ($${j.importe})*\n`;
+            datosPartidos.forEach((p, i) => {
+                texto += `${i+1}. ${p.l} vs ${p.v}: *[${j.detalle[i].join('-') || '---'}]*\n`;
             });
-            msg += `\n`;
+            texto += `\n`;
         });
 
-        msg += `💰 *TOTAL FINAL A PAGAR: $${totalFinal}*`;
-        window.open(`https://wa.me/523113405833?text=${encodeURIComponent(msg)}`);
+        texto += `💰 *TOTAL A PAGAR: $${granTotal}*`;
+        
+        // Reemplaza con tu número real
+        const miNumero = "521XXXXXXXXXX"; 
+        window.open(`https://wa.me/${miNumero}?text=${encodeURIComponent(texto)}`);
     }
 
-    iniciar();
+    iniciarApp();
 </script>
 </body>
 </html>
