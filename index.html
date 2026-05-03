@@ -5,64 +5,55 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>LA DE DIEZ GANADORA</title>
     <style>
-        body { font-family: 'Segoe UI', Arial, sans-serif; background-color: #f0f2f5; margin: 0; padding: 10px; }
-        .container { max-width: 450px; margin: auto; background: white; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 15px rgba(0,0,0,0.2); border: 1px solid #ddd; }
+        body { font-family: 'Segoe UI', Arial, sans-serif; background-color: #f0f2f5; margin: 0; padding: 5px; }
+        .container { max-width: 400px; margin: auto; background: white; border-radius: 10px; overflow: hidden; box-shadow: 0 4px 12px rgba(0,0,0,0.15); border: 1px solid #ddd; }
         
-        .header { background-color: #064e3b; color: white; text-align: center; padding: 15px; }
-        .logo-img { width: 80px; height: 80px; margin-bottom: 8px; border-radius: 50%; background: white; object-fit: contain; border: 3px solid #fff; }
-        .header h1 { margin: 0; font-size: 18px; text-transform: uppercase; }
-        .header p { margin: 4px 0 0; font-size: 11px; color: #a7f3d0; font-weight: bold; }
+        /* CABECERA MÁS COMPACTA */
+        .header { background-color: #064e3b; color: white; text-align: center; padding: 10px; }
+        .logo-img { width: 60px; height: 60px; margin-bottom: 5px; border-radius: 50%; background: white; object-fit: contain; border: 2px solid #fff; }
+        .header h1 { margin: 0; font-size: 16px; text-transform: uppercase; letter-spacing: 1px; }
+        .header p { margin: 2px 0 0; font-size: 10px; color: #a7f3d0; font-weight: bold; }
 
-        .seccion-user { padding: 12px; text-align: center; background: #f9f9f9; border-bottom: 1px solid #eee; }
-        input { width: 90%; padding: 10px; border: 2px solid #ddd; border-radius: 6px; text-align: center; font-weight: bold; font-size: 14px; text-transform: uppercase; }
+        .seccion-user { padding: 8px; text-align: center; background: #f9f9f9; border-bottom: 1px solid #eee; }
+        input { width: 85%; padding: 8px; border: 2px solid #ddd; border-radius: 6px; text-align: center; font-weight: bold; font-size: 13px; text-transform: uppercase; }
 
-        .fila { display: flex; align-items: center; justify-content: space-between; padding: 10px 15px; border-bottom: 1px solid #f0f0f0; }
-        .eq { width: 35%; font-size: 12px; font-weight: 800; color: #000; text-transform: uppercase; line-height: 1.2; }
+        /* FILAS ESTÉTICAS: L - EQUIPO - E - EQUIPO - V */
+        .fila { display: flex; align-items: center; justify-content: center; padding: 6px 10px; border-bottom: 1px solid #f0f0f0; gap: 4px; }
+        .eq { width: 30%; font-size: 11px; font-weight: 800; color: #000; text-transform: uppercase; line-height: 1.1; }
         .iz { text-align: right; }
         .de { text-align: left; }
         
-        .btns { display: flex; gap: 6px; }
-        .b-v { width: 35px; height: 35px; display: flex; align-items: center; justify-content: center; border: 2px solid #bbb; border-radius: 6px; cursor: pointer; font-size: 14px; font-weight: bold; background: #fff; color: #333; }
+        .b-v { width: 30px; height: 30px; display: flex; align-items: center; justify-content: center; border: 1.5px solid #bbb; border-radius: 5px; cursor: pointer; font-size: 12px; font-weight: bold; background: #fff; color: #333; flex-shrink: 0; }
         .b-v.active { background-color: #059669; color: white; border-color: #059669; box-shadow: inset 0 2px 4px rgba(0,0,0,0.2); }
 
-        .footer-cont { padding: 15px; background: #fdfdfd; text-align: center; border-top: 2px solid #eee; }
-        .txt-costo { font-size: 16px; font-weight: 800; color: #064e3b; margin-bottom: 10px; }
-        .btn-g { background-color: #064e3b; color: white; border: none; padding: 14px; width: 100%; border-radius: 8px; font-weight: bold; font-size: 14px; cursor: pointer; text-transform: uppercase; }
+        .footer-cont { padding: 10px; background: #fdfdfd; text-align: center; border-top: 1px solid #eee; }
+        .txt-costo { font-size: 14px; font-weight: 800; color: #064e3b; margin-bottom: 8px; }
+        .btn-g { background-color: #064e3b; color: white; border: none; padding: 12px; width: 100%; border-radius: 8px; font-weight: bold; font-size: 13px; cursor: pointer; text-transform: uppercase; }
 
-        /* ESTILO CORREGIDO PARA QUE SE VEA LA JUGADA */
-        .ticket { padding: 10px; background: #f0f0f0; max-height: 250px; overflow-y: auto; }
-        .card { background: white; padding: 12px; border-radius: 6px; margin-bottom: 8px; border-left: 6px solid #059669; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
-        .card-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
-        .card-prog { 
-            display: block; 
-            font-family: 'Courier New', Courier, monospace; 
-            font-size: 14px; 
-            color: #000; 
-            font-weight: 900; 
-            background: #f1f1f1; 
-            padding: 8px; 
-            border-radius: 4px;
-            text-align: center;
-            border: 1px solid #ccc;
-        }
-        .btn-del { background: #e11d48; color: white; border: none; padding: 6px 12px; border-radius: 4px; cursor: pointer; font-size: 11px; font-weight: bold; }
+        /* RESUMEN DE JUGADAS */
+        .ticket { padding: 8px; background: #f0f0f0; max-height: 180px; overflow-y: auto; }
+        .card { background: white; padding: 10px; border-radius: 6px; margin-bottom: 6px; border-left: 5px solid #059669; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
+        .card-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 5px; }
+        .card-top b { font-size: 12px; }
+        .card-prog { font-family: 'Courier New', monospace; font-size: 13px; color: #000; font-weight: 900; background: #f1f1f1; padding: 6px; border-radius: 4px; text-align: center; border: 1px solid #ccc; letter-spacing: 1px; }
+        .btn-del { background: #e11d48; color: white; border: none; padding: 4px 8px; border-radius: 4px; cursor: pointer; font-size: 10px; font-weight: bold; }
 
-        .final { background: #064e3b; padding: 20px; text-align: center; }
-        #total-pago { color: white; font-size: 20px; font-weight: 900; margin-bottom: 15px; }
-        .btn-wa { background-color: #25d366; color: white; border: none; padding: 16px; width: 100%; border-radius: 10px; font-weight: bold; font-size: 16px; cursor: pointer; box-shadow: 0 4px 10px rgba(0,0,0,0.3); }
+        .final { background: #064e3b; padding: 15px; text-align: center; }
+        #total-pago { color: white; font-size: 18px; font-weight: 900; margin-bottom: 12px; }
+        .btn-wa { background-color: #25d366; color: white; border: none; padding: 14px; width: 100%; border-radius: 10px; font-weight: bold; font-size: 15px; cursor: pointer; box-shadow: 0 4px 8px rgba(0,0,0,0.3); }
     </style>
 </head>
 <body onload="iniciar()">
 
 <div class="container">
     <div class="header">
-        <img src="logo.jpg" class="logo-img" alt="Logo" onerror="this.src='https://via.placeholder.com/80?text=10'">
+        <img src="logo.jpg" class="logo-img" alt="Logo" onerror="this.src='https://via.placeholder.com/60?text=10'">
         <h1>LA DE DIEZ GANADORA</h1>
         <p>Sencilla $10 | Doble x2 | Triple x3</p>
     </div>
 
     <div class="seccion-user">
-        <input type="text" id="usuario" placeholder="ESCRIBE TU NOMBRE">
+        <input type="text" id="usuario" placeholder="TU NOMBRE">
     </div>
 
     <div id="partidos-list"></div>
@@ -99,13 +90,11 @@
             actual[i] = [];
             html += `
                 <div class="fila">
+                    <div class="b-v" id="L-${i}" onclick="sel(${i},'L')">L</div>
                     <div class="eq iz">${p.l}</div>
-                    <div class="btns">
-                        <div class="b-v" id="L-${i}" onclick="sel(${i},'L')">L</div>
-                        <div class="b-v" id="E-${i}" onclick="sel(${i},'E')">E</div>
-                        <div class="b-v" id="V-${i}" onclick="sel(${i},'V')">V</div>
-                    </div>
+                    <div class="b-v" id="E-${i}" onclick="sel(${i},'E')">E</div>
                     <div class="eq de">${p.v}</div>
+                    <div class="b-v" id="V-${i}" onclick="sel(${i},'V')">V</div>
                 </div>`;
         });
         d.innerHTML = html;
@@ -149,13 +138,11 @@
     function guardarJugada() {
         const c = calcular();
         if (c === 0) return alert("Selecciona los 9 partidos");
-        
         ticket.push({ 
             datos: JSON.parse(JSON.stringify(actual)), 
             precio: c,
             resumenTexto: obtenerLineaOrdenada(actual)
         });
-        
         for (let k in actual) {
             actual[k] = [];
             ['L','E','V'].forEach(t => {
