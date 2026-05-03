@@ -5,85 +5,84 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>LA DE DIEZ GANADORA</title>
     <style>
-        /* FONDO CON MARCA DE AGUA */
+        /* FONDO CON MARCA DE AGUA USANDO TU IMAGEN PORTADA.JPG */
         body { 
             font-family: 'Segoe UI', Roboto, sans-serif; 
             margin: 0; 
             padding: 5px;
-            background: linear-gradient(rgba(255,255,255,0.85), rgba(255,255,255,0.85)), 
-                        url('portada.jpeg') no-repeat center center fixed;
+            background: linear-gradient(rgba(255,255,255,0.88), rgba(255,255,255,0.88)), 
+                        url('portada.jpg') no-repeat center center fixed;
             background-size: cover;
         }
 
         .container { 
             max-width: 420px; 
             margin: auto; 
-            background: rgba(255, 255, 255, 0.9); 
+            background: rgba(255, 255, 255, 0.95); 
             border-radius: 15px; 
             overflow: hidden; 
             box-shadow: 0 8px 32px rgba(0,0,0,0.3); 
             border: 1px solid rgba(255,255,255,0.3);
-            backdrop-filter: blur(5px);
+            backdrop-filter: blur(8px);
         }
         
         .header { background-color: #064e3b; color: white; text-align: center; padding: 15px; }
         .logo-img { width: 70px; height: 70px; margin-bottom: 5px; border-radius: 50%; border: 2px solid #fff; background: white; }
-        .header h1 { margin: 0; font-size: 20px; text-transform: uppercase; letter-spacing: 2px; }
+        .header h1 { margin: 0; font-size: 18px; text-transform: uppercase; letter-spacing: 1.5px; }
         .header p { margin: 4px 0 0; font-size: 11px; color: #fbbf24; font-weight: bold; }
 
-        .seccion-user { padding: 12px; text-align: center; }
+        .seccion-user { padding: 10px; text-align: center; }
         input { 
-            width: 85%; padding: 10px; border: 2px solid #064e3b; border-radius: 25px; 
+            width: 85%; padding: 8px; border: 2px solid #064e3b; border-radius: 20px; 
             text-align: center; font-weight: bold; font-size: 14px; text-transform: uppercase;
             outline: none; background: white;
         }
 
-        /* FILAS CENTRADAS Y NEGRITAS */
+        /* DISEÑO DE FILAS: L - LOCAL - E - VISITANTE - V */
         .fila { 
-            display: flex; align-items: center; justify-content: center; 
-            padding: 8px 10px; border-bottom: 1px solid rgba(0,0,0,0.05); gap: 8px; 
+            display: flex; align-items: center; justify-content: space-between; 
+            padding: 8px 12px; border-bottom: 1px solid rgba(0,0,0,0.05); gap: 4px; 
         }
         .eq { 
-            width: 32%; font-size: 12px; font-weight: 900; color: #1a1a1a; 
-            text-transform: uppercase; line-height: 1.2; 
+            flex: 1; font-size: 11px; font-weight: 900; color: #000; 
+            text-transform: uppercase; line-height: 1.2; text-align: center;
         }
-        .iz { text-align: right; }
-        .de { text-align: left; }
         
         .b-v { 
-            width: 34px; height: 34px; display: flex; align-items: center; justify-content: center; 
-            border: 2px solid #064e3b; border-radius: 8px; cursor: pointer; 
-            font-size: 14px; font-weight: 900; background: #fff; color: #064e3b; transition: 0.2s;
+            width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; 
+            border: 1.5px solid #064e3b; border-radius: 6px; cursor: pointer; 
+            font-size: 13px; font-weight: 900; background: #fff; color: #064e3b; transition: 0.2s;
+            flex-shrink: 0;
         }
-        .b-v.active { background-color: #059669; color: white; border-color: #059669; transform: scale(1.1); }
+        .b-v.active { background-color: #059669; color: white; border-color: #059669; transform: scale(1.05); }
 
-        .footer-cont { padding: 15px; text-align: center; }
-        .txt-costo { font-size: 16px; font-weight: 900; color: #064e3b; margin-bottom: 10px; text-shadow: 1px 1px 0px #fff; }
+        .footer-cont { padding: 12px; text-align: center; }
+        .txt-costo { font-size: 15px; font-weight: 900; color: #064e3b; margin-bottom: 8px; }
         .btn-g { 
             background: linear-gradient(135deg, #064e3b, #059669); color: white; border: none; 
-            padding: 14px; width: 90%; border-radius: 30px; font-weight: bold; 
-            font-size: 14px; cursor: pointer; text-transform: uppercase; box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+            padding: 12px; width: 90%; border-radius: 25px; font-weight: bold; 
+            font-size: 13px; cursor: pointer; text-transform: uppercase; box-shadow: 0 4px 8px rgba(0,0,0,0.2);
         }
 
-        .ticket { padding: 10px; background: rgba(0,0,0,0.05); max-height: 200px; overflow-y: auto; }
+        .ticket { padding: 8px; background: rgba(0,0,0,0.03); max-height: 180px; overflow-y: auto; }
         .card { 
-            background: white; padding: 12px; border-radius: 10px; margin-bottom: 8px; 
-            border-left: 6px solid #fbbf24; box-shadow: 0 2px 8px rgba(0,0,0,0.1); 
+            background: white; padding: 10px; border-radius: 10px; margin-bottom: 6px; 
+            border-left: 5px solid #fbbf24; box-shadow: 0 2px 6px rgba(0,0,0,0.08); 
         }
-        .card-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
+        .card-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 5px; font-size: 12px; }
         .card-prog { 
-            font-family: 'Courier New', monospace; font-size: 15px; color: #000; 
-            font-weight: 900; background: #f8fafc; padding: 8px; border-radius: 6px; 
-            text-align: center; border: 1px dashed #064e3b; letter-spacing: 2px;
+            font-family: 'Courier New', monospace; font-size: 14px; color: #000; 
+            font-weight: 900; background: #f8fafc; padding: 6px; border-radius: 4px; 
+            text-align: center; border: 1px dashed #064e3b; letter-spacing: 1px;
         }
-        .btn-del { background: #e11d48; color: white; border: none; padding: 6px 12px; border-radius: 15px; cursor: pointer; font-size: 11px; font-weight: bold; }
+        .btn-del { background: #e11d48; color: white; border: none; padding: 5px 10px; border-radius: 12px; cursor: pointer; font-size: 10px; font-weight: bold; }
 
-        .final { background-color: #064e3b; padding: 20px; text-align: center; }
-        #total-pago { color: #fbbf24; font-size: 22px; font-weight: 900; margin-bottom: 15px; }
+        .final { background-color: #064e3b; padding: 15px; text-align: center; }
+        #total-pago { color: #fbbf24; font-size: 20px; font-weight: 900; margin-bottom: 12px; }
         .btn-wa { 
-            background-color: #25d366; color: white; border: none; padding: 16px; 
-            width: 100%; border-radius: 12px; font-weight: bold; font-size: 16px; 
-            cursor: pointer; box-shadow: 0 6px 15px rgba(0,0,0,0.3);
+            background-color: #25d366; color: white; border: none; padding: 14px; 
+            width: 100%; border-radius: 10px; font-weight: bold; font-size: 16px; 
+            cursor: pointer; box-shadow: 0 5px 12px rgba(0,0,0,0.3);
         }
     </style>
 </head>
@@ -97,7 +96,7 @@
     </div>
 
     <div class="seccion-user">
-        <input type="text" id="usuario" placeholder="INGRESA TU NOMBRE">
+        <input type="text" id="usuario" placeholder="TU NOMBRE">
     </div>
 
     <div id="partidos-list"></div>
@@ -117,14 +116,10 @@
 
 <script>
     const partidos = [
-        {l: "AMÉRICA", v: "PUMAS"}, 
-        {l: "TOLUCA", v: "PACHUCA"},
-        {l: "CANCÚN", v: "JAIBA BRAVA"},
-        {l: "TEPATITLÁN", v: "MINEROS"},
-        {l: "AUSTIN", v: "LOUIS CITY"}, 
-        {l: "INTERNACIONAL", v: "FLUMINENSE"},
-        {l: "MIRASSOL", v: "CORINTHIANS"}, 
-        {l: "BARCELONA", v: "R. SOCIEDAD"},
+        {l: "AMÉRICA", v: "PUMAS"}, {l: "TOLUCA", v: "PACHUCA"},
+        {l: "CANCÚN", v: "JAIBA BRAVA"}, {l: "TEPATITLÁN", v: "MINEROS"},
+        {l: "AUSTIN", v: "LOUIS CITY"}, {l: "INTERNACIONAL", v: "FLUMINENSE"},
+        {l: "MIRASSOL", v: "CORINTHIANS"}, {l: "BARCELONA", v: "R. SOCIEDAD"},
         {l: "MAN. CITY", v: "ARSENAL"}
     ];
 
@@ -139,9 +134,9 @@
             html += `
                 <div class="fila">
                     <div class="b-v" id="L-${i}" onclick="sel(${i},'L')">L</div>
-                    <div class="eq iz">${p.l}</div>
+                    <div class="eq">${p.l}</div>
                     <div class="b-v" id="E-${i}" onclick="sel(${i},'E')">E</div>
-                    <div class="eq de">${p.v}</div>
+                    <div class="eq">${p.v}</div>
                     <div class="b-v" id="V-${i}" onclick="sel(${i},'V')">V</div>
                 </div>`;
         });
