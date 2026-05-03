@@ -6,123 +6,174 @@
     <title>LA DE DIEZ GANADORA</title>
     <style>
         body { font-family: 'Segoe UI', sans-serif; background-color: #f0f2f5; margin: 0; padding: 10px; }
-        .container { max-width: 450px; margin: auto; background: white; border-radius: 20px; overflow: hidden; box-shadow: 0 10px 25px rgba(0,0,0,0.1); }
+        .container { max-width: 500px; margin: auto; background: white; border-radius: 20px; overflow: hidden; box-shadow: 0 10px 25px rgba(0,0,0,0.1); }
+        .header { background-color: #064e3b; color: white; text-align: center; padding: 20px; }
+        .logo-principal { width: 85px; height: 85px; background: white; border-radius: 50%; padding: 5px; margin-bottom: 10px; object-fit: contain; }
         
-        /* SECCIÓN DEL LOGO */
-        .header { background-color: #064e3b; color: white; text-align: center; padding: 20px 15px; }
-        .logo-principal { width: 80px; height: 80px; background: white; border-radius: 50%; padding: 5px; margin-bottom: 10px; object-fit: contain; }
-        .header h1 { margin: 0; font-size: 20px; text-transform: uppercase; }
-
-        .input-cliente { padding: 15px; text-align: center; }
+        .input-seccion { padding: 15px; border-bottom: 2px solid #eee; background: #fff; position: sticky; top: 0; z-index: 10; }
         input { width: 90%; padding: 12px; border: 2px solid #e5e7eb; border-radius: 8px; text-align: center; font-weight: bold; font-size: 16px; }
 
-        .fila { display: flex; align-items: center; padding: 12px 10px; border-bottom: 1px solid #f3f4f6; }
+        .fila { display: flex; align-items: center; padding: 10px; border-bottom: 1px solid #f3f4f6; }
         .equipo { flex: 1; font-size: 11px; font-weight: bold; color: #374151; text-transform: uppercase; }
         .izq { text-align: right; padding-right: 8px; }
         .der { text-align: left; padding-left: 8px; }
 
         .opciones { display: flex; gap: 4px; }
-        .btn { width: 38px; height: 38px; display: flex; align-items: center; justify-content: center; border: 1px solid #d1d5db; border-radius: 6px; cursor: pointer; font-weight: bold; background: white; }
+        .btn { width: 36px; height: 36px; display: flex; align-items: center; justify-content: center; border: 1px solid #d1d5db; border-radius: 6px; cursor: pointer; font-weight: bold; background: white; }
         .btn.active { background: #059669; color: white; border-color: #059669; }
 
-        /* SECCIÓN DE ENVIAR */
-        .footer { background: #f9fafb; padding: 20px; text-align: center; border-top: 4px solid #059669; }
-        #resultado { font-size: 22px; font-weight: 900; color: #064e3b; margin-bottom: 15px; }
-        .btn-enviar { background-color: #25d366; color: white; border: none; padding: 15px; font-size: 16px; font-weight: bold; border-radius: 10px; cursor: pointer; width: 100%; box-shadow: 0 4px 10px rgba(37,211,102,0.3); }
+        .controles { padding: 20px; background: #f9fafb; text-align: center; }
+        .btn-guardar { background: #064e3b; color: white; border: none; padding: 12px; width: 100%; border-radius: 8px; font-weight: bold; cursor: pointer; margin-bottom: 10px; }
+        
+        .lista-guardadas { padding: 15px; background: #fff; }
+        .jugada-item { background: #f3f4f6; padding: 10px; border-radius: 8px; margin-bottom: 10px; font-size: 13px; display: flex; justify-content: space-between; align-items: center; }
+        .btn-borrar { background: #ef4444; color: white; border: none; padding: 5px 10px; border-radius: 4px; cursor: pointer; }
+
+        .footer-total { background: #064e3b; color: white; padding: 20px; text-align: center; }
+        .gran-total { font-size: 24px; font-weight: 900; margin-bottom: 15px; }
+        .btn-whatsapp { background: #25d366; color: white; border: none; padding: 15px; width: 100%; border-radius: 10px; font-weight: bold; cursor: pointer; font-size: 16px; }
     </style>
 </head>
 <body>
 
 <div class="container">
     <div class="header">
-        <!-- AQUÍ ESTÁ EL LOGO -->
-        <img src="logos/QUINIELA.png" class="logo-principal" onerror="this.src='https://via.placeholder.com/80?text=10'">
+        <img src="logos/QUINIELA.png" class="logo-principal" onerror="this.src='https://via.placeholder.com/85?text=LOGO'">
         <h1>LA DE DIEZ GANADORA</h1>
-        <p style="margin:5px 0 0; font-size: 12px; color: #a7f3d0;">SENCILLA $10 | DOBLE x2 | TRIPLE x3</p>
     </div>
 
-    <div class="input-cliente">
-        <input type="text" id="nombreCliente" placeholder="ESCRIBE TU NOMBRE">
+    <div class="input-seccion">
+        <input type="text" id="nombreCliente" placeholder="NOMBRE DEL PARTICIPANTE">
     </div>
 
-    <div id="lista"></div>
+    <div id="partidosContenedor"></div>
 
-    <div class="footer">
-        <div id="resultado">TOTAL A PAGAR: $0</div>
-        <!-- AQUÍ ESTÁ EL BOTÓN DE ENVIAR -->
-        <button class="btn-enviar" onclick="enviarWhatsApp()">ENVIAR POR WHATSAPP</button>
+    <div class="controles">
+        <div style="font-weight: bold; margin-bottom: 10px;" id="costoActual">Costo Jugada: $0</div>
+        <button class="btn-guardar" onclick="guardarJugada()">+ GUARDAR JUGADA</button>
+    </div>
+
+    <div class="lista-guardadas" id="listaGuardadas">
+        <h4 style="margin-top:0">Jugadas Guardadas:</h4>
+        <!-- Aquí aparecen las jugadas -->
+    </div>
+
+    <div class="footer-total">
+        <div class="gran-total" id="granTotal">TOTAL A PAGAR: $0</div>
+        <button class="btn-whatsapp" onclick="enviarTodo()">ENVIAR TODAS POR WHATSAPP</button>
     </div>
 </div>
 
 <script>
-    const partidos = [
-        "REAL SOCIEDAD vs REAL BETIS", "CHIVAS vs TIGRES", "CRUZ AZUL vs ATLAS",
-        "PORTLAND vs KANSAS CITY", "BARCELONA vs REAL MADRID", "PSG vs BREST",
-        "TOLOUSE vs LYON", "PACHUCA vs TOLUCA", "PUMAS vs AMERICA"
-    ];
+    const partidos = ["REAL SOCIEDAD vs REAL BETIS", "CHIVAS vs TIGRES", "CRUZ AZUL vs ATLAS", "PORTLAND vs KANSAS CITY", "BARCELONA vs REAL MADRID", "PSG vs BREST", "TOLOUSE vs LYON", "PACHUCA vs TOLUCA", "PUMAS vs AMERICA"];
+    let seleccionActual = {};
+    let jugadasGuardadas = [];
 
-    let elecciones = {};
-    let totalGlobal = 0;
-
-    function cargar() {
-        const div = document.getElementById('lista');
+    function iniciar() {
+        const cont = document.getElementById('partidosContenedor');
         partidos.forEach((p, i) => {
-            elecciones[i] = [];
-            const [local, visita] = p.split(" vs ");
-            div.innerHTML += `
-                <div class="fila">
-                    <div class="equipo izq">${local}</div>
-                    <div class="opciones">
-                        <div class="btn" id="L-${i}" onclick="marcar(${i},'L')">L</div>
-                        <div class="btn" id="E-${i}" onclick="marcar(${i},'E')">E</div>
-                        <div class="btn" id="V-${i}" onclick="marcar(${i},'V')">V</div>
-                    </div>
-                    <div class="equipo der">${visita}</div>
-                </div>`;
+            seleccionActual[i] = [];
+            const [l, v] = p.split(" vs ");
+            cont.innerHTML += `<div class="fila">
+                <div class="equipo izq">${l}</div>
+                <div class="opciones">
+                    <div class="btn" id="L-${i}" onclick="votar(${i},'L')">L</div>
+                    <div class="btn" id="E-${i}" onclick="votar(${i},'E')">E</div>
+                    <div class="btn" id="V-${i}" onclick="votar(${i},'V')">V</div>
+                </div>
+                <div class="equipo der">${v}</div>
+            </div>`;
         });
     }
 
-    function marcar(i, tipo) {
-        const btn = document.getElementById(`${tipo}-${i}`);
-        if (elecciones[i].includes(tipo)) {
-            elecciones[i] = elecciones[i].filter(x => x !== tipo);
-            btn.classList.remove('active');
+    function votar(i, t) {
+        const b = document.getElementById(`${t}-${i}`);
+        if (seleccionActual[i].includes(t)) {
+            seleccionActual[i] = seleccionActual[i].filter(x => x !== t);
+            b.classList.remove('active');
         } else {
-            elecciones[i].push(tipo);
-            btn.classList.add('active');
+            seleccionActual[i].push(t);
+            b.classList.add('active');
         }
-        calcular();
+        actualizarCosto();
     }
 
-    function calcular() {
-        let total = 10;
-        let jugados = 0;
-        for (let i in elecciones) {
-            if (elecciones[i].length > 0) {
-                jugados++;
-                if (elecciones[i].length === 2) total *= 2;
-                if (elecciones[i].length === 3) total *= 3;
-            }
+    function actualizarCosto() {
+        let costo = 10;
+        let tiene = false;
+        for (let i in seleccionActual) {
+            let n = seleccionActual[i].length;
+            if (n > 0) tiene = true;
+            if (n === 2) costo *= 2;
+            if (n === 3) costo *= 3;
         }
-        totalGlobal = jugados > 0 ? total : 0;
-        document.getElementById('resultado').innerText = `TOTAL A PAGAR: $${totalGlobal}`;
+        document.getElementById('costoActual').innerText = `Costo Jugada: $${tiene ? costo : 0}`;
+        return tiene ? costo : 0;
     }
 
-    function enviarWhatsApp() {
-        const nombre = document.getElementById('nombreCliente').value;
-        if (!nombre) return alert("Escribe tu nombre");
+    function guardarJugada() {
+        const costo = actualizarCosto();
+        if (costo === 0) return alert("Selecciona al menos un resultado");
         
-        let mensaje = `📌 *QUINIELA: LA DE DIEZ GANADORA*\n👤 *Cliente:* ${nombre}\n\n`;
-        partidos.forEach((p, i) => {
-            mensaje += `${i+1}. ${p}: *${elecciones[i].join('-') || '---'}*\n`;
+        const copiaSeleccion = JSON.parse(JSON.stringify(seleccionActual));
+        jugadasGuardadas.push({ selecciones: copiaSeleccion, importe: costo });
+        
+        // Limpiar selección para la siguiente
+        partidos.forEach((_, i) => {
+            seleccionActual[i] = [];
+            document.getElementById(`L-${i}`).classList.remove('active');
+            document.getElementById(`E-${i}`).classList.remove('active');
+            document.getElementById(`V-${i}`).classList.remove('active');
         });
-        mensaje += `\n💰 *TOTAL: $${totalGlobal}*`;
         
-        // Pon tu número aquí (ejemplo de México: 521 + número)
-        window.open(`https://wa.me/521XXXXXXXXXX?text=${encodeURIComponent(mensaje)}`);
+        dibujarLista();
+        actualizarCosto();
     }
 
-    cargar();
+    function borrarJugada(index) {
+        jugadasGuardadas.splice(index, 1);
+        dibujarLista();
+    }
+
+    function dibujarLista() {
+        const lista = document.getElementById('listaGuardadas');
+        let html = '<h4 style="margin-top:0">Jugadas Guardadas:</h4>';
+        let total = 0;
+        
+        jugadasGuardadas.forEach((j, i) => {
+            total += j.importe;
+            html += `<div class="jugada-item">
+                <span>Jugada #${i+1} - <b>$${j.importe}</b></span>
+                <button class="btn-borrar" onclick="borrarJugada(${i})">Eliminar</button>
+            </div>`;
+        });
+        
+        lista.innerHTML = html;
+        document.getElementById('granTotal').innerText = `TOTAL A PAGAR: $${total}`;
+    }
+
+    function enviarTodo() {
+        const nombre = document.getElementById('nombreCliente').value;
+        if (!nombre) return alert("Escribe el nombre del participante");
+        if (jugadasGuardadas.length === 0) return alert("No hay jugadas guardadas");
+
+        let msg = `⚽ *QUINIELA: LA DE DIEZ GANADORA*\n👤 *Participante:* ${nombre}\n\n`;
+        let totalFinal = 0;
+
+        jugadasGuardadas.forEach((j, idx) => {
+            totalFinal += j.importe;
+            msg += `👉 *JUGADA #${idx+1} ($${j.importe})*\n`;
+            partidos.forEach((p, i) => {
+                msg += `${i+1}. [${j.selecciones[i].join('-')}]\n`;
+            });
+            msg += `\n`;
+        });
+
+        msg += `💰 *TOTAL FINAL A PAGAR: $${totalFinal}*`;
+        window.open(`https://wa.me/521XXXXXXXXXX?text=${encodeURIComponent(msg)}`);
+    }
+
+    iniciar();
 </script>
 </body>
 </html>
