@@ -41,14 +41,13 @@
         /* FINAL */
         .final { background: #064e3b; padding: 12px; text-align: center; }
         #total-pago { color: white; font-size: 18px; font-weight: 900; margin-bottom: 10px; }
-        .btn-wa { background-color: #25d366; color: white; border: none; padding: 12px; width: 100%; border-radius: 6px; font-weight: bold; font-size: 14px; cursor: pointer; box-shadow: 0 4px 6px rgba(0,0,0,0.2); }
+        .btn-wa { background-color: #25d366; color: white; border: none; padding: 12px; width: 100%; border-radius: 6px; font-weight: bold; font-size: 14px; cursor: pointer; }
     </style>
 </head>
 <body>
 
 <div class="container">
     <div class="header">
-        <!-- RUTA CORREGIDA SEGÚN TU CARPETA -->
         <img src="logo.jpg" class="logo-img" alt="Logo" onerror="this.src='https://via.placeholder.com/70?text=LOGO'">
         <h1>LA DE DIEZ GANADORA</h1>
         <p>Sencilla $10 | Doble x2 | Triple x3</p>
@@ -74,35 +73,36 @@
 </div>
 
 <script>
+    // LISTA ACTUALIZADA
     const partidos = [
-    {id: 1, l: "AMÉRICA", v: "PUMAS"}, 
-    {id: 2, l: "TOLUCA", v: "PACHUCA"},
-    {id: 3, l: "CANCÚN", v: "JAIBA BRAVA"}, 
-    {id: 4, l: "TEPATITLÁN", v: "MINEROS"},
-    {id: 5, l: "AUSTIN", v: "LOUIS CITY"}, 
-    {id: 6, l: "INTERNACIONAL", v: "FLUMINENSE"},
-    {id: 7, l: "MIRASSOL", v: "CORINTHIANS"},
-    {id: 8, l: "BARCELONA", v: "R. SOCIEDAD"},
-    {id: 9, l: "MAN. CITY", v: "ARSENAL"}
-];
+        {id: 1, l: "AMÉRICA", v: "PUMAS"}, 
+        {id: 2, l: "TOLUCA", v: "PACHUCA"},
+        {id: 3, l: "CANCÚN", v: "JAIBA BRAVA"}, 
+        {id: 4, l: "TEPATITLÁN", v: "MINEROS"},
+        {id: 5, l: "AUSTIN", v: "LOUIS CITY"}, 
+        {id: 6, l: "INTERNACIONAL", v: "FLUMINENSE"},
+        {id: 7, l: "MIRASSOL", v: "CORINTHIANS"},
+        {id: 8, l: "BARCELONA", v: "R. SOCIEDAD"},
+        {id: 9, l: "MAN. CITY", v: "ARSENAL"}
+    ];
 
     let actual = {};
     let ticket = [];
 
     function crear() {
         const d = document.getElementById('partidos-list');
-        lista.forEach((p, i) => {
+        d.innerHTML = ""; // Limpiar antes de crear
+        partidos.forEach((p, i) => {
             actual[i] = [];
-            const [l, v] = p.split(" vs ");
             d.innerHTML += `
                 <div class="fila">
-                    <div class="eq iz">${l}</div>
+                    <div class="eq iz">${p.l}</div>
                     <div class="btns">
                         <div class="b-v" id="L-${i}" onclick="sel(${i},'L')">L</div>
                         <div class="b-v" id="E-${i}" onclick="sel(${i},'E')">E</div>
                         <div class="b-v" id="V-${i}" onclick="sel(${i},'V')">V</div>
                     </div>
-                    <div class="eq de">${v}</div>
+                    <div class="eq de">${p.v}</div>
                 </div>`;
         });
     }
@@ -173,9 +173,9 @@
         ticket.forEach((j, idx) => {
             total += j.precio;
             m += `📝 *JUGADA #${idx+1} ($${j.precio})*\n`;
-            lista.forEach((p, i) => {
+            partidos.forEach((p, i) => {
                 const s = j.datos[i].length > 0 ? j.datos[i].join('-') : '---';
-                m += `${i+1}. [${s}]\n`;
+                m += `${i+1}. [${s}] ${p.l} vs ${p.v}\n`;
             });
             m += `\n`;
         });
