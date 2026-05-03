@@ -5,30 +5,26 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>LA DE DIEZ GANADORA</title>
     <style>
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f0f2f5; margin: 0; padding: 10px; }
-        .container { max-width: 450px; margin: auto; background: white; border-radius: 20px; overflow: hidden; box-shadow: 0 10px 25px rgba(0,0,0,0.1); border: 1px solid #e5e7eb; }
+        body { font-family: 'Segoe UI', sans-serif; background-color: #f0f2f5; margin: 0; padding: 10px; }
+        .container { max-width: 450px; margin: auto; background: white; border-radius: 20px; overflow: hidden; box-shadow: 0 10px 25px rgba(0,0,0,0.1); }
         
-        .header { background-color: #064e3b; color: white; text-align: center; padding: 30px 15px; }
-        .header h1 { margin: 0; font-size: 22px; letter-spacing: 1px; text-transform: uppercase; }
-        .header p { margin: 8px 0 0; font-size: 13px; color: #a7f3d0; font-weight: bold; }
+        .header { background-color: #064e3b; color: white; text-align: center; padding: 25px 15px; }
+        .header h1 { margin: 0; font-size: 20px; text-transform: uppercase; }
+        .header p { margin: 5px 0 0; font-size: 12px; color: #a7f3d0; }
 
-        .input-cliente { padding: 20px; background: #fff; text-align: center; }
-        input { width: 90%; padding: 12px; border-radius: 8px; border: 2px solid #e5e7eb; font-size: 16px; text-align: center; font-weight: bold; outline: none; }
-        input:focus { border-color: #059669; }
+        .input-cliente { padding: 15px; text-align: center; border-bottom: 1px solid #eee; }
+        input { width: 90%; padding: 12px; border: 2px solid #e5e7eb; border-radius: 8px; text-align: center; font-weight: bold; font-size: 16px; }
 
-        .lista-partidos { padding: 10px; background: white; }
-        .fila { display: flex; align-items: center; justify-content: space-between; padding: 15px 5px; border-bottom: 1px solid #f3f4f6; }
-        
-        .equipo { width: 35%; font-size: 13px; font-weight: 700; color: #1f2937; text-transform: uppercase; }
+        .fila { display: flex; align-items: center; padding: 12px 10px; border-bottom: 1px solid #f3f4f6; }
+        .equipo { flex: 1; font-size: 12px; font-weight: bold; color: #374151; text-transform: uppercase; }
         .izq { text-align: right; padding-right: 10px; }
         .der { text-align: left; padding-left: 10px; }
 
-        .opciones { display: flex; gap: 5px; }
-        .btn-voto { width: 36px; height: 36px; display: flex; align-items: center; justify-content: center; border: 2px solid #d1d5db; border-radius: 8px; cursor: pointer; font-weight: bold; background: #fff; transition: 0.2s; }
-        .btn-voto:hover { background: #f3f4f6; }
-        .btn-voto.active { background-color: #059669; color: white; border-color: #059669; }
+        .opciones { display: flex; gap: 4px; }
+        .btn { width: 38px; height: 38px; display: flex; align-items: center; justify-content: center; border: 1px solid #d1d5db; border-radius: 6px; cursor: pointer; font-weight: bold; background: white; transition: 0.2s; }
+        .btn.active { background: #059669; color: white; border-color: #059669; }
 
-        .footer-total { background: #f9fafb; padding: 25px; text-align: center; border-top: 4px solid #059669; }
+        .footer { background: #f9fafb; padding: 20px; text-align: center; border-top: 4px solid #059669; }
         #resultado { font-size: 22px; font-weight: 900; color: #064e3b; }
     </style>
 </head>
@@ -37,87 +33,82 @@
 <div class="container">
     <div class="header">
         <h1>LA DE DIEZ GANADORA</h1>
-        <p>SENCILLA $10 | DOBLE x2 | TRIPLE x3</p>
+        <p>COSTO: $10 | DOBLE x2 | TRIPLE x3</p>
     </div>
 
     <div class="input-cliente">
-        <input type="text" placeholder="ESCRIBE TU NOMBRE AQUÍ" id="nombre">
+        <input type="text" placeholder="ESCRIBE TU NOMBRE">
     </div>
 
-    <div id="listaPartidos" class="lista-partidos">
-        <!-- Los partidos se generarán aquí -->
-    </div>
+    <div id="lista"></div>
 
-    <div class="footer-total">
+    <div class="footer">
         <div id="resultado">TOTAL A PAGAR: $0</div>
     </div>
 </div>
 
 <script>
     const partidos = [
-        {id: 1, l: "REAL SOCIEDAD", v: "REAL BETIS"},
-        {id: 2, l: "CHIVAS", v: "TIGRES"},
-        {id: 3, l: "CRUZ AZUL", v: "ATLAS"},
-        {id: 4, l: "PORTLAND", v: "KANSAS CITY"},
-        {id: 5, l: "BARCELONA", v: "REAL MADRID"},
-        {id: 6, l: "PSG", v: "BREST"},
-        {id: 7, l: "TOLOUSE", v: "LYON"},
-        {id: 8, l: "PACHUCA", v: "TOLUCA"},
-        {id: 9, l: "PUMAS", v: "AMERICA"}
+        "REAL SOCIEDAD vs REAL BETIS",
+        "CHIVAS vs TIGRES",
+        "CRUZ AZUL vs ATLAS",
+        "PORTLAND vs KANSAS CITY",
+        "BARCELONA vs REAL MADRID",
+        "PSG vs BREST",
+        "TOLOUSE vs LYON",
+        "PACHUCA vs TOLUCA",
+        "PUMAS vs AMERICA"
     ];
 
-    let seleccionActual = {};
+    let elecciones = {};
 
     function cargar() {
-        const contenedor = document.getElementById('listaPartidos');
-        let html = "";
-        partidos.forEach(p => {
-            seleccionActual[p.id] = [];
-            html += `
+        const div = document.getElementById('lista');
+        partidos.forEach((p, i) => {
+            elecciones[i] = [];
+            const [local, visita] = p.split(" vs ");
+            div.innerHTML += `
                 <div class="fila">
-                    <div class="equipo izq">${p.l}</div>
+                    <div class="equipo izq">${local}</div>
                     <div class="opciones">
-                        <div class="btn-voto" id="btn-${p.id}-L" onclick="marcar(${p.id}, 'L')">L</div>
-                        <div class="btn-voto" id="btn-${p.id}-E" onclick="marcar(${p.id}, 'E')">E</div>
-                        <div class="btn-voto" id="btn-${p.id}-V" onclick="marcar(${p.id}, 'V')">V</div>
+                        <div class="btn" id="L-${i}" onclick="marcar(${i},'L')">L</div>
+                        <div class="btn" id="E-${i}" onclick="marcar(${i},'E')">E</div>
+                        <div class="btn" id="V-${i}" onclick="marcar(${i},'V')">V</div>
                     </div>
-                    <div class="equipo der">${p.v}</div>
+                    <div class="equipo der">${visita}</div>
                 </div>`;
         });
-        contenedor.innerHTML = html;
     }
 
-    function marcar(id, opcion) {
-        const btn = document.getElementById(`btn-${id}-${opcion}`);
-        const index = seleccionActual[id].indexOf(opcion);
-        
-        if (index > -1) {
-            seleccionActual[id].splice(index, 1);
+    function marcar(i, tipo) {
+        const btn = document.getElementById(`${tipo}-${i}`);
+        if (elecciones[i].includes(tipo)) {
+            elecciones[i] = elecciones[i].filter(x => x !== tipo);
             btn.classList.remove('active');
         } else {
-            seleccionActual[id].push(opcion);
+            elecciones[i].push(tipo);
             btn.classList.add('active');
         }
-        calcularTotal();
+        calcular();
     }
 
-    function calcularTotal() {
-        let costo = 10;
-        let seleccionados = 0;
-        
-        for (let id in seleccionActual) {
-            let votos = seleccionActual[id].length;
-            if (votos > 0) {
-                seleccionados++;
-                if (votos === 2) costo *= 2;
-                if (votos === 3) costo *= 3;
+    function calcular() {
+        let total = 10;
+        let juegosJugados = 0;
+
+        for (let i in elecciones) {
+            let cant = elecciones[i].length;
+            if (cant > 0) {
+                juegosJugados++;
+                if (cant === 2) total *= 2;
+                if (cant === 3) total *= 3;
             }
         }
-        
-        document.getElementById('resultado').innerText = `TOTAL A PAGAR: $${seleccionados > 0 ? costo : 0}`;
+
+        document.getElementById('resultado').innerText = `TOTAL A PAGAR: $${juegosJugados > 0 ? total : 0}`;
     }
 
-    window.onload = cargar;
+    cargar();
 </script>
 </body>
 </html>
