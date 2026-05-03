@@ -16,16 +16,19 @@
         input { width: 90%; padding: 12px; border: 2px solid #e5e7eb; border-radius: 8px; text-align: center; font-weight: bold; font-size: 16px; }
 
         .fila { display: flex; align-items: center; padding: 12px 10px; border-bottom: 1px solid #f3f4f6; }
-        .equipo { flex: 1; font-size: 12px; font-weight: bold; color: #374151; text-transform: uppercase; }
-        .izq { text-align: right; padding-right: 10px; }
-        .der { text-align: left; padding-left: 10px; }
+        .equipo { flex: 1; font-size: 11px; font-weight: bold; color: #374151; text-transform: uppercase; }
+        .izq { text-align: right; padding-right: 8px; }
+        .der { text-align: left; padding-left: 8px; }
 
         .opciones { display: flex; gap: 4px; }
-        .btn { width: 38px; height: 38px; display: flex; align-items: center; justify-content: center; border: 1px solid #d1d5db; border-radius: 6px; cursor: pointer; font-weight: bold; background: white; transition: 0.2s; }
+        .btn { width: 38px; height: 38px; display: flex; align-items: center; justify-content: center; border: 1px solid #d1d5db; border-radius: 6px; cursor: pointer; font-weight: bold; background: white; }
         .btn.active { background: #059669; color: white; border-color: #059669; }
 
         .footer { background: #f9fafb; padding: 20px; text-align: center; border-top: 4px solid #059669; }
-        #resultado { font-size: 22px; font-weight: 900; color: #064e3b; }
+        #resultado { font-size: 22px; font-weight: 900; color: #064e3b; margin-bottom: 15px; }
+        
+        .btn-enviar { background-color: #25d366; color: white; border: none; padding: 15px 30px; font-size: 16px; font-weight: bold; border-radius: 10px; cursor: pointer; width: 100%; box-shadow: 0 4px 10px rgba(37, 211, 102, 0.3); }
+        .btn-enviar:active { transform: scale(0.98); }
     </style>
 </head>
 <body>
@@ -37,13 +40,14 @@
     </div>
 
     <div class="input-cliente">
-        <input type="text" placeholder="ESCRIBE TU NOMBRE">
+        <input type="text" id="nombreCliente" placeholder="TU NOMBRE">
     </div>
 
     <div id="lista"></div>
 
     <div class="footer">
         <div id="resultado">TOTAL A PAGAR: $0</div>
+        <button class="btn-enviar" onclick="enviarWhatsApp()">ENVIAR QUINIELA POR WHATSAPP</button>
     </div>
 </div>
 
@@ -61,6 +65,7 @@
     ];
 
     let elecciones = {};
+    let totalGlobal = 0;
 
     function cargar() {
         const div = document.getElementById('lista');
@@ -95,7 +100,6 @@
     function calcular() {
         let total = 10;
         let juegosJugados = 0;
-
         for (let i in elecciones) {
             let cant = elecciones[i].length;
             if (cant > 0) {
@@ -104,8 +108,32 @@
                 if (cant === 3) total *= 3;
             }
         }
+        totalGlobal = juegosJugados > 0 ? total : 0;
+        document.getElementById('resultado').innerText = `TOTAL A PAGAR: $${totalGlobal}`;
+    }
 
-        document.getElementById('resultado').innerText = `TOTAL A PAGAR: $${juegosJugados > 0 ? total : 0}`;
+    function enviarWhatsApp() {
+        const nombre = document.getElementById('nombreCliente').value;
+        if (!nombre) return alert("Por favor escribe tu nombre");
+        
+        let resumen = `📌 *QUINIELA: LA DE DIEZ GANADORA*\n👤 *Cliente:* ${nombre}\n\n`;
+        let completos = 0;
+
+        partidos.forEach((p, i) => {
+            if (elecciones[i].length > 0) {
+                resumen += `${i+1}. ${p}: *${elecciones[i].join('-')}*\n`;
+                completos++;
+            }
+        });
+
+        if (completos < 9) return alert("Por favor selecciona todos los partidos");
+
+        resumen += `\n💰 *TOTAL A PAGAR: $${totalGlobal}*`;
+        
+        // Reemplaza el número de abajo por tu número de WhatsApp
+        const miNumero = "521XXXXXXXXXX"; 
+        const url = `https://wa.me/${miNumero}?text=${encodeURIComponent(resumen)}`;
+        window.open(url, '_blank');
     }
 
     cargar();
