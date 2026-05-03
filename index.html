@@ -5,61 +5,62 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>LA DE DIEZ GANADORA</title>
     <style>
-        body { font-family: 'Arial', sans-serif; background-color: #f4f4f4; margin: 0; padding: 5px; }
-        .container { max-width: 400px; margin: auto; background: white; border-radius: 8px; overflow: hidden; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f0f2f5; margin: 0; padding: 10px; }
+        .container { max-width: 450px; margin: auto; background: white; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 15px rgba(0,0,0,0.2); }
         
-        /* ENCABEZADO */
-        .header { background-color: #064e3b; color: white; text-align: center; padding: 12px; }
-        .logo-img { width: 70px; height: 70px; margin-bottom: 5px; border-radius: 50%; background: white; object-fit: contain; border: 2px solid #fff; }
-        .header h1 { margin: 0; font-size: 16px; text-transform: uppercase; letter-spacing: 1px; }
-        .header p { margin: 2px 0 0; font-size: 10px; color: #a7f3d0; font-weight: bold; }
+        /* CABECERA */
+        .header { background-color: #064e3b; color: white; text-align: center; padding: 15px; }
+        .logo-img { width: 80px; height: 80px; margin-bottom: 8px; border-radius: 50%; background: white; object-fit: contain; border: 3px solid #fff; }
+        .header h1 { margin: 0; font-size: 18px; text-transform: uppercase; }
+        .header p { margin: 4px 0 0; font-size: 11px; color: #a7f3d0; font-weight: bold; }
 
-        /* NOMBRE */
-        .seccion-user { padding: 8px; text-align: center; border-bottom: 1px solid #eee; }
-        input { width: 90%; padding: 8px; border: 1px solid #ddd; border-radius: 4px; text-align: center; font-weight: bold; font-size: 13px; text-transform: uppercase; }
+        /* USUARIO */
+        .seccion-user { padding: 12px; text-align: center; background: #f9f9f9; border-bottom: 1px solid #eee; }
+        input { width: 90%; padding: 10px; border: 2px solid #ddd; border-radius: 6px; text-align: center; font-weight: bold; font-size: 14px; text-transform: uppercase; }
 
-        /* LISTA DE PARTIDOS (Aseguramos visibilidad) */
-        #partidos-list { background: #fff; min-height: 200px; }
-        .fila { display: flex; align-items: center; justify-content: space-between; padding: 10px; border-bottom: 1px solid #eee; }
-        .eq { width: 35%; font-size: 11px; font-weight: 900; color: #1a1a1a; text-transform: uppercase; }
+        /* LISTA DE PARTIDOS */
+        .partidos-container { background: #fff; }
+        .fila { display: flex; align-items: center; justify-content: space-between; padding: 12px 15px; border-bottom: 1px solid #f0f0f0; }
+        .eq { width: 35%; font-size: 12px; font-weight: 800; color: #000; text-transform: uppercase; line-height: 1.2; }
         .iz { text-align: right; }
         .de { text-align: left; }
         
-        .btns { display: flex; gap: 6px; }
-        .b-v { width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; border: 2px solid #ccc; border-radius: 4px; cursor: pointer; font-size: 13px; font-weight: bold; background: white; color: #333; }
-        .b-v.active { background-color: #059669; color: white; border-color: #059669; }
+        .btns { display: flex; gap: 8px; }
+        .b-v { width: 35px; height: 35px; display: flex; align-items: center; justify-content: center; border: 2px solid #bbb; border-radius: 6px; cursor: pointer; font-size: 14px; font-weight: bold; background: #fff; color: #333; transition: 0.2s; }
+        .b-v.active { background-color: #059669; color: white; border-color: #059669; box-shadow: inset 0 2px 4px rgba(0,0,0,0.2); }
 
-        /* GUARDAR */
-        .footer-cont { padding: 15px; background: #fafafa; text-align: center; border-top: 2px solid #eee; }
-        .txt-costo { font-size: 15px; font-weight: 800; color: #064e3b; margin-bottom: 10px; }
-        .btn-g { background-color: #064e3b; color: white; border: none; padding: 12px; width: 100%; border-radius: 5px; font-weight: bold; font-size: 14px; cursor: pointer; text-transform: uppercase; }
+        /* BOTÓN GUARDAR */
+        .footer-cont { padding: 20px; background: #fdfdfd; text-align: center; border-top: 2px solid #eee; }
+        .txt-costo { font-size: 16px; font-weight: 800; color: #064e3b; margin-bottom: 12px; }
+        .btn-g { background-color: #064e3b; color: white; border: none; padding: 14px; width: 100%; border-radius: 8px; font-weight: bold; font-size: 15px; cursor: pointer; text-transform: uppercase; }
 
-        /* TICKET */
-        .ticket { padding: 8px; background: #fff; max-height: 150px; overflow-y: auto; }
-        .card { background: #f3f4f6; padding: 8px; border-radius: 4px; margin-bottom: 5px; display: flex; justify-content: space-between; align-items: center; font-size: 12px; border-left: 5px solid #059669; }
-        .btn-del { background: #dc2626; color: white; border: none; padding: 5px 8px; border-radius: 3px; cursor: pointer; font-size: 10px; }
+        /* RESUMEN JUGADAS */
+        .ticket { padding: 10px; background: #eee; max-height: 150px; overflow-y: auto; }
+        .card { background: white; padding: 10px; border-radius: 6px; margin-bottom: 6px; display: flex; justify-content: space-between; align-items: center; font-size: 13px; border-left: 6px solid #059669; }
+        .btn-del { background: #e11d48; color: white; border: none; padding: 6px 10px; border-radius: 4px; cursor: pointer; font-size: 11px; }
 
-        /* FINAL */
-        .final { background: #064e3b; padding: 15px; text-align: center; }
-        #total-pago { color: white; font-size: 18px; font-weight: 900; margin-bottom: 12px; }
-        .btn-wa { background-color: #25d366; color: white; border: none; padding: 15px; width: 100%; border-radius: 6px; font-weight: bold; font-size: 15px; cursor: pointer; box-shadow: 0 4px 6px rgba(0,0,0,0.2); }
+        /* WHATSAPP */
+        .final { background: #064e3b; padding: 20px; text-align: center; }
+        #total-pago { color: white; font-size: 20px; font-weight: 900; margin-bottom: 15px; }
+        .btn-wa { background-color: #25d366; color: white; border: none; padding: 16px; width: 100%; border-radius: 10px; font-weight: bold; font-size: 16px; cursor: pointer; box-shadow: 0 4px 10px rgba(0,0,0,0.3); }
     </style>
 </head>
-<body onload="crear()">
+<body>
 
 <div class="container">
     <div class="header">
-        <img src="logo.jpg" class="logo-img" alt="Logo" onerror="this.src='https://via.placeholder.com/70?text=LOGO'">
+        <img src="logo.jpg" class="logo-img" alt="Logo" onerror="this.src='https://via.placeholder.com/80?text=10'">
         <h1>LA DE DIEZ GANADORA</h1>
         <p>Sencilla $10 | Doble x2 | Triple x3</p>
     </div>
 
     <div class="seccion-user">
-        <input type="text" id="usuario" placeholder="TU NOMBRE AQUÍ">
+        <input type="text" id="usuario" placeholder="ESCRIBE TU NOMBRE">
     </div>
 
-    <!-- AQUÍ SE CARGAN LOS PARTIDOS -->
-    <div id="partidos-list"></div>
+    <div id="partidos-list" class="partidos-container">
+        <!-- Los partidos se cargarán aquí automáticamente -->
+    </div>
 
     <div class="footer-cont">
         <div class="txt-costo" id="c-actual">Importe Jugada: $0</div>
@@ -75,27 +76,29 @@
 </div>
 
 <script>
+    // LISTA DE PARTIDOS
     const partidos = [
-        {id: 1, l: "AMÉRICA", v: "PUMAS"}, 
-        {id: 2, l: "TOLUCA", v: "PACHUCA"},
-        {id: 3, l: "CANCÚN", v: "JAIBA BRAVA"}, 
-        {id: 4, l: "TEPATITLÁN", v: "MINEROS"},
-        {id: 5, l: "AUSTIN", v: "LOUIS CITY"}, 
-        {id: 6, l: "INTERNACIONAL", v: "FLUMINENSE"},
-        {id: 7, l: "MIRASSOL", v: "CORINTHIANS"},
-        {id: 8, l: "BARCELONA", v: "R. SOCIEDAD"},
-        {id: 9, l: "MAN. CITY", v: "ARSENAL"}
+        {l: "AMÉRICA", v: "PUMAS"}, 
+        {l: "TOLUCA", v: "PACHUCA"},
+        {l: "CANCÚN", v: "JAIBA BRAVA"}, 
+        {l: "TEPATITLÁN", v: "MINEROS"},
+        {l: "AUSTIN", v: "LOUIS CITY"}, 
+        {l: "INTERNACIONAL", v: "FLUMINENSE"},
+        {l: "MIRASSOL", v: "CORINTHIANS"},
+        {l: "BARCELONA", v: "R. SOCIEDAD"},
+        {l: "MAN. CITY", v: "ARSENAL"}
     ];
 
     let actual = {};
     let ticket = [];
 
-    function crear() {
+    // Función para dibujar partidos inmediatamente
+    function iniciar() {
         const d = document.getElementById('partidos-list');
-        d.innerHTML = ""; 
+        let html = "";
         partidos.forEach((p, i) => {
             actual[i] = [];
-            d.innerHTML += `
+            html += `
                 <div class="fila">
                     <div class="eq iz">${p.l}</div>
                     <div class="btns">
@@ -106,6 +109,7 @@
                     <div class="eq de">${p.v}</div>
                 </div>`;
         });
+        d.innerHTML = html;
     }
 
     function sel(idx, t) {
@@ -135,9 +139,10 @@
 
     function guardarJugada() {
         const c = calcular();
-        if (c === 0) return alert("Selecciona resultados");
+        if (c === 0) return alert("Selecciona al menos un resultado");
         ticket.push({ datos: JSON.parse(JSON.stringify(actual)), precio: c });
         
+        // Limpiar selección actual
         for (let k in actual) {
             actual[k] = [];
             ['L','E','V'].forEach(t => {
@@ -161,7 +166,7 @@
             total += j.precio;
             h += `<div class="card">
                 <span><b>Jugada #${i+1}</b> ($${j.precio})</span>
-                <button class="btn-del" onclick="borrar(${i})">Borrar</button>
+                <button class="btn-del" onclick="borrar(${i})">Eliminar</button>
             </div>`;
         });
         r.innerHTML = h;
@@ -170,7 +175,7 @@
 
     function enviar() {
         const u = document.getElementById('usuario').value;
-        if (!u || ticket.length === 0) return alert("Ingresa tu nombre y guarda tus jugadas");
+        if (!u || ticket.length === 0) return alert("Escribe tu nombre y guarda tus jugadas");
         
         let m = `⚽ *LA DE DIEZ GANADORA*\n👤 *Cliente:* ${u.toUpperCase()}\n\n`;
         let total = 0;
@@ -185,9 +190,12 @@
         });
         m += `💰 *TOTAL A PAGAR: $${total}*`;
         
-        const num = "523113405833"; 
-        window.open(`https://wa.me/${num}?text=${encodeURIComponent(m)}`);
+        window.open(`https://wa.me/523113405833?text=${encodeURIComponent(m)}`);
     }
+
+    // Ejecutar al cargar
+    iniciar();
 </script>
+
 </body>
 </html>
