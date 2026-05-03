@@ -18,33 +18,34 @@
         .seccion-user { padding: 8px; text-align: center; border-bottom: 1px solid #eee; }
         input { width: 90%; padding: 8px; border: 1px solid #ddd; border-radius: 4px; text-align: center; font-weight: bold; font-size: 13px; text-transform: uppercase; }
 
-        /* PARTIDOS */
-        .fila { display: flex; align-items: center; justify-content: space-between; padding: 6px 10px; border-bottom: 1px solid #f9f9f9; }
-        .eq { width: 35%; font-size: 10px; font-weight: bold; color: #333; text-transform: uppercase; }
+        /* LISTA DE PARTIDOS (Aseguramos visibilidad) */
+        #partidos-list { background: #fff; min-height: 200px; }
+        .fila { display: flex; align-items: center; justify-content: space-between; padding: 10px; border-bottom: 1px solid #eee; }
+        .eq { width: 35%; font-size: 11px; font-weight: 900; color: #1a1a1a; text-transform: uppercase; }
         .iz { text-align: right; }
         .de { text-align: left; }
         
-        .btns { display: flex; gap: 4px; }
-        .b-v { width: 30px; height: 30px; display: flex; align-items: center; justify-content: center; border: 1px solid #ccc; border-radius: 4px; cursor: pointer; font-size: 12px; font-weight: bold; background: white; }
+        .btns { display: flex; gap: 6px; }
+        .b-v { width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; border: 2px solid #ccc; border-radius: 4px; cursor: pointer; font-size: 13px; font-weight: bold; background: white; color: #333; }
         .b-v.active { background-color: #059669; color: white; border-color: #059669; }
 
         /* GUARDAR */
-        .footer-cont { padding: 10px; background: #fafafa; text-align: center; border-top: 1px solid #eee; }
-        .txt-costo { font-size: 14px; font-weight: 800; color: #064e3b; margin-bottom: 8px; }
-        .btn-g { background-color: #064e3b; color: white; border: none; padding: 10px; width: 100%; border-radius: 5px; font-weight: bold; font-size: 13px; cursor: pointer; }
+        .footer-cont { padding: 15px; background: #fafafa; text-align: center; border-top: 2px solid #eee; }
+        .txt-costo { font-size: 15px; font-weight: 800; color: #064e3b; margin-bottom: 10px; }
+        .btn-g { background-color: #064e3b; color: white; border: none; padding: 12px; width: 100%; border-radius: 5px; font-weight: bold; font-size: 14px; cursor: pointer; text-transform: uppercase; }
 
         /* TICKET */
-        .ticket { padding: 8px; background: white; max-height: 120px; overflow-y: auto; }
-        .card { background: #f3f4f6; padding: 6px 10px; border-radius: 4px; margin-bottom: 4px; display: flex; justify-content: space-between; align-items: center; font-size: 11px; border-left: 4px solid #059669; }
-        .btn-del { background: #dc2626; color: white; border: none; padding: 4px 6px; border-radius: 3px; cursor: pointer; font-size: 9px; }
+        .ticket { padding: 8px; background: #fff; max-height: 150px; overflow-y: auto; }
+        .card { background: #f3f4f6; padding: 8px; border-radius: 4px; margin-bottom: 5px; display: flex; justify-content: space-between; align-items: center; font-size: 12px; border-left: 5px solid #059669; }
+        .btn-del { background: #dc2626; color: white; border: none; padding: 5px 8px; border-radius: 3px; cursor: pointer; font-size: 10px; }
 
         /* FINAL */
-        .final { background: #064e3b; padding: 12px; text-align: center; }
-        #total-pago { color: white; font-size: 18px; font-weight: 900; margin-bottom: 10px; }
-        .btn-wa { background-color: #25d366; color: white; border: none; padding: 12px; width: 100%; border-radius: 6px; font-weight: bold; font-size: 14px; cursor: pointer; }
+        .final { background: #064e3b; padding: 15px; text-align: center; }
+        #total-pago { color: white; font-size: 18px; font-weight: 900; margin-bottom: 12px; }
+        .btn-wa { background-color: #25d366; color: white; border: none; padding: 15px; width: 100%; border-radius: 6px; font-weight: bold; font-size: 15px; cursor: pointer; box-shadow: 0 4px 6px rgba(0,0,0,0.2); }
     </style>
 </head>
-<body>
+<body onload="crear()">
 
 <div class="container">
     <div class="header">
@@ -57,6 +58,7 @@
         <input type="text" id="usuario" placeholder="TU NOMBRE AQUÍ">
     </div>
 
+    <!-- AQUÍ SE CARGAN LOS PARTIDOS -->
     <div id="partidos-list"></div>
 
     <div class="footer-cont">
@@ -73,7 +75,6 @@
 </div>
 
 <script>
-    // LISTA ACTUALIZADA
     const partidos = [
         {id: 1, l: "AMÉRICA", v: "PUMAS"}, 
         {id: 2, l: "TOLUCA", v: "PACHUCA"},
@@ -91,7 +92,7 @@
 
     function crear() {
         const d = document.getElementById('partidos-list');
-        d.innerHTML = ""; // Limpiar antes de crear
+        d.innerHTML = ""; 
         partidos.forEach((p, i) => {
             actual[i] = [];
             d.innerHTML += `
@@ -134,12 +135,15 @@
 
     function guardarJugada() {
         const c = calcular();
-        if (c === 0) return alert("Por favor selecciona resultados");
+        if (c === 0) return alert("Selecciona resultados");
         ticket.push({ datos: JSON.parse(JSON.stringify(actual)), precio: c });
         
         for (let k in actual) {
             actual[k] = [];
-            ['L','E','V'].forEach(t => document.getElementById(`${t}-${k}`).classList.remove('active'));
+            ['L','E','V'].forEach(t => {
+                const b = document.getElementById(`${t}-${k}`);
+                if(b) b.classList.remove('active');
+            });
         }
         dibujarTicket();
         calcular();
@@ -184,8 +188,6 @@
         const num = "523113405833"; 
         window.open(`https://wa.me/${num}?text=${encodeURIComponent(m)}`);
     }
-
-    crear();
 </script>
 </body>
 </html>
