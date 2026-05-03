@@ -5,121 +5,119 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>LA DE DIEZ GANADORA</title>
     <style>
-        body { font-family: Arial, sans-serif; background-color: #f0f2f5; margin: 0; padding: 10px; }
-        .container { max-width: 450px; margin: auto; background: white; border-radius: 15px; overflow: hidden; box-shadow: 0 4px 15px rgba(0,0,0,0.2); border: 1px solid #ddd; }
-        .header { background-color: #064e3b; color: white; text-align: center; padding: 20px; }
-        .logo-principal { width: 80px; height: 80px; background: white; border-radius: 50%; padding: 5px; margin-bottom: 10px; object-fit: contain; }
-        .input-seccion { padding: 15px; text-align: center; }
-        input { width: 90%; padding: 10px; border: 1px solid #ccc; border-radius: 5px; text-align: center; font-weight: bold; font-size: 16px; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f0f2f5; margin: 0; padding: 10px; }
+        .container { max-width: 450px; margin: auto; background: white; border-radius: 20px; overflow: hidden; box-shadow: 0 10px 25px rgba(0,0,0,0.1); border: 1px solid #e5e7eb; }
         
-        /* Contenedor donde deben aparecer los equipos */
-        #listaPartidos { padding: 10px; min-height: 200px; } 
+        .header { background-color: #064e3b; color: white; text-align: center; padding: 30px 15px; }
+        .header h1 { margin: 0; font-size: 22px; letter-spacing: 1px; text-transform: uppercase; }
+        .header p { margin: 8px 0 0; font-size: 13px; color: #a7f3d0; font-weight: bold; }
 
-        .fila { display: flex; align-items: center; justify-content: space-between; padding: 12px 0; border-bottom: 1px solid #eee; }
-        .equipo-caja { display: flex; align-items: center; width: 38%; font-size: 11px; font-weight: bold; color: #333; text-transform: uppercase; }
-        .izq { justify-content: flex-end; text-align: right; }
-        .der { justify-content: flex-start; text-align: left; }
-        .img-logo { width: 28px; height: 28px; object-fit: contain; margin: 0 5px; background: #f9f9f9; }
+        .input-cliente { padding: 20px; background: #fff; text-align: center; }
+        input { width: 90%; padding: 12px; border-radius: 8px; border: 2px solid #e5e7eb; font-size: 16px; text-align: center; font-weight: bold; outline: none; }
+        input:focus { border-color: #059669; }
+
+        .lista-partidos { padding: 10px; background: white; }
+        .fila { display: flex; align-items: center; justify-content: space-between; padding: 15px 5px; border-bottom: 1px solid #f3f4f6; }
         
-        .botones { display: flex; gap: 4px; }
-        .btn { width: 34px; height: 34px; border: 1px solid #ccc; display: flex; align-items: center; justify-content: center; cursor: pointer; border-radius: 5px; font-weight: bold; background: #fff; }
-        .active { background: #059669 !important; color: white !important; border-color: #059669 !important; }
-        
-        .total-caja { padding: 20px; text-align: center; background: #fff; font-size: 20px; font-weight: 800; border-top: 4px solid #064e3b; color: #064e3b; }
+        .equipo { width: 35%; font-size: 13px; font-weight: 700; color: #1f2937; text-transform: uppercase; }
+        .izq { text-align: right; padding-right: 10px; }
+        .der { text-align: left; padding-left: 10px; }
+
+        .opciones { display: flex; gap: 5px; }
+        .btn-voto { width: 36px; height: 36px; display: flex; align-items: center; justify-content: center; border: 2px solid #d1d5db; border-radius: 8px; cursor: pointer; font-weight: bold; background: #fff; transition: 0.2s; }
+        .btn-voto:hover { background: #f3f4f6; }
+        .btn-voto.active { background-color: #059669; color: white; border-color: #059669; }
+
+        .footer-total { background: #f9fafb; padding: 25px; text-align: center; border-top: 4px solid #059669; }
+        #resultado { font-size: 22px; font-weight: 900; color: #064e3b; }
     </style>
 </head>
 <body>
 
 <div class="container">
     <div class="header">
-        <img src="logos/QUINIELA.png" class="logo-principal" onerror="this.src='https://via.placeholder.com/80?text=10'">
-        <h2 style="margin:0;">LA DE DIEZ GANADORA</h2>
-        <p style="margin:5px 0 0; font-size: 13px;">SENCILLA $10 | DOBLE x2 | TRIPLE x3</p>
+        <h1>LA DE DIEZ GANADORA</h1>
+        <p>SENCILLA $10 | DOBLE x2 | TRIPLE x3</p>
     </div>
 
-    <div class="input-seccion">
-        <input type="text" placeholder="ESCRIBE TU NOMBRE">
+    <div class="input-cliente">
+        <input type="text" placeholder="ESCRIBE TU NOMBRE AQUÍ" id="nombre">
     </div>
 
-    <!-- AQUÍ SE GENERAN LOS PARTIDOS -->
-    <div id="listaPartidos">
-        <p style="text-align:center; color:gray;">Cargando partidos...</p>
+    <div id="listaPartidos" class="lista-partidos">
+        <!-- Los partidos se generarán aquí -->
     </div>
 
-    <div class="total-caja" id="txtTotal">TOTAL A PAGAR: $0</div>
+    <div class="footer-total">
+        <div id="resultado">TOTAL A PAGAR: $0</div>
+    </div>
 </div>
 
 <script>
-    // Usamos nombres de archivos simples. Verifica que en tu carpeta 'logos' se llamen igual.
     const partidos = [
-        {id: 1, l: "REAL SOCIEDAD.", v: "REAL BETIS", imgL: "REALSOCIEDAD.png", imgV: "REALBETIS.png"},
-        {id: 2, l: "CHIVAS", v: "TIGRES", imgL: "CHIVAS.png", imgV: "TIGRES.png"},
-        {id: 3, l: "CRUZ AZUL", v: "ATLAS", imgL: "CRUZAZUL.png", imgV: "ATLAS.png"},
-        {id: 4, l: "PORTLAND", v: "KANSAS CITY", imgL: "PORTLAND.png", imgV: "KANSAS CITY.png"},
-        {id: 5, l: "BARCELONA", v: "REAL MADRID", imgL: "BARCELONA.png", imgV: "REALMADRID.png"},
-        {id: 6, l: "PSG", v: "BREST", imgL: "PSG.png", imgV: "BREST.png"},
-        {id: 7, l: "TOLOUSE", v: "LYON", imgL: "TOLOUSE.png", imgV: "LYON.png"},
-        {id: 8, l: "PACHUCA", v: "TOLUCA", imgL: "PACHUCA.png", imgV: "TOLUCA.png"},
-        {id: 9, l: "PUMAS", v: "AMERICA", imgL: "PUMAS.png", imgV: "AMERICA.png"}
+        {id: 1, l: "REAL SOCIEDAD", v: "REAL BETIS"},
+        {id: 2, l: "CHIVAS", v: "TIGRES"},
+        {id: 3, l: "CRUZ AZUL", v: "ATLAS"},
+        {id: 4, l: "PORTLAND", v: "KANSAS CITY"},
+        {id: 5, l: "BARCELONA", v: "REAL MADRID"},
+        {id: 6, l: "PSG", v: "BREST"},
+        {id: 7, l: "TOLOUSE", v: "LYON"},
+        {id: 8, l: "PACHUCA", v: "TOLUCA"},
+        {id: 9, l: "PUMAS", v: "AMERICA"}
     ];
 
-    let elecciones = {};
+    let seleccionActual = {};
 
-    function render() {
+    function cargar() {
         const contenedor = document.getElementById('listaPartidos');
-        let contenido = "";
-        
+        let html = "";
         partidos.forEach(p => {
-            elecciones[p.id] = [];
-            contenido += `
+            seleccionActual[p.id] = [];
+            html += `
                 <div class="fila">
-                    <div class="equipo-caja izq">
-                        <span>${p.l}</span>
-                        <img src="logos/${p.imgL}" class="img-logo" onerror="this.src='https://via.placeholder.com/30?text=X'">
+                    <div class="equipo izq">${p.l}</div>
+                    <div class="opciones">
+                        <div class="btn-voto" id="btn-${p.id}-L" onclick="marcar(${p.id}, 'L')">L</div>
+                        <div class="btn-voto" id="btn-${p.id}-E" onclick="marcar(${p.id}, 'E')">E</div>
+                        <div class="btn-voto" id="btn-${p.id}-V" onclick="marcar(${p.id}, 'V')">V</div>
                     </div>
-                    <div class="botones">
-                        <div class="btn" id="btn-${p.id}-L" onclick="tocar(${p.id}, 'L')">L</div>
-                        <div class="btn" id="btn-${p.id}-E" onclick="tocar(${p.id}, 'E')">E</div>
-                        <div class="btn" id="btn-${p.id}-V" onclick="tocar(${p.id}, 'V')">V</div>
-                    </div>
-                    <div class="equipo-caja der">
-                        <img src="logos/${p.imgV}" class="img-logo" onerror="this.src='https://via.placeholder.com/30?text=X'">
-                        <span>${p.v}</span>
-                    </div>
+                    <div class="equipo der">${p.v}</div>
                 </div>`;
         });
-        contenedor.innerHTML = contenido;
+        contenedor.innerHTML = html;
     }
 
-    function tocar(id, tipo) {
-        const btn = document.getElementById('btn-' + id + '-' + tipo);
-        if (elecciones[id].includes(tipo)) {
-            elecciones[id] = elecciones[id].filter(t => t !== tipo);
+    function marcar(id, opcion) {
+        const btn = document.getElementById(`btn-${id}-${opcion}`);
+        const index = seleccionActual[id].indexOf(opcion);
+        
+        if (index > -1) {
+            seleccionActual[id].splice(index, 1);
             btn.classList.remove('active');
         } else {
-            elecciones[id].push(tipo);
+            seleccionActual[id].push(opcion);
             btn.classList.add('active');
         }
-        calcular();
+        calcularTotal();
     }
 
-    function calcular() {
-        let total = 10;
-        let tieneVotos = false;
+    function calcularTotal() {
+        let costo = 10;
+        let seleccionados = 0;
         
-        for (let id in elecciones) {
-            let n = elecciones[id].length;
-            if (n > 0) tieneVotos = true;
-            if (n === 2) total *= 2;
-            if (n === 3) total *= 3;
+        for (let id in seleccionActual) {
+            let votos = seleccionActual[id].length;
+            if (votos > 0) {
+                seleccionados++;
+                if (votos === 2) costo *= 2;
+                if (votos === 3) costo *= 3;
+            }
         }
         
-        document.getElementById('txtTotal').innerHTML = "TOTAL A PAGAR: $" + (tieneVotos ? total : 0);
+        document.getElementById('resultado').innerText = `TOTAL A PAGAR: $${seleccionados > 0 ? costo : 0}`;
     }
 
-    // Ejecutar al cargar
-    render();
+    window.onload = cargar;
 </script>
-
 </body>
 </html>
