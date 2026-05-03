@@ -3,127 +3,119 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>La de Diez Ganadora</title>
+    <title>LA DE DIEZ GANADORA</title>
     <style>
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f0f2f5; margin: 0; padding: 10px; }
-        .container { max-width: 480px; margin: auto; background: white; border-radius: 20px; overflow: hidden; box-shadow: 0 10px 25px rgba(0,0,0,0.2); }
+        body { font-family: 'Segoe UI', Arial, sans-serif; background-color: #f0f2f5; margin: 0; padding: 10px; }
+        .container { max-width: 450px; margin: auto; background: white; border-radius: 15px; overflow: hidden; box-shadow: 0 4px 15px rgba(0,0,0,0.2); }
+        .header { background-color: #064e3b; color: white; text-align: center; padding: 20px; }
+        .logo-principal { width: 80px; height: 80px; background: white; border-radius: 50%; padding: 5px; margin-bottom: 10px; object-fit: contain; }
+        .input-seccion { padding: 15px; text-align: center; }
+        input { width: 90%; padding: 10px; border: 1px solid #ccc; border-radius: 5px; text-align: center; font-weight: bold; font-size: 16px; }
         
-        .header { background-color: #064e3b; color: white; text-align: center; padding: 25px 15px; }
-        .logo-quiniela { width: 90px; height: 90px; object-fit: contain; margin-bottom: 10px; background: white; border-radius: 50%; padding: 5px; }
-        .header h1 { margin: 5px 0; font-size: 24px; letter-spacing: 1px; }
-        .header p { margin: 0; font-size: 14px; color: #a7f3d0; }
-
-        .input-cliente { padding: 20px; background: #fff; }
-        input { width: 100%; padding: 12px; border-radius: 8px; border: 2px solid #e5e7eb; font-size: 16px; text-align: center; font-weight: bold; box-sizing: border-box; }
-
-        .lista-partidos { padding: 10px; background: white; }
-        .fila { display: flex; align-items: center; justify-content: space-between; padding: 15px 5px; border-bottom: 1px solid #f3f4f6; }
-        
-        .bloque-equipo { display: flex; align-items: center; width: 38%; }
+        #listaPartidos { padding: 10px; }
+        .fila { display: flex; align-items: center; justify-content: space-between; padding: 12px 0; border-bottom: 1px solid #eee; }
+        .equipo-caja { display: flex; align-items: center; width: 38%; font-size: 12px; font-weight: bold; color: #333; }
         .izq { justify-content: flex-end; text-align: right; }
         .der { justify-content: flex-start; text-align: left; }
+        .img-logo { width: 30px; height: 30px; object-fit: contain; margin: 0 5px; }
         
-        .logo-equipo { width: 35px; height: 35px; object-fit: contain; margin: 0 5px; }
-        .nombre-equipo { font-size: 12px; font-weight: 800; color: #1f2937; text-transform: uppercase; }
-
-        .opciones { display: flex; gap: 3px; }
-        .btn-voto { width: 34px; height: 34px; display: flex; align-items: center; justify-content: center; border: 2px solid #d1d5db; border-radius: 6px; cursor: pointer; font-weight: bold; background: #f9fafb; font-size: 14px; }
-        .btn-voto.active { background-color: #059669; color: white; border-color: #059669; }
-
-        .footer-total { background: #f9fafb; padding: 25px; text-align: center; border-top: 3px solid #059669; }
-        #resultado { font-size: 20px; font-weight: 900; color: #064e3b; }
+        .botones { display: flex; gap: 4px; }
+        .btn { width: 34px; height: 34px; border: 1px solid #ccc; display: flex; align-items: center; justify-content: center; cursor: pointer; border-radius: 5px; font-weight: bold; background: white; }
+        .active { background: #059669; color: white; border-color: #059669; }
+        
+        .total-caja { padding: 25px; text-align: center; background: #f8fafc; font-size: 20px; font-weight: 800; border-top: 4px solid #064e3b; color: #064e3b; }
     </style>
 </head>
 <body>
 
 <div class="container">
     <div class="header">
-        <!-- Se busca el logo en tu carpeta logos -->
-        <img src="logos/QUINIELA.png" class="logo-quiniela" alt="Logo" onerror="this.src='https://via.placeholder.com/100?text=LOGO'">
-        <h1>LA DE DIEZ GANADORA</h1>
-        <p>SENCILLA $10 | DOBLE x2 | TRIPLE x3</p>
+        <img src="logos/QUINIELA.png" class="logo-principal" alt="Logo" onerror="this.src='https://via.placeholder.com/80?text=10'">
+        <h2 style="margin:0; letter-spacing: 1px;">LA DE DIEZ GANADORA</h2>
+        <p style="margin:5px 0 0; font-size: 13px; opacity: 0.9;">SENCILLA $10 | DOBLE x2 | TRIPLE x3</p>
     </div>
 
-    <div class="input-cliente">
-        <input type="text" placeholder="ESCRIBE TU NOMBRE AQUÍ">
+    <div class="input-seccion">
+        <input type="text" placeholder="NOMBRE DEL CLIENTE" id="nombreCliente">
     </div>
 
-    <div id="listaPartidos" class="lista-partidos">
-        <!-- Los partidos se generan aquí -->
+    <div id="listaPartidos">
+        <!-- Los partidos se cargarán aquí automáticamente -->
     </div>
 
-    <div class="footer-total">
-        <div id="resultado">TOTAL A PAGAR: $0</div>
-    </div>
+    <div class="total-caja" id="txtTotal">TOTAL A PAGAR: $0</div>
 </div>
 
 <script>
-    // Configura los nombres EXACTAMENTE como están en tus archivos de la imagen
+    // Los nombres de imagen deben coincidir exactamente con los de tu carpeta 'logos'
     const partidos = [
-        {id: 1, l: "REAL SOCIEDAD.", imgL: "logos/REALSOCIEDAD.png", v: "REAL BETIS", imgV: "logos/REALBETIS.png"},
-        {id: 2, l: "CHIVAS", imgL: "logos/CHIVAS.png", v: "TIGRES", imgV: "logos/TIGRES.png"},
-        {id: 3, l: "CRUZ AZUL", imgL: "logos/CRUZAZUL.png", v: "ATLAS", imgV: "logos/ATLAS.png"},
-        {id: 4, l: "PORTLAND", imgL: "logos/PORTLAND.png", v: "KANSAS CITY", imgV: "logos/KANSAS CITY.png"},
-        {id: 5, l: "BARCELONA", imgL: "logos/BARCELONA.png", v: "REAL MADRID", imgV: "logos/REALMADRID.png"},
-        {id: 6, l: "PSG", imgL: "logos/PSG.png", v: "BREST", imgV: "logos/BREST.png"},
-        {id: 7, l: "TOLOUSE", imgL: "logos/TOLOUSE.png", v: "LYON", imgV: "logos/LYON.png"},
-        {id: 8, l: "PACHUCA", imgL: "logos/PACHUCA.png", v: "TOLUCA", imgV: "logos/TOLUCA.png"},
-        {id: 9, l: "PUMAS", imgL: "logos/PUMAS.png", v: "AMERICA", imgV: "logos/AMERICA.png"}
+        {id: 1, l: "REAL SOCIEDAD.", v: "REAL BETIS", imgL: "REALSOCIEDAD.png", imgV: "REALBETIS.png"},
+        {id: 2, l: "CHIVAS", v: "TIGRES", imgL: "CHIVAS.png", imgV: "TIGRES.png"},
+        {id: 3, l: "CRUZ AZUL", v: "ATLAS", imgL: "CRUZAZUL.png", imgV: "ATLAS.png"},
+        {id: 4, l: "PORTLAND", v: "KANSAS CITY", imgL: "PORTLAND.png", imgV: "KANSAS CITY.png"},
+        {id: 5, l: "BARCELONA", v: "REAL MADRID", imgL: "BARCELONA.png", imgV: "REALMADRID.png"},
+        {id: 6, l: "PSG", v: "BREST", imgL: "PSG.png", imgV: "BREST.png"},
+        {id: 7, l: "TOLOUSE", v: "LYON", imgL: "TOLOUSE.png", imgV: "LYON.png"},
+        {id: 8, l: "PACHUCA", v: "TOLUCA", imgL: "PACHUCA.png", imgV: "TOLUCA.png"},
+        {id: 9, l: "PUMAS", v: "AMERICA", imgL: "PUMAS.png", imgV: "AMERICA.png"}
     ];
 
-    let seleccionActual = {};
+    let elecciones = {};
 
-    function cargar() {
+    function generarTabla() {
         const contenedor = document.getElementById('listaPartidos');
+        let html = "";
+        
         partidos.forEach(p => {
-            seleccionActual[p.id] = [];
-            contenedor.innerHTML += `
+            elecciones[p.id] = [];
+            html += `
                 <div class="fila">
-                    <div class="bloque-equipo izq">
-                        <span class="nombre-equipo">${p.l}</span>
-                        <img src="${p.imgL}" class="logo-equipo" onerror="this.src='https://via.placeholder.com/30?text=?'">
+                    <div class="equipo-caja izq">
+                        <span>${p.l}</span>
+                        <img src="logos/${p.imgL}" class="img-logo" onerror="this.style.visibility='hidden'">
                     </div>
-
-                    <div class="opciones">
-                        <div class="btn-voto" onclick="marcar(${p.id}, 'L', this)">L</div>
-                        <div class="btn-voto" onclick="marcar(${p.id}, 'E', this)">E</div>
-                        <div class="btn-voto" onclick="marcar(${p.id}, 'V', this)">V</div>
+                    <div class="botones">
+                        <div class="btn" onclick="seleccionar(${p.id}, 'L', this)">L</div>
+                        <div class="btn" onclick="seleccionar(${p.id}, 'E', this)">E</div>
+                        <div class="btn" onclick="seleccionar(${p.id}, 'V', this)">V</div>
                     </div>
-
-                    <div class="bloque-equipo der">
-                        <img src="${p.imgV}" class="logo-equipo" onerror="this.src='https://via.placeholder.com/30?text=?'">
-                        <span class="nombre-equipo">${p.v}</span>
+                    <div class="equipo-caja der">
+                        <img src="logos/${p.imgV}" class="img-logo" onerror="this.style.visibility='hidden'">
+                        <span>${p.v}</span>
                     </div>
                 </div>`;
         });
+        contenedor.innerHTML = html;
     }
 
-    function marcar(id, opcion, elemento) {
-        const index = seleccionActual[id].indexOf(opcion);
-        if (index > -1) {
-            seleccionActual[id].splice(index, 1);
+    function seleccionar(id, tipo, elemento) {
+        if (elecciones[id].includes(tipo)) {
+            elecciones[id] = elecciones[id].filter(t => t !== tipo);
             elemento.classList.remove('active');
         } else {
-            seleccionActual[id].push(opcion);
+            elecciones[id].push(tipo);
             elemento.classList.add('active');
         }
-        calcularTotal();
+        actualizarCosto();
     }
 
-    function calcularTotal() {
-        let costo = 10;
-        let seleccionados = 0;
-        Object.values(seleccionActual).forEach(votos => {
-            if (votos.length > 0) {
-                seleccionados++;
-                if (votos.length === 2) costo *= 2;
-                if (votos.length === 3) costo *= 3;
-            }
-        });
-        document.getElementById('resultado').innerText = `TOTAL A PAGAR: $${seleccionados > 0 ? costo : 0}`;
+    function actualizarCosto() {
+        let total = 10;
+        let marcado = false;
+        
+        for (let id in elecciones) {
+            let cant = elecciones[id].length;
+            if (cant > 0) marcado = true;
+            if (cant === 2) total *= 2;
+            if (cant === 3) total *= 3;
+        }
+        
+        document.getElementById('txtTotal').innerText = "TOTAL A PAGAR: $" + (marcado ? total : 0);
     }
 
-    window.onload = cargar;
+    // Ejecución inmediata al cargar la página
+    document.addEventListener('DOMContentLoaded', generarTabla);
 </script>
+
 </body>
 </html>
