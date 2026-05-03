@@ -8,17 +8,14 @@
         body { font-family: 'Segoe UI', Arial, sans-serif; background-color: #f0f2f5; margin: 0; padding: 10px; }
         .container { max-width: 450px; margin: auto; background: white; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 15px rgba(0,0,0,0.2); border: 1px solid #ddd; }
         
-        /* CABECERA */
         .header { background-color: #064e3b; color: white; text-align: center; padding: 15px; }
         .logo-img { width: 80px; height: 80px; margin-bottom: 8px; border-radius: 50%; background: white; object-fit: contain; border: 3px solid #fff; }
         .header h1 { margin: 0; font-size: 18px; text-transform: uppercase; }
         .header p { margin: 4px 0 0; font-size: 11px; color: #a7f3d0; font-weight: bold; }
 
-        /* USUARIO */
         .seccion-user { padding: 12px; text-align: center; background: #f9f9f9; border-bottom: 1px solid #eee; }
         input { width: 90%; padding: 10px; border: 2px solid #ddd; border-radius: 6px; text-align: center; font-weight: bold; font-size: 14px; text-transform: uppercase; }
 
-        /* LISTA DE PARTIDOS */
         .fila { display: flex; align-items: center; justify-content: space-between; padding: 10px 15px; border-bottom: 1px solid #f0f0f0; }
         .eq { width: 35%; font-size: 12px; font-weight: 800; color: #000; text-transform: uppercase; line-height: 1.2; }
         .iz { text-align: right; }
@@ -28,17 +25,16 @@
         .b-v { width: 35px; height: 35px; display: flex; align-items: center; justify-content: center; border: 2px solid #bbb; border-radius: 6px; cursor: pointer; font-size: 14px; font-weight: bold; background: #fff; color: #333; }
         .b-v.active { background-color: #059669; color: white; border-color: #059669; box-shadow: inset 0 2px 4px rgba(0,0,0,0.2); }
 
-        /* BOTÓN GUARDAR */
         .footer-cont { padding: 15px; background: #fdfdfd; text-align: center; border-top: 2px solid #eee; }
         .txt-costo { font-size: 16px; font-weight: 800; color: #064e3b; margin-bottom: 10px; }
         .btn-g { background-color: #064e3b; color: white; border: none; padding: 14px; width: 100%; border-radius: 8px; font-weight: bold; font-size: 14px; cursor: pointer; text-transform: uppercase; }
 
-        /* RESUMEN JUGADAS */
-        .ticket { padding: 10px; background: #f0f0f0; max-height: 150px; overflow-y: auto; }
-        .card { background: white; padding: 10px; border-radius: 6px; margin-bottom: 6px; display: flex; justify-content: space-between; align-items: center; font-size: 13px; border-left: 6px solid #059669; box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
+        .ticket { padding: 10px; background: #f0f0f0; max-height: 200px; overflow-y: auto; }
+        .card { background: white; padding: 10px; border-radius: 6px; margin-bottom: 6px; display: flex; flex-direction: column; gap: 5px; border-left: 6px solid #059669; box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
+        .card-top { display: flex; justify-content: space-between; align-items: center; }
+        .card-prog { font-family: monospace; font-size: 12px; color: #444; font-weight: bold; background: #f9f9f9; padding: 4px; border-radius: 4px; }
         .btn-del { background: #e11d48; color: white; border: none; padding: 6px 10px; border-radius: 4px; cursor: pointer; font-size: 11px; }
 
-        /* WHATSAPP */
         .final { background: #064e3b; padding: 20px; text-align: center; }
         #total-pago { color: white; font-size: 20px; font-weight: 900; margin-bottom: 15px; }
         .btn-wa { background-color: #25d366; color: white; border: none; padding: 16px; width: 100%; border-radius: 10px; font-weight: bold; font-size: 16px; cursor: pointer; box-shadow: 0 4px 10px rgba(0,0,0,0.3); }
@@ -119,23 +115,43 @@
         calcular();
     }
 
+    function obtenerLineaOrdenada(datos) {
+        let linea = [];
+        const orden = {"L": 1, "E": 2, "V": 3};
+        for (let i = 0; i < 9; i++) {
+            let combo = [...datos[i]].sort((a, b) => orden[a] - orden[b]).join('');
+            linea.push(combo || "---");
+        }
+        return linea.join(' ');
+    }
+
     function calcular() {
         let costo = 10, tiene = false;
+        let completos = 0;
         for (let k in actual) {
             let n = actual[k].length;
-            if (n > 0) tiene = true;
+            if (n > 0) {
+                tiene = true;
+                completos++;
+            }
             if (n === 2) costo *= 2;
             if (n === 3) costo *= 3;
         }
-        const r = tiene ? costo : 0;
+        // Solo mostramos costo si tiene los 9 partidos marcados
+        const r = completos === 9 ? costo : 0;
         document.getElementById('c-actual').innerText = `Importe Jugada: $${r}`;
         return r;
     }
 
     function guardarJugada() {
         const c = calcular();
-        if (c === 0) return alert("Selecciona resultados");
-        ticket.push({ datos: JSON.parse(JSON.stringify(actual)), precio: c });
+        if (c === 0) return alert("Por favor selecciona resultados para los 9 partidos");
+        
+        ticket.push({ 
+            datos: JSON.parse(JSON.stringify(actual)), 
+            precio: c,
+            resumenTexto: obtenerLineaOrdenada(actual)
+        });
         
         for (let k in actual) {
             actual[k] = [];
@@ -158,9 +174,13 @@
         let h = "", total = 0;
         ticket.forEach((j, i) => {
             total += j.precio;
-            h += `<div class="card">
-                <span><b>Jugada #${i+1}</b> ($${j.precio})</span>
-                <button class="btn-del" onclick="borrar(${i})">Eliminar</button>
+            h += `
+            <div class="card">
+                <div class="card-top">
+                    <span><b>Jugada #${i+1}</b> ($${j.precio})</span>
+                    <button class="btn-del" onclick="borrar(${i})">Eliminar</button>
+                </div>
+                <div class="card-prog">${j.resumenTexto}</div>
             </div>`;
         });
         r.innerHTML = h;
@@ -176,15 +196,7 @@
 
         ticket.forEach((j, idx) => {
             total += j.precio;
-            let lineaHorizontal = "";
-            
-            for (let i = 0; i < 9; i++) {
-                // Junta las letras de dobles/triples sin espacio (ej: LE, LEV)
-                let pronostico = j.datos[i].join(''); 
-                lineaHorizontal += (pronostico || "---") + " ";
-            }
-            
-            m += `◈ *J${idx + 1}:* ${lineaHorizontal.trim()} ($${j.precio})\n`;
+            m += `◈ *J${idx + 1}:* ${j.resumenTexto} ($${j.precio})\n`;
         });
 
         m += `\n◈ *TOTAL A PAGAR: $${total}*`;
@@ -193,6 +205,5 @@
         window.open(`https://wa.me/${num}?text=${encodeURIComponent(m)}`);
     }
 </script>
-
 </body>
 </html>
