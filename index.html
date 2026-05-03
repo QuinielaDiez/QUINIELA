@@ -5,54 +5,51 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>La de Diez Ganadora</title>
     <style>
-        body { font-family: Arial, sans-serif; background-color: #f4f4f4; margin: 0; padding: 20px; }
-        .container { max-width: 500px; margin: auto; background: white; border-radius: 15px; overflow: hidden; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f0f2f5; margin: 0; padding: 10px; }
+        .container { max-width: 480px; margin: auto; background: white; border-radius: 20px; overflow: hidden; box-shadow: 0 10px 25px rgba(0,0,0,0.2); }
         
-        /* Encabezado con Logo */
-        .header { background-color: #064e3b; color: white; text-align: center; padding: 20px; }
-        .logo-quiniela { width: 100px; height: auto; margin-bottom: 10px; }
-        .header h1 { margin: 5px 0; font-size: 22px; text-transform: uppercase; }
-        .header p { margin: 0; font-size: 14px; opacity: 0.9; }
+        .header { background-color: #064e3b; color: white; text-align: center; padding: 25px 15px; }
+        .logo-quiniela { width: 90px; height: 90px; object-fit: contain; margin-bottom: 10px; background: white; border-radius: 50%; padding: 5px; }
+        .header h1 { margin: 5px 0; font-size: 24px; letter-spacing: 1px; }
+        .header p { margin: 0; font-size: 14px; color: #a7f3d0; }
 
-        .input-cliente { padding: 15px; text-align: center; }
-        input { width: 90%; padding: 10px; border-radius: 5px; border: 1px solid #ccc; font-size: 16px; text-align: center; }
+        .input-cliente { padding: 20px; background: #fff; }
+        input { width: 100%; padding: 12px; border-radius: 8px; border: 2px solid #e5e7eb; font-size: 16px; text-align: center; font-weight: bold; box-sizing: border-box; }
 
-        /* Lista de Partidos */
-        .lista-partidos { padding: 10px; }
-        .fila { display: flex; align-items: center; justify-content: space-between; padding: 12px 0; border-bottom: 1px solid #eee; }
+        .lista-partidos { padding: 10px; background: white; }
+        .fila { display: flex; align-items: center; justify-content: space-between; padding: 15px 5px; border-bottom: 1px solid #f3f4f6; }
         
         .bloque-equipo { display: flex; align-items: center; width: 38%; }
         .izq { justify-content: flex-end; text-align: right; }
         .der { justify-content: flex-start; text-align: left; }
         
-        .logo-equipo { width: 30px; height: 30px; object-fit: contain; margin: 0 8px; }
-        .nombre-equipo { font-size: 13px; font-weight: bold; color: #333; }
+        .logo-equipo { width: 35px; height: 35px; object-fit: contain; margin: 0 5px; }
+        .nombre-equipo { font-size: 12px; font-weight: 800; color: #1f2937; text-transform: uppercase; }
 
-        /* Botones L E V */
-        .opciones { display: flex; gap: 4px; }
-        .btn-voto { width: 35px; height: 35px; display: flex; align-items: center; justify-content: center; border: 1px solid #ddd; border-radius: 5px; cursor: pointer; font-weight: bold; background: #fff; transition: 0.2s; }
-        .btn-voto.active { background-color: #064e3b; color: white; border-color: #064e3b; }
+        .opciones { display: flex; gap: 3px; }
+        .btn-voto { width: 34px; height: 34px; display: flex; align-items: center; justify-content: center; border: 2px solid #d1d5db; border-radius: 6px; cursor: pointer; font-weight: bold; background: #f9fafb; font-size: 14px; }
+        .btn-voto.active { background-color: #059669; color: white; border-color: #059669; }
 
-        .footer-total { background: #f9f9f9; padding: 20px; text-align: center; border-top: 2px solid #064e3b; }
-        #resultado { font-size: 18px; font-weight: bold; color: #064e3b; }
+        .footer-total { background: #f9fafb; padding: 25px; text-align: center; border-top: 3px solid #059669; }
+        #resultado { font-size: 20px; font-weight: 900; color: #064e3b; }
     </style>
 </head>
 <body>
 
 <div class="container">
     <div class="header">
-        <!-- AQUÍ VA TU LOGO DE LA QUINIELA -->
-        <img src="logos/QUINIELA.png" class="logo-quiniela" alt="Logo La de Diez" onerror="this.style.display='none'">
-        <h1>La de Diez Ganadora</h1>
-        <p>Sencilla $10 | Doble x2 | Triple x3</p>
+        <!-- Se busca el logo en tu carpeta logos -->
+        <img src="logos/QUINIELA.png" class="logo-quiniela" alt="Logo" onerror="this.src='https://via.placeholder.com/100?text=LOGO'">
+        <h1>LA DE DIEZ GANADORA</h1>
+        <p>SENCILLA $10 | DOBLE x2 | TRIPLE x3</p>
     </div>
 
     <div class="input-cliente">
-        <input type="text" placeholder="NOMBRE DEL CLIENTE">
+        <input type="text" placeholder="ESCRIBE TU NOMBRE AQUÍ">
     </div>
 
     <div id="listaPartidos" class="lista-partidos">
-        <!-- Los partidos se cargan aquí con JavaScript -->
+        <!-- Los partidos se generan aquí -->
     </div>
 
     <div class="footer-total">
@@ -61,6 +58,7 @@
 </div>
 
 <script>
+    // Configura los nombres EXACTAMENTE como están en tus archivos de la imagen
     const partidos = [
         {id: 1, l: "REAL SOCIEDAD.", imgL: "logos/REALSOCIEDAD.png", v: "REAL BETIS", imgV: "logos/REALBETIS.png"},
         {id: 2, l: "CHIVAS", imgL: "logos/CHIVAS.png", v: "TIGRES", imgV: "logos/TIGRES.png"},
@@ -83,7 +81,7 @@
                 <div class="fila">
                     <div class="bloque-equipo izq">
                         <span class="nombre-equipo">${p.l}</span>
-                        <img src="${p.imgL}" class="logo-equipo" onerror="this.style.visibility='hidden'">
+                        <img src="${p.imgL}" class="logo-equipo" onerror="this.src='https://via.placeholder.com/30?text=?'">
                     </div>
 
                     <div class="opciones">
@@ -93,7 +91,7 @@
                     </div>
 
                     <div class="bloque-equipo der">
-                        <img src="${p.imgV}" class="logo-equipo" onerror="this.style.visibility='hidden'">
+                        <img src="${p.imgV}" class="logo-equipo" onerror="this.src='https://via.placeholder.com/30?text=?'">
                         <span class="nombre-equipo">${p.v}</span>
                     </div>
                 </div>`;
@@ -114,21 +112,18 @@
 
     function calcularTotal() {
         let costo = 10;
-        let tieneSeleccion = false;
-
+        let seleccionados = 0;
         Object.values(seleccionActual).forEach(votos => {
             if (votos.length > 0) {
-                tieneSeleccion = true;
+                seleccionados++;
                 if (votos.length === 2) costo *= 2;
                 if (votos.length === 3) costo *= 3;
             }
         });
-
-        document.getElementById('resultado').innerText = `TOTAL A PAGAR: $${tieneSeleccion ? costo : 0}`;
+        document.getElementById('resultado').innerText = `TOTAL A PAGAR: $${seleccionados > 0 ? costo : 0}`;
     }
 
     window.onload = cargar;
 </script>
-
 </body>
 </html>
