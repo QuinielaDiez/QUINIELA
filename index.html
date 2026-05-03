@@ -8,17 +8,17 @@
         body { font-family: 'Arial', sans-serif; background-color: #f4f4f4; margin: 0; padding: 5px; }
         .container { max-width: 400px; margin: auto; background: white; border-radius: 8px; overflow: hidden; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
         
-        /* ENCABEZADO COMPACTO */
-        .header { background-color: #064e3b; color: white; text-align: center; padding: 10px; }
-        .logo-img { width: 60px; height: 60px; margin-bottom: 5px; border-radius: 50%; background: white; object-fit: contain; }
+        /* ENCABEZADO */
+        .header { background-color: #064e3b; color: white; text-align: center; padding: 12px; }
+        .logo-img { width: 70px; height: 70px; margin-bottom: 5px; border-radius: 50%; background: white; object-fit: contain; border: 2px solid #fff; }
         .header h1 { margin: 0; font-size: 16px; text-transform: uppercase; letter-spacing: 1px; }
-        .header p { margin: 2px 0 0; font-size: 10px; color: #a7f3d0; }
+        .header p { margin: 2px 0 0; font-size: 10px; color: #a7f3d0; font-weight: bold; }
 
-        /* INPUT NOMBRE */
+        /* NOMBRE */
         .seccion-user { padding: 8px; text-align: center; border-bottom: 1px solid #eee; }
-        input { width: 90%; padding: 6px; border: 1px solid #ddd; border-radius: 4px; text-align: center; font-weight: bold; font-size: 13px; }
+        input { width: 90%; padding: 8px; border: 1px solid #ddd; border-radius: 4px; text-align: center; font-weight: bold; font-size: 13px; text-transform: uppercase; }
 
-        /* FILAS DE PARTIDOS */
+        /* PARTIDOS */
         .fila { display: flex; align-items: center; justify-content: space-between; padding: 6px 10px; border-bottom: 1px solid #f9f9f9; }
         .eq { width: 35%; font-size: 10px; font-weight: bold; color: #333; text-transform: uppercase; }
         .iz { text-align: right; }
@@ -28,57 +28,63 @@
         .b-v { width: 30px; height: 30px; display: flex; align-items: center; justify-content: center; border: 1px solid #ccc; border-radius: 4px; cursor: pointer; font-size: 12px; font-weight: bold; background: white; }
         .b-v.active { background-color: #059669; color: white; border-color: #059669; }
 
-        /* ACCIONES */
+        /* GUARDAR */
         .footer-cont { padding: 10px; background: #fafafa; text-align: center; border-top: 1px solid #eee; }
         .txt-costo { font-size: 14px; font-weight: 800; color: #064e3b; margin-bottom: 8px; }
         .btn-g { background-color: #064e3b; color: white; border: none; padding: 10px; width: 100%; border-radius: 5px; font-weight: bold; font-size: 13px; cursor: pointer; }
 
-        /* RESUMEN TICKET */
+        /* TICKET */
         .ticket { padding: 8px; background: white; max-height: 120px; overflow-y: auto; }
-        .card { background: #f3f4f6; padding: 6px 10px; border-radius: 4px; margin-bottom: 4px; display: flex; justify-content: space-between; align-items: center; font-size: 11px; border-left: 3px solid #059669; }
+        .card { background: #f3f4f6; padding: 6px 10px; border-radius: 4px; margin-bottom: 4px; display: flex; justify-content: space-between; align-items: center; font-size: 11px; border-left: 4px solid #059669; }
         .btn-del { background: #dc2626; color: white; border: none; padding: 4px 6px; border-radius: 3px; cursor: pointer; font-size: 9px; }
 
-        /* WHATSAPP */
+        /* FINAL */
         .final { background: #064e3b; padding: 12px; text-align: center; }
         #total-pago { color: white; font-size: 18px; font-weight: 900; margin-bottom: 10px; }
-        .btn-wa { background-color: #25d366; color: white; border: none; padding: 12px; width: 100%; border-radius: 6px; font-weight: bold; font-size: 14px; cursor: pointer; }
+        .btn-wa { background-color: #25d366; color: white; border: none; padding: 12px; width: 100%; border-radius: 6px; font-weight: bold; font-size: 14px; cursor: pointer; box-shadow: 0 4px 6px rgba(0,0,0,0.2); }
     </style>
 </head>
 <body>
 
 <div class="container">
     <div class="header">
-        <!-- Probamos con QUINIELA.png directamente -->
-        <img src="QUINIELA.png" class="logo-img" alt="LOGO" onerror="this.src='https://via.placeholder.com/60?text=LOGO'">
+        <!-- RUTA CORREGIDA SEGÚN TU CARPETA -->
+        <img src="logo.jpg" class="logo-img" alt="Logo" onerror="this.src='https://via.placeholder.com/70?text=LOGO'">
         <h1>LA DE DIEZ GANADORA</h1>
         <p>Sencilla $10 | Doble x2 | Triple x3</p>
     </div>
 
     <div class="seccion-user">
-        <input type="text" id="usuario" placeholder="NOMBRE DEL PARTICIPANTE">
+        <input type="text" id="usuario" placeholder="TU NOMBRE AQUÍ">
     </div>
 
     <div id="partidos-list"></div>
 
     <div class="footer-cont">
-        <div class="txt-costo" id="c-actual">Costo Jugada: $0</div>
+        <div class="txt-costo" id="c-actual">Importe Jugada: $0</div>
         <button class="btn-g" onclick="guardarJugada()">+ GUARDAR JUGADA</button>
     </div>
 
     <div class="ticket" id="resumen"></div>
 
     <div class="final">
-        <div id="total-pago">TOTAL: $0</div>
-        <button class="btn-wa" onclick="enviar()">ENVIAR A WHATSAPP</button>
+        <div id="total-pago">TOTAL A PAGAR: $0</div>
+        <button class="btn-wa" onclick="enviar()">ENVIAR POR WHATSAPP</button>
     </div>
 </div>
 
 <script>
-    const lista = [
-        "REAL SOCIEDAD vs REAL BETIS", "CHIVAS vs TIGRES", "CRUZ AZUL vs ATLAS",
-        "PORTLAND vs KANSAS CITY", "BARCELONA vs REAL MADRID", "PSG vs BREST",
-        "TOLOUSE vs LYON", "PACHUCA vs TOLUCA", "PUMAS vs AMERICA"
-    ];
+    const partidos = [
+    {id: 1, l: "AMÉRICA", v: "PUMAS"}, 
+    {id: 2, l: "TOLUCA", v: "PACHUCA"},
+    {id: 3, l: "CANCÚN", v: "JAIBA BRAVA"}, 
+    {id: 4, l: "TEPATITLÁN", v: "MINEROS"},
+    {id: 5, l: "AUSTIN", v: "LOUIS CITY"}, 
+    {id: 6, l: "INTERNACIONAL", v: "FLUMINENSE"},
+    {id: 7, l: "MIRASSOL", v: "CORINTHIANS"},
+    {id: 8, l: "BARCELONA", v: "R. SOCIEDAD"},
+    {id: 9, l: "MAN. CITY", v: "ARSENAL"}
+];
 
     let actual = {};
     let ticket = [];
@@ -122,13 +128,13 @@
             if (n === 3) costo *= 3;
         }
         const r = tiene ? costo : 0;
-        document.getElementById('c-actual').innerText = `Costo Jugada: $${r}`;
+        document.getElementById('c-actual').innerText = `Importe Jugada: $${r}`;
         return r;
     }
 
     function guardarJugada() {
         const c = calcular();
-        if (c === 0) return alert("Elige resultados");
+        if (c === 0) return alert("Por favor selecciona resultados");
         ticket.push({ datos: JSON.parse(JSON.stringify(actual)), precio: c });
         
         for (let k in actual) {
@@ -150,17 +156,17 @@
         ticket.forEach((j, i) => {
             total += j.precio;
             h += `<div class="card">
-                <span>Jugada #${i+1} ($${j.precio})</span>
-                <button class="btn-del" onclick="borrar(${i})">X</button>
+                <span><b>Jugada #${i+1}</b> ($${j.precio})</span>
+                <button class="btn-del" onclick="borrar(${i})">Borrar</button>
             </div>`;
         });
         r.innerHTML = h;
-        document.getElementById('total-pago').innerText = `TOTAL: $${total}`;
+        document.getElementById('total-pago').innerText = `TOTAL A PAGAR: $${total}`;
     }
 
     function enviar() {
         const u = document.getElementById('usuario').value;
-        if (!u || ticket.length === 0) return alert("Nombre y al menos una jugada");
+        if (!u || ticket.length === 0) return alert("Ingresa tu nombre y guarda tus jugadas");
         
         let m = `⚽ *LA DE DIEZ GANADORA*\n👤 *Cliente:* ${u.toUpperCase()}\n\n`;
         let total = 0;
@@ -168,7 +174,8 @@
             total += j.precio;
             m += `📝 *JUGADA #${idx+1} ($${j.precio})*\n`;
             lista.forEach((p, i) => {
-                m += `${i+1}. [${j.datos[i].join('-') || '---'}]\n`;
+                const s = j.datos[i].length > 0 ? j.datos[i].join('-') : '---';
+                m += `${i+1}. [${s}]\n`;
             });
             m += `\n`;
         });
